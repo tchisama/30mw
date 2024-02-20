@@ -18,7 +18,7 @@ type Field = {
 
 /// all the types
 type NormalField ={
-  type: "string" | "number" | "boolean" | "date" | "time" | "image" | "avatar"
+  type: "string" | "number" | "boolean" | "date" | "time" | "image" | "avatar" | "text"
 }
 
 type SelectField ={
