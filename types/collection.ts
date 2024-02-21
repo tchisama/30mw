@@ -109,6 +109,10 @@ export const UserCollection : CollectionType = {
   id:" ",
   structure:[
     {
+      name:"_id",
+      type:"string"
+    },
+    {
       name:"person",
       type:"object",
       structure:[
@@ -133,6 +137,16 @@ export const UserCollection : CollectionType = {
               type:"string"
             },
             {
+              name:"images",
+              type:"array",
+              structure:[
+                {
+                  name:"image",
+                  type:"image"
+                }
+              ]
+            },
+            {
               name:"level",
               type:"select",
               select:[
@@ -152,6 +166,7 @@ export const UserCollection : CollectionType = {
 
 export const me = {
   id:"abcd",
+  _id:"abcd",
   person:{
     name:"tchisama",
     age:20,
@@ -159,8 +174,23 @@ export const me = {
     skills:[
       {
         skill:"developer",
-        level:"good"
-      }
+        level:"good",
+        images:[
+          {
+            image:"image1"
+          },
+          {
+            image:"image2"
+          },
+          {
+            image:"image3"
+          },
+        ]
+      },
+      {
+        skill:"designer",
+        level:"normal"
+      },
     ]
   }
 }
