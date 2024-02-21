@@ -100,11 +100,6 @@ type ReferenceField ={
 
 
 
-
-
-
-
-
 export const UserCollection : CollectionType = {
   id:" ",
   structure:[
@@ -164,6 +159,8 @@ export const UserCollection : CollectionType = {
 
 
 
+
+
 export const me = {
   id:"abcd",
   _id:"abcd",
@@ -189,7 +186,8 @@ export const me = {
       },
       {
         skill:"designer",
-        level:"normal"
+        level:"normal",
+        // images:[]
       },
     ]
   }

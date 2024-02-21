@@ -20,7 +20,17 @@ const Home = () => {
 };
 
 const RenderField = (field: Field, index: (string | number)[], me: any, setMe: Function) => {
+  // if(getValue(index,me)===undefined){
+  //   return (
+  //     <div className="flex justify-between">
+  //       {field.name}
+  //       <span>null</span>
+  //     </div>
+  //   )
+  // }
 	if (field.type === "object") {
+    const value = getValue(index, me)
+    if(!value) setMe( returnUpdated(index, me, createEmptyObject(field.structure)))
 		return (
 			<div className="">
 				{field.name}
@@ -37,21 +47,29 @@ const RenderField = (field: Field, index: (string | number)[], me: any, setMe: F
 		);
 	}
 	if (field.type === "array") {
+    const value = getValue(index, me)?? []
 		return (
 			<div className="">
-				{field.name}
-				<div className="border-l pl-6">
-					{(getValue(index, me) as any[])?.map(
+        <div className="flex justify-between">
+          {field.name}
+          <button onClick={()=>{
+                setMe(returnUpdated(index, me, [...value,{}]))
+            }
+            }>add</button>
+        </div>
+				<div className="border-l bt-1 pl-6">
+					{(value as any[])?.map(
 						(value, index2) => {
 							return (
-								<div key={index2}>
+								<div key={index2 + field.name} className="border my-1 p-2">
 									{field.structure.map((field: Field, index3) => {
-										return RenderField(
+										return <div key={index3}>{RenderField(
 											field,
 											[...index, index2, field.name],
 											me,
                       setMe
-										);
+										)}
+                    </div>
 									})}
 								</div>
 							);
@@ -71,15 +89,28 @@ const RenderField = (field: Field, index: (string | number)[], me: any, setMe: F
 	}
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
 const getValue = (
 	index: (string | number)[],
 	obj: any
 ) => {
 	let v = obj;
 	for (let i = 0; i < index.length; i++) {
+    if(v[index[i]]===undefined) return null
 		v = v[index[i]];
 	}
-	return v;
+	return v??null;
 };
 
 const returnUpdated = (index: (string | number)[], obj: any, newValue: any) => {
@@ -92,6 +123,28 @@ const returnUpdated = (index: (string | number)[], obj: any, newValue: any) => {
     });
     return newObj;
 };
+
+
+function createEmptyObject(collection: Field[]) {
+  const emptyObject:any = {};
+
+  
+  collection.forEach(field => {
+    if (field.type === "object") {
+      emptyObject[field.name] = createEmptyObject(field.structure);
+    } else if (field.type === "array") {
+      emptyObject[field.name] = [];
+    } else {
+      emptyObject[field.name] = null;
+    }
+  });
+
+  return emptyObject;
+}
+
+
+
+
 
 
 export default Home;
