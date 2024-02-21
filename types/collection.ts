@@ -1,7 +1,7 @@
 import { db } from "@/firebase"
 // import { addDoc, collection } from "firebase/firestore"
 
-type CollectionType = {
+export type CollectionType = {
   id: string
   structure:Field[]
 }
@@ -9,7 +9,7 @@ type CollectionType = {
 
 
 
-type Field = {
+export type Field = {
   name: string
 } & (  StringField | NumberField | BooleanField | DateField | TimeField | SelectField | ObjectField |  ArrayField | ReferenceField )
 
@@ -105,7 +105,7 @@ type ReferenceField ={
 
 
 
-export const collection : CollectionType = {
+export const UserCollection : CollectionType = {
   id:" ",
   structure:[
     {
@@ -150,16 +150,16 @@ export const collection : CollectionType = {
 
 
 
-const me = {
-  id:"",
+export const me = {
+  id:"abcd",
   person:{
-    name:" ",
-    age:0,
-    active:false,
+    name:"tchisama",
+    age:20,
+    active:true,
     skills:[
       {
-        skill:"",
-        level:""
+        skill:"developer",
+        level:"good"
       }
     ]
   }
