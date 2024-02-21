@@ -1,9 +1,9 @@
+import { db } from "@/firebase"
+// import { addDoc, collection } from "firebase/firestore"
+
 type CollectionType = {
-  name: string
-  collection: string
   id: string
-  fields:Field[]
-  structure: string[]
+  structure:Field[]
 }
 
 
@@ -11,18 +11,46 @@ type CollectionType = {
 
 type Field = {
   name: string
-  id: string
-} & ( NormalField | SelectField | ObjectField | ReferenceField )
+} & (  StringField | NumberField | BooleanField | DateField | TimeField | SelectField | ObjectField |  ArrayField | ReferenceField )
 
 
 
 /// all the types
-type NormalField ={
-  type: "string" | "number" | "boolean" | "date" | "time" | "image" | "avatar" | "text"
+
+type StringField ={
+  type : "string" | "text" | "image" | "avatar"
+  defaultValue?: string
+  value?: string
+}
+
+type NumberField ={
+  type: "number"
+  defaultValue?: number
+  value?: number
+}
+
+type BooleanField ={
+  type: "boolean"
+  defaultValue?: boolean
+  value?: boolean
+}
+
+type DateField ={
+  type: "date"
+  defaultValue?: Date
+  value?: Date
+}
+
+type TimeField ={
+  type: "time"
+  defaultValue?: string
+  value?: string
 }
 
 type SelectField ={
   type: "select"
+  defaultValue?: string
+  value?: string
   select: {
     name:string,
     value:string
@@ -31,11 +59,22 @@ type SelectField ={
 
 type ObjectField ={
   type: "object" | "array"
-  structure: string[]
+  defaultValue?: Field[]
+  value?: Field[]
+  structure: Field[]
+}
+
+type ArrayField ={
+  type: "object" | "array"
+  defaultValue?: Field[][]
+  value?: Field[][]
+  structure: Field[]
 }
 
 type ReferenceField ={
-  type: "reference"
+  type: "reference",
+  defaultValue?: string | number | boolean | Date 
+  value?:  string | number | boolean | Date
   reference: {
     collection: string
     key: string
@@ -64,31 +103,74 @@ type ReferenceField ={
 
 
 
-const collection: CollectionType = {
-  name: "test",
-  collection: "test",
-  id: "test",
-  fields: [
+
+
+export const collection : CollectionType = {
+  id:" ",
+  structure:[
     {
-      name:"name",
-      type:"select",
-      id:"hello world",
-      select:[
+      name:"person",
+      type:"object",
+      structure:[
         {
-          name:"hello",
-          value:"world"
+          name:"name",
+          type:"string"
+        },
+        {
+          name:"age",
+          type:"number"
+        },
+        {
+          name:"active",
+          type:"boolean"
+        },
+        {
+          name:"skills",
+          type:"array",
+          structure:[
+            {
+              name:"skill",
+              type:"string"
+            },
+            {
+              name:"level",
+              type:"select",
+              select:[
+                {name:"beginner",value:"beginner"},
+                {name:"intermediate",value:"intermediate"},
+                {name:"advanced",value:"advanced"}
+              ]
+            }
+          ]
         }
       ]
-    },
-    {
-      name:"name",
-      id:"hell",
-      type:"reference",
-      reference:{
-        collection:"test",
-        key:"test"
-      }
     }
-  ],
-  structure: ["hello world"]
+  ]
 }
+
+
+
+const me = {
+  id:"",
+  person:{
+    name:" ",
+    age:0,
+    active:false,
+    skills:[
+      {
+        skill:"",
+        level:""
+      }
+    ]
+  }
+}
+
+
+
+
+
+
+
+
+
+
