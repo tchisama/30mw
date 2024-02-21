@@ -5,11 +5,6 @@ type Props = {
 }
 
 function ViewField({}: Props) {
-
-
-
-
-
   return (
     <div>ViewField</div>
   )

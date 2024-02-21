@@ -1,33 +1,29 @@
 "use client";
-
+import Doc from "@/components/DocComponents/Doc";
+import {getValue , returnUpdated, createEmptyObject } from "@/lib/utils/index";
 import { CollectionType, Field, UserCollection, me as _me } from "@/types/collection";
 import { produce } from "immer";
 import React from "react";
 
 const Home = () => {
-  const [me, setMe] = React.useState<any>(_me);
 	return (
-		<div>
-			{UserCollection.structure.map((field: Field, index) => {
-				return (
-					<div className="container" key={field.name}>
-						{RenderField(field, [field.name], me,setMe)}
-					</div>
-				);
-			})}
-		</div>
+		// <div>
+		// 	{UserCollection.structure.map((field: Field, index) => {
+		// 		return (
+		// 			<div className="container" key={field.name}>
+		// 				{RenderField(field, [field.name], me,setMe)}
+		// 			</div>
+		// 		);
+		// 	})}
+		// </div>
+    <div className="container">
+      <Doc/>
+    </div>
 	);
 };
 
 const RenderField = (field: Field, index: (string | number)[], me: any, setMe: Function) => {
-  // if(getValue(index,me)===undefined){
-  //   return (
-  //     <div className="flex justify-between">
-  //       {field.name}
-  //       <span>null</span>
-  //     </div>
-  //   )
-  // }
+
 	if (field.type === "object") {
     const value = getValue(index, me)
     if(!value) setMe( returnUpdated(index, me, createEmptyObject(field.structure)))
@@ -96,51 +92,6 @@ const RenderField = (field: Field, index: (string | number)[], me: any, setMe: F
 
 
 
-
-
-
-
-
-const getValue = (
-	index: (string | number)[],
-	obj: any
-) => {
-	let v = obj;
-	for (let i = 0; i < index.length; i++) {
-    if(v[index[i]]===undefined) return null
-		v = v[index[i]];
-	}
-	return v??null;
-};
-
-const returnUpdated = (index: (string | number)[], obj: any, newValue: any) => {
-    const newObj = produce(obj, (draft: any) => {
-        let target = draft;
-        for (let i = 0; i < index.length - 1; i++) {
-            target = target[index[i]];
-        }
-        target[index[index.length - 1]] = newValue;
-    });
-    return newObj;
-};
-
-
-function createEmptyObject(collection: Field[]) {
-  const emptyObject:any = {};
-
-  
-  collection.forEach(field => {
-    if (field.type === "object") {
-      emptyObject[field.name] = createEmptyObject(field.structure);
-    } else if (field.type === "array") {
-      emptyObject[field.name] = [];
-    } else {
-      emptyObject[field.name] = null;
-    }
-  });
-
-  return emptyObject;
-}
 
 
 
