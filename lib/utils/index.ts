@@ -17,13 +17,30 @@ export const returnUpdated = (index: (string | number)[], obj: any, newValue: an
     const newObj = produce(obj, (draft: any) => {
         let target = draft;
         for (let i = 0; i < index.length - 1; i++) {
+            if(target[index[i]]===undefined) {
+                target[index[i]] = {}
+            }
             target = target[index[i]];
         }
         target[index[index.length - 1]] = newValue;
     });
     return newObj;
 };
+// delete item form the array 
 
+export const returnDeleted = (index: (string | number)[], obj: any) => {
+    const newObj = produce(obj, (draft: any) => {
+        let target = draft;
+        for (let i = 0; i < index.length - 1; i++) {
+            if(target[index[i]]===undefined) {
+                return
+            }
+            target = target[index[i]];
+        }
+        delete target[index[index.length - 1]];
+    });
+    return newObj;
+};
 
 export function createEmptyObject(collection: Field[]) {
   const emptyObject:any = {};

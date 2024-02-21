@@ -11,16 +11,21 @@ export type CollectionType = {
 
 export type Field = {
   name: string
-} & (  StringField | NumberField | BooleanField | DateField | TimeField | SelectField | ObjectField |  ArrayField | ReferenceField )
+  prefix?: string
+} & (  ImageField |StringField | NumberField | BooleanField | DateField | TimeField | SelectField | ObjectField |  ArrayField | ReferenceField )
 
 
 
 /// all the types
 
 type StringField ={
-  type : "string" | "text" | "image" | "avatar"
+  type : "string" | "text" 
   defaultValue?: string
   value?: string
+}
+type ImageField ={
+  type: "image" | "avatar"
+  defaultValue?: string
 }
 
 type NumberField ={
@@ -32,28 +37,29 @@ type NumberField ={
 type BooleanField ={
   type: "boolean"
   defaultValue?: boolean
-  value?: boolean
+  labels?: {
+    true: string
+    false: string
+  }
 }
 
 type DateField ={
   type: "date"
   defaultValue?: Date
-  value?: Date
 }
 
 type TimeField ={
   type: "time"
   defaultValue?: string
-  value?: string
 }
 
 type SelectField ={
   type: "select"
   defaultValue?: string
   value?: string
-  select: {
+  options: {
     name:string,
-    value:string
+    value: string
   }[]
 }
 
@@ -101,102 +107,135 @@ type ReferenceField ={
 
 
 export const UserCollection : CollectionType = {
-  id:" ",
-  structure:[
+  id: "",
+  structure: [
     {
-      name:"_id",
-      type:"string"
+      name: "_id",
+      type: "string"
     },
     {
-      name:"person",
-      type:"object",
-      structure:[
+      name: "image",
+      type: "image"
+    },
+    {
+      name: "product",
+      type: "object",
+      structure: [
         {
-          name:"name",
-          type:"string"
+          name: "photo",
+          type: "avatar"
         },
         {
-          name:"age",
-          type:"number"
+          name: "name",
+          type: "string"
         },
         {
-          name:"active",
-          type:"boolean"
+          name: "price",
+          type: "number",
+          prefix: "Dh"
         },
         {
-          name:"skills",
-          type:"array",
-          structure:[
+          name: "quantity",
+          type: "number",
+          prefix: "pieces"
+        },
+        {
+          name: "createdAt",
+          type: "date"
+        },
+        {
+          name: "category",
+          type: "select",
+          options: [
             {
-              name:"skill",
-              type:"string"
+              name: "electronics",
+              value: "electronics"
             },
             {
-              name:"images",
-              type:"array",
-              structure:[
-                {
-                  name:"image",
-                  type:"image"
-                }
-              ]
+              name: "food",
+              value: "food"
             },
             {
-              name:"level",
-              type:"select",
-              select:[
-                {name:"beginner",value:"beginner"},
-                {name:"intermediate",value:"intermediate"},
-                {name:"advanced",value:"advanced"}
-              ]
+              name: "clothes",
+              value: "clothes"
+            }
+          ]
+        },
+        {
+          name: "description",
+          type: "text"
+        }
+      ]
+    },
+    {
+      name: "in stock",
+      type: "boolean",
+      prefix:"check it",
+      labels: {
+        true: "in stock",
+        false: "out of stock"
+      }
+    },
+    {
+      name: "reviews",
+      type: "array",
+      structure: [
+        {
+          name: "userId",
+          type: "string"
+        },
+        {
+          name: "comment",
+          type: "text"
+        },
+        {
+          name: "rating",
+          type: "select",
+          options: [
+            {
+              name: "⭐",
+              value: "1"
+            },
+            {
+              name: "⭐⭐",
+              value: "2"
+            },
+            {
+              name: "⭐⭐⭐",
+              value: "3"
+            },
+            {
+              name: "⭐⭐⭐⭐",
+              value: "4"
+            },
+            {
+              name: "⭐⭐⭐⭐⭐",
+              value: "5"
             }
           ]
         }
       ]
     }
   ]
-}
-
+};
 
 
 
 
 export const me = {
-  id:"abcd",
-  _id:"abcd",
-  person:{
-    name:"tchisama",
-    age:20,
-    active:true,
-    skills:[
-      {
-        skill:"developer",
-        level:"good",
-        images:[
-          {
-            image:"image1"
-          },
-          {
-            image:"image2"
-          },
-          {
-            image:"image3"
-          },
-        ]
-      },
-      {
-        skill:"designer",
-        level:"normal",
-        // images:[]
-      },
-    ]
+  _id: "abcd1234",
+  user: {
+    username: "example_user",
+    email: "user@example.com",
+    createdAt: new Date("2022-01-01"),
+    address: {
+      street: "123 Main St",
+      city: "Cityville",
+      zip: "12345",
+      country: "Countryland"
+    },
   }
-}
-
-
-
-
-
+};
 
 
 
