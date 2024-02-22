@@ -70,23 +70,18 @@ function AddDailog({ setCollection, index }: Props) {
 
 	const addRowFunction = () => {
 		if (!name || !type) return;
-		if (type === "reference") {
-			if (!refCollection || !refKey) return;
-		}
+		// if (type === "reference") {
+		// 	if (!refCollection || !refKey) return;
+		// }
 		setCollection((prev: CollectionType) => {
 			return {
 				...prev,
-				rows: addRow({
+				structure: addRow({
 					rows: prev.structure,
 					index,
 					newValue: {
 						name,
 						type,
-						select: [],
-						reference: {
-							collection: refCollection,
-							key: refKey,
-						},
 					},
 				}),
 			};
@@ -95,11 +90,11 @@ function AddDailog({ setCollection, index }: Props) {
 
 	return (
 		<>
-			<Button onPress={onOpen}>Add Field</Button>
+			<Button onPress={onOpen} className="mt-2" variant="bordered">Add Field</Button>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
 				<ModalContent>
 					{(onClose) => (
-						<>
+						<div>
 							<ModalHeader className="flex flex-col gap-1">
 								Add Field {type}
 							</ModalHeader>
@@ -109,17 +104,12 @@ function AddDailog({ setCollection, index }: Props) {
 										placeholder="Name"
 										value={name}
 										onChange={(e) => setName(e.target.value)}
+										
 									/>
-									<Select  label="Select an type" className="max-w-xs">
+									<Select selectedKeys={type} onSelectionChange={setType as any} label="Select an type" className="max-w-xs">
 										{FieldsTypes.map((field) => (
 											<SelectItem key={field.name} value={field.name}>
-                        <div className="flex gap-4 items-center">
-                          {field.icon({ size: 20 })}
-                          <div className="flex flex-col">
-                            <div>{field.name}</div>
-                            <div className="text-xs">{field.description}</div>
-                          </div>
-                        </div>
+													{field.name}
 											</SelectItem>
 										))}
 									</Select>
@@ -129,11 +119,11 @@ function AddDailog({ setCollection, index }: Props) {
 								<Button variant="light" onPress={onClose}>
 									Close
 								</Button>
-								<Button color="primary" onPress={onClose}>
+								<Button color="primary" onPress={()=>{addRowFunction();onClose();}}>
 									Create
 								</Button>
 							</ModalFooter>
-						</>
+						</div>
 					)}
 				</ModalContent>
 			</Modal>
