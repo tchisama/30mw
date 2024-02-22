@@ -36,9 +36,10 @@ function SideNavbar({}: Props) {
             {
               collections.map((_,i)=>{
                 return <Link href={_?.href} key={i}>
-                <div className={cn('flex hover:bg-slate-50 duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-4 pl-3 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":pathname === _?.href})}>
+                <div className={cn('flex hover:bg-slate-50  duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-4 pl-3 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":pathname === _?.href})}>
                   {/* <Home size={24} strokeWidth={1}/> */}
-                  <div className='text-2xl bg-white rounded-lg'>{_?.icon}</div>
+                  <div className='text-2xl bg-white rounded-lg w-10 h-10 text-center flex items-center justify-center'> {" "}
+                  {_?.icon}</div>
                   <div className=''>
                     <div className='font-medium capitalize'>{_?.name}</div>
                     <div className='text-xs '>{_?.subtitle}</div>
@@ -52,7 +53,7 @@ function SideNavbar({}: Props) {
                 <Link href={"/dashboard/settings"} className='w-full' >
                 <div className={cn('flex hover:bg-slate-50 duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-4 pl-3 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":pathname.includes("/dashboard/settings")})}>
                   {/* <Home size={24} strokeWidth={1}/> */}
-                  <div className='text-2xl bg-white rounded-lg'>⚙️</div>
+                  <div className='text-2xl bg-white w-10 h-10 flex items-center justify-center rounded-lg'>⚙️</div>
                   <div className=''>
                     <div className='font-medium capitalize'>Configs</div>
                     <div className='text-xs '> manage dashboard</div>
