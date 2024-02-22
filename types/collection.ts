@@ -3,7 +3,12 @@ import { db } from "@/firebase"
 
 export type CollectionType = {
   id: string
+  collection: string
+  name: string
+  icon: string
+  subtitle: string
   structure:Field[]
+  href: string
 }
 
 
@@ -91,151 +96,101 @@ type ReferenceField ={
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export const UserCollection : CollectionType = {
-  id: "",
-  structure: [
-    {
-      name: "_id",
-      type: "string"
-    },
-    {
-      name: "image",
-      type: "image"
-    },
-    {
-      name: "product",
-      type: "object",
-      structure: [
+export const usersColl: CollectionType = {
+    "id": "abc123xyz456",
+    "collection": "users",
+    "icon" : "👥",
+    "href": "/dashboard/users",
+    "subtitle": "manage users",
+    "structure": [
         {
-          name: "photo",
-          type: "avatar"
+            "name": "avatar",
+            "type": "image"
         },
         {
-          name: "name",
-          type: "string"
+            "name": "name",
+            "type": "object",
+            "structure": [
+                {
+                    "name": "first",
+                    "type": "string"
+                },
+                {
+                    "name": "last",
+                    "type": "string"
+                }
+            ]
         },
         {
-          name: "price",
-          type: "number",
-          prefix: "Dh"
+            "name": "email",
+            "type": "string"
         },
         {
-          name: "quantity",
-          type: "number",
-          prefix: "pieces"
+            "name": "age",
+            "type": "number"
         },
         {
-          name: "createdAt",
-          type: "date"
-        },
-        {
-          name: "category",
-          type: "select",
-          options: [
-            {
-              name: "electronics",
-              value: "electronics"
-            },
-            {
-              name: "food",
-              value: "food"
-            },
-            {
-              name: "clothes",
-              value: "clothes"
+            "name": "active",
+            "type": "boolean",
+            "labels": {
+                "true": "active",
+                "false": "inactive"
             }
-          ]
         },
         {
-          name: "description",
-          type: "text"
+            "name": "role",
+            "type": "select",
+            "options": [
+                {
+                    "name": "Admin",
+                    "value": "admin"
+                },
+                {
+                    "name": "User",
+                    "value": "user"
+                }
+            ]
+        },
+        {
+            "name": "createdAt",
+            "type": "date"
+        },
+        {
+            "name": "address",
+            "type": "object",
+            "structure": [
+                {
+                    "name": "street",
+                    "type": "string"
+                },
+                {
+                    "name": "city",
+                    "type": "string"
+                },
+                {
+                    "name": "zipcode",
+                    "type": "string"
+                },
+                {
+                    "name": "country",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "bio",
+            "type": "text"
         }
-      ]
-    },
-    {
-      name: "in stock",
-      type: "boolean",
-      prefix:"check it",
-      labels: {
-        true: "in stock",
-        false: "out of stock"
-      }
-    },
-    {
-      name: "reviews",
-      type: "array",
-      structure: [
-        {
-          name: "userId",
-          type: "string"
-        },
-        {
-          name: "comment",
-          type: "text"
-        },
-        {
-          name: "rating",
-          type: "select",
-          options: [
-            {
-              name: "⭐",
-              value: "1"
-            },
-            {
-              name: "⭐⭐",
-              value: "2"
-            },
-            {
-              name: "⭐⭐⭐",
-              value: "3"
-            },
-            {
-              name: "⭐⭐⭐⭐",
-              value: "4"
-            },
-            {
-              name: "⭐⭐⭐⭐⭐",
-              value: "5"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-};
+    ],
+    "name": "users"
+}
 
 
 
 
-export const me = {
-  _id: "abcd1234",
-  user: {
-    username: "example_user",
-    email: "user@example.com",
-    createdAt: new Date("2022-01-01"),
-    address: {
-      street: "123 Main St",
-      city: "Cityville",
-      zip: "12345",
-      country: "Countryland"
-    },
-  }
-};
+
+
+
 
 
 

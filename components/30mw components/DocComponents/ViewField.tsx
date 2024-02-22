@@ -1,8 +1,8 @@
 import { getValue } from '@/lib/utils/index'
 import { Field } from '@/types/collection'
-import { Accordion, AccordionItem, Avatar, Button, Chip, Image } from '@nextui-org/react'
+import { Accordion, AccordionItem, Avatar, Button, Chip, Image, Skeleton } from '@nextui-org/react'
 import { MoreHorizontal, Plus, Settings } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { fileURLToPath } from 'url'
 import NextImage from "next/image"
 import {
@@ -21,13 +21,32 @@ type Props = {
 }
 
 function ViewField({field,index,document,setDocument}: Props) {
+
+
+  const [loading, setLoading] = React.useState<boolean>(false)
+
+  useEffect(() => {
+    if(field.type !== "array" && field.type !== "object"){ 
+      setLoading(true)
+      setTimeout(() => {
+        setLoading(false)
+      },300)
+    }
+  }, [field])
+
+  if(loading) return (
+      <Skeleton className="rounded-lg">
+        <div className={`${field.type === "image" ? "h-44" : "h-10"} rounded-lg bg-default-300`}></div>
+      </Skeleton>
+  )
+
   if(field === null) return null
 
 
   if(field.type === "object"){
     return (
       <Accordion className=''>
-      <AccordionItem className='font-medium' key="1" aria-label="Accordion 1" title={field.name}>
+      <AccordionItem className='font-medium ' key="1" aria-label="Accordion 1" title={field.name}>
         <div className=' bg-slate-400/5 p-2 border rounded-xl space-y-1'>
           {
             field.structure.map((f:Field,i)=>{
@@ -45,10 +64,8 @@ function ViewField({field,index,document,setDocument}: Props) {
   if(field.type === "array"){
     const value = getValue(index,document) ?? []
     return (
-      <div className='p-2 bg-white rounded-xl border  '>
-        <div className='flex justify-between'>
-          <div className='font-medium mb-2 capitalize'>{field.name}</div>
-        </div>
+      <Accordion className='overflow-hidden '>
+      <AccordionItem className='font-medium' key="1" aria-label="Accordion 1" title={field.name}>
         <div className=' space-y-1 bg-slate-400/5 p-2 border rounded-xl'>
           <Carousel >
             <CarouselContent className=''>
@@ -57,7 +74,7 @@ function ViewField({field,index,document,setDocument}: Props) {
                   (value, index2) => {
                 
                     return (
-                      <CarouselItem key={index2 + field.name}>
+                      <CarouselItem className='basis-3/4' key={index2 + field.name}>
                         <div key={index2 + field.name} className="rounded-xl space-y-1 my-1 ">
                           {field.structure.map((field2: Field, index3) => {
                             return <div key={index3}>
@@ -76,7 +93,8 @@ function ViewField({field,index,document,setDocument}: Props) {
             </div>
           </Carousel>
         </div>
-      </div>
+      </AccordionItem>
+      </Accordion>
     )
   }
 
@@ -150,7 +168,6 @@ function ViewField({field,index,document,setDocument}: Props) {
   
   if(field.type === "select"){
     const value = getValue(index,document)
-    console.log(value)
     return (
       <div className='flex justify-between font-normal bg-white pr-2 p-2 rounded-xl border px-4'>
         <div className='font-medium capitalize'>{field.name}</div>

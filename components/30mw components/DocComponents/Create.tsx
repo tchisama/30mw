@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, useDisclosure, Button, DropdownItem} from "@nextui-org/react";
 import { Edit } from 'lucide-react';
 import { CollectionType, Field } from '@/types/collection';
 import ViewField from './ViewField';
 import EditField from './EditField';
-import { doc, updateDoc } from 'firebase/firestore';
+import { createEmptyObject } from '@/lib/utils/index';
+import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import { db } from '@/firebase';
 type Props = {
   model:{
@@ -12,18 +13,22 @@ type Props = {
     onOpen: () => void,
     onOpenChange: () => void
   }
-  document: any
-  setDocument: Function
   collection: CollectionType
 }
 
-function EditModal({document,setDocument,collection,model:{isOpen, onOpen, onOpenChange}}: Props) {
-  const [newDocument, setNewDocument] = React.useState<any>(document);
-  const updateDocument = () => {
-    updateDoc(doc(db,"products",newDocument.id),{
-      ...newDocument,
-    }).then(() => {
-      setDocument(newDocument)
+function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange}}: Props) {
+  const [document, setDocument] = React.useState<any>(createEmptyObject(_collection.structure));
+  const createDocument = () => {
+    console.log(document)
+    addDoc(
+      collection(db, _collection.collection),{
+        ...document,
+        _30mw_createdAt: Timestamp.now(),
+        _30mw_updatedAt: Timestamp.now(),
+        _30mw_deleted: false
+      }
+    ).then(() => {
+      setDocument(createEmptyObject(_collection.structure))
     })
   }
   return(
@@ -35,9 +40,9 @@ function EditModal({document,setDocument,collection,model:{isOpen, onOpen, onOpe
               <ModalHeader className="flex flex-col gap-1">Edit Document</ModalHeader>
               <ModalBody className='max-h-[70vh] overflow-auto'>
                 {
-                  collection.structure.map((field: Field, index) => {
+                  _collection.structure.map((field: Field, index) => {
                     return (
-                      <EditField key={field.name} field={field} index={[field.name]} document={newDocument} setDocument={setNewDocument} />
+                      <EditField key={field.name} field={field} index={[field.name]} document={document} setDocument={setDocument} />
                     );
                   })
                 }
@@ -46,7 +51,7 @@ function EditModal({document,setDocument,collection,model:{isOpen, onOpen, onOpe
                 <Button variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={()=>{updateDocument();onClose()}}>
+                <Button color="primary" onPress={()=>{createDocument();onClose()}}>
                   Save
                 </Button>
               </ModalFooter>
@@ -58,4 +63,4 @@ function EditModal({document,setDocument,collection,model:{isOpen, onOpen, onOpe
   );
 }
 
-export default EditModal
+export default CreateModal

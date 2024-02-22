@@ -45,7 +45,7 @@ export const returnDeleted = (index: (string | number)[], obj: any) => {
 export function createEmptyObject(collection: Field[]) {
   const emptyObject:any = {};
 
-  
+  if(!collection) return emptyObject
   collection.forEach(field => {
     if (field.type === "object") {
       emptyObject[field.name] = createEmptyObject(field.structure);

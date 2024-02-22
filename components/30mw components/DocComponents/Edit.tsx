@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, useDisclosure, Button, DropdownItem} from "@nextui-org/react";
 import { Edit } from 'lucide-react';
 import { CollectionType, Field } from '@/types/collection';
 import ViewField from './ViewField';
 import EditField from './EditField';
-import { createEmptyObject } from '@/lib/utils/index';
-import { addDoc, collection } from 'firebase/firestore';
+import { Timestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 type Props = {
   model:{
@@ -13,20 +12,19 @@ type Props = {
     onOpen: () => void,
     onOpenChange: () => void
   }
+  document: any
+  setDocument: Function
   collection: CollectionType
 }
 
-function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange}}: Props) {
-  const [document, setDocument] = React.useState<any>(createEmptyObject(_collection.structure));
-  const createDocument = () => {
-    console.log(document)
-    addDoc(
-      collection(db, "products"),{
-        ...document,
-        deleted: false
-      }
-    ).then(() => {
-      setDocument(createEmptyObject(_collection.structure))
+function EditModal({document,setDocument,collection,model:{isOpen, onOpen, onOpenChange}}: Props) {
+  const [newDocument, setNewDocument] = React.useState<any>(document);
+  const updateDocument = () => {
+    updateDoc(doc(db,collection.collection,newDocument.id),{
+      ...newDocument,
+      _30mw_updatedAt : Timestamp.now()
+    }).then(() => {
+      setDocument(newDocument)
     })
   }
   return(
@@ -38,9 +36,9 @@ function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange
               <ModalHeader className="flex flex-col gap-1">Edit Document</ModalHeader>
               <ModalBody className='max-h-[70vh] overflow-auto'>
                 {
-                  _collection.structure.map((field: Field, index) => {
+                  collection.structure.map((field: Field, index) => {
                     return (
-                      <EditField key={field.name} field={field} index={[field.name]} document={document} setDocument={setDocument} />
+                      <EditField key={field.name} field={field} index={[field.name]} document={newDocument} setDocument={setNewDocument} />
                     );
                   })
                 }
@@ -49,7 +47,7 @@ function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange
                 <Button variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={()=>{createDocument();onClose()}}>
+                <Button color="primary" onPress={()=>{updateDocument();onClose()}}>
                   Save
                 </Button>
               </ModalFooter>
@@ -61,4 +59,4 @@ function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange
   );
 }
 
-export default CreateModal
+export default EditModal
