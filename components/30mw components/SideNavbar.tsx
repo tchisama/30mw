@@ -36,7 +36,7 @@ function SideNavbar({}: Props) {
             {
               collections.map((_,i)=>{
                 return <Link href={_?.href} key={i}>
-                <div className={cn('flex hover:bg-slate-50 duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-4 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":pathname === _?.href})}>
+                <div className={cn('flex hover:bg-slate-50 duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-4 pl-3 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":pathname === _?.href})}>
                   {/* <Home size={24} strokeWidth={1}/> */}
                   <div className='text-2xl bg-white rounded-lg'>{_?.icon}</div>
                   <div className=''>
@@ -50,11 +50,11 @@ function SideNavbar({}: Props) {
           {/* <Button className='w-full mt-4' onPress={createCollection}> Create Collection</Button> */}
           <div className='flex mt-auto flex-col gap-2 w-full items-start'>
                 <Link href={"/dashboard/settings"} className='w-full' >
-                <div className={cn('flex hover:bg-slate-50 duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-4 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":pathname === "/dashboard/settings"})}>
+                <div className={cn('flex hover:bg-slate-50 duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-4 pl-3 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":pathname.includes("/dashboard/settings")})}>
                   {/* <Home size={24} strokeWidth={1}/> */}
-                  <div className='text-2xl bg-white rounded-lg'><Settings size={24} strokeWidth={1}/></div>
+                  <div className='text-2xl bg-white rounded-lg'>⚙️</div>
                   <div className=''>
-                    <div className='font-medium capitalize'>Settings</div>
+                    <div className='font-medium capitalize'>Configs</div>
                     <div className='text-xs '> manage dashboard</div>
                   </div>
                 </div></Link>

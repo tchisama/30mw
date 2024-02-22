@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useMemo } from 'react'
 import Doc from '../DocComponents/Doc'
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, Input, useDisclosure, Skeleton} from "@nextui-org/react";
@@ -31,7 +32,7 @@ const CollectionPage = (props: Props) => {
 
   return (
     selectedCollection && !loading &&
-    <div className='flex-1 min-h-[110vh]'>
+    <div className='flex-1'>
     <Navbar maxWidth='2xl' isBlurred={false} height={"80px"} isBordered shouldHideOnScroll className=''>
       <NavbarBrand>
         <LoadingTiming>
