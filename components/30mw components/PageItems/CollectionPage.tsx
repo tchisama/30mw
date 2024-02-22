@@ -68,7 +68,7 @@ const CollectionPage = (props: Props) => {
       {
         !loading &&
         docs.map((doc,index) => {
-          return <Doc doc={doc} key={index}/>
+          return <Doc doc={doc} key={doc.id}/>
         })
       }
     </div>

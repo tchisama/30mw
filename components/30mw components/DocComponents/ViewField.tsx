@@ -199,7 +199,7 @@ function ViewField({field,index,document,setDocument}: Props) {
       </div>
       <div className='flex gap-2 items-center'>
         {
-          getValue(index,document)
+          String(getValue(index,document))
         }
          {" "}
          <div className='text-sm text-gray-950/50'>
