@@ -13,7 +13,9 @@ type Props = {
 function Doc({doc}: Props) {
   const [document, setDocument] = React.useState<any>(doc);
   const {selectedCollection} = useCollections()
+  console.log(selectedCollection)
   return (
+    selectedCollection &&
     <Card className=''>
       <CardHeader className='flex justify-between'>
         <div className="flex flex-col text-lg capitalize font-medium">

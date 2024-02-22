@@ -18,3 +18,8 @@ const useCollections = create<CollectionState>((set) => ({
 }));
 
 export default useCollections;
+
+
+
+
+// [  {    "name": "image",    "type": "image"  },  {    "name": "name",    "type": "string"  },  {    "name": "in stock",    "type": "boolean",    "labels": {      "true": "in stock",      "false": "out of stock"    }  },  ]

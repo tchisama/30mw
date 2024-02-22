@@ -18,7 +18,6 @@ const Home = () => {
     try{
       onSnapshot(collection(db, "collections"), (snapshot) => {
           setCollections(snapshot.docs.map((doc) => {
-              console.log(doc.data())
               return {...doc.data(), id: doc.id , structure: JSON.parse(doc.data().structure)} as CollectionType
           }))  
       })
@@ -29,12 +28,17 @@ const Home = () => {
   },[setCollections])
   useEffect(() => {
     if(collections.length < 0) return
-    const coll = collections.find((c) => c.href === pathname) || collections[0]
+    const coll = collections.find((c) => c.href === pathname) 
+    if(!coll && collections.length > 0){
+      setSelectedCollection(collections[0])
+      router.push((collections[0] as CollectionType)?.href)
+    }
     if(coll) setSelectedCollection(coll)
+    // console.log(coll)
   },[collections,pathname,router,setSelectedCollection])
 
 	return (
-    collections && collections.length > 0 && selectedCollection &&
+    collections.length > 0 && selectedCollection &&
     <div className="flex">
       <SideNavbar />
 			<CollectionPage />

@@ -31,6 +31,9 @@ function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange
       setDocument(createEmptyObject(_collection.structure))
     })
   }
+  useEffect(() => {
+    setDocument(createEmptyObject(_collection.structure))
+  },[_collection])
   return(
     <>
       <Modal  scrollBehavior='inside' size='3xl' isOpen={isOpen} onOpenChange={onOpenChange}>

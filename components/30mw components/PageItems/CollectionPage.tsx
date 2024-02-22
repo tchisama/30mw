@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import Doc from '../DocComponents/Doc'
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, Input, useDisclosure, Skeleton} from "@nextui-org/react";
 import { Filter, Plus, Search, Trash } from 'lucide-react';
@@ -14,21 +14,23 @@ const CollectionPage = (props: Props) => {
   const [docs, setDocs] = React.useState<CollectionType[]>([])
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const {collections, setCollections ,selectedCollection, setSelectedCollection} = useCollections()
+  const [loading,setLoading] = React.useState(true)
 
-  useEffect(() => {
+  useMemo(() => {
     setDocs([])
+    setLoading(true)
     if(!selectedCollection.collection) return
     const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false),orderBy('_30mw_createdAt', 'desc'));
     onSnapshot(q, (snapshot) => {
       setDocs(snapshot.docs.map((doc) => {
         return {...doc.data(), id: doc.id} as CollectionType
       }))
+      setLoading(false)
     })
   },[selectedCollection])
 
-
   return (
-    selectedCollection &&
+    selectedCollection && !loading &&
     <div className='flex-1 min-h-[110vh]'>
     <Navbar maxWidth='2xl' isBlurred={false} height={"80px"} isBordered shouldHideOnScroll className=''>
       <NavbarBrand>
@@ -64,6 +66,7 @@ const CollectionPage = (props: Props) => {
     </Navbar>
     <div className='p-5 grid gap-4 grid-cols-3 mt-12'>
       {
+        !loading &&
         docs.map((doc,index) => {
           return <Doc doc={doc} key={index}/>
         })
