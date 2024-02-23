@@ -15,6 +15,7 @@ import {
 type Props = {
 	index: number[];
 	setCollection: Function;
+	collection : CollectionType
 };
 
 import {
@@ -92,7 +93,7 @@ const FieldsTypes = [
 	{ name: "time", icon: (p: any) => <ClockIcon {...p} />, description: "Time" },
 ];
 
-function AddDailog({ setCollection, index }: Props) {
+function EditDailog({ setCollection, index , collection }: Props) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 	const [name, setName] = useState("");
@@ -132,8 +133,8 @@ function AddDailog({ setCollection, index }: Props) {
 
 	return (
 		<>
-			<Button onPress={onOpen} className="mt-2 w-full" variant="bordered">
-				Add Field
+			<Button onPress={onOpen} size="sm" isIconOnly className="mt-1 ml-1" variant="light">
+				<MoreHorizontal size={15}/>
 			</Button>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
 				<ModalContent>
@@ -185,14 +186,5 @@ function AddDailog({ setCollection, index }: Props) {
 	);
 }
 
-export default AddDailog;
+export default EditDailog;
 
-[
-	{ name: "image", type: "image" },
-	{ name: "userid", type: { anchorKey: "string", currentKey: "string" } },
-	{
-		name: "in stock",
-		type: "boolean",
-		labels: { true: "in stock", false: "out of stock" },
-	},
-];

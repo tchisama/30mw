@@ -14,13 +14,13 @@ export const setSelect = ({ rows, index, newValue }: { rows: any[]; index: numbe
         return newRows;
     }
 
-    if (currentItem.type === "object" && currentItem.object && currentItem.object.length > 0) {
+    if (currentItem.type === "object" && currentItem.structure && currentItem.structure.length > 0) {
         // If the current item is an object, go one level deeper
-        const updatedObject = setSelect({ rows: currentItem.object, index: index.slice(1), newValue });
-        currentItem.object = updatedObject;
+        const updatedObject = setSelect({ rows: currentItem.structure, index: index.slice(1), newValue });
+        currentItem.structure = updatedObject;
     } else if (currentItem.type === "array") {
         // If the current item is an array, go one level deeper
-        const updatedObject = setSelect({ rows: currentItem.array, index: index.slice(1), newValue });
+        const updatedObject = setSelect({ rows: currentItem.structure, index: index.slice(1), newValue });
         currentItem.structure = updatedObject;
     } else {
         // This case is when we have reached the target value
@@ -46,18 +46,11 @@ export const addRow = ({ rows, index, newValue }: { rows: any[]; index: number[]
         // return [...newRows, {name:"hell",type:"string"}];
     }
 
-    if (newRows[index[0]].type === "object") {
+    if (newRows[index[0]].type === "object" || newRows[index[0]].type === "array") {
         if (!newRows[index[0]].structure) {
             newRows[index[0]].structure = [];
         }
-        newRows[index[0]].structure =  addRow({ rows: newRows[index[0]].object, index: index.slice(1), newValue })
-
-    } else if (newRows[index[0]].type === "array") {
-        if (!newRows[index[0]].structure) {
-            newRows[index[0]].structure = [];
-        }
-        newRows[index[0]].structure = addRow({ rows: newRows[index[0]].array, index: index.slice(1), newValue });
-
+        newRows[index[0]].structure =  addRow({ rows: newRows[index[0]].structure, index: index.slice(1), newValue })
     } else {
         newRows[index[0]] = newValue;
     }

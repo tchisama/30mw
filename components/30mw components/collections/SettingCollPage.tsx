@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddDailog from "./AddDailog";
+import EditDailog from "./EditDailog";
 type Props = {
   i:number;
 	c: CollectionType;
@@ -85,7 +86,7 @@ useEffect(() => {
 					collection.structure.map((r, i) => {
 						return <RenderRow setCollection={setCollection} key={i} r={r} collection={collection} i={[i]} />;
 					})}
-          <AddDailog setCollection={setCollection} index={[_i]}/>
+          <AddDailog setCollection={setCollection} index={[]}/>
 			</div>
 		</Card>
 	);
@@ -97,8 +98,9 @@ const RenderRow = ({ r ,collection,i:ii,setCollection }: { r: Field , collection
 		const AddRelativeDiv = (children: React.ReactNode) => {
 			return (
 				<div className="relative flex  ">
-					<div className=" w-full">{children}</div>
-					{/* <EditRow r={a} index={index} setCollection={setCollection}  collection={collection}/> */}
+					<div className=" w-full">{children}
+					</div>
+					<EditDailog setCollection={setCollection} index={index} collection={collection}/>
 				</div>
 			);
 		};
@@ -119,13 +121,8 @@ const RenderRow = ({ r ,collection,i:ii,setCollection }: { r: Field , collection
 						{a.structure?.map((o, i) => {
 							return render(o,[...index,i]);
 						})}
-            {/* <AddRowDialog setCollection={setCollection} index={index}>
-            <Button
-              className=" mr-2 w-full mt-2 gap-2" variant={"outline"}>
-                <Plus size={18} />
-                add new row
-            </Button>
-            </AddRowDialog> */}
+            <AddDailog setCollection={setCollection} index={index}> 
+            </AddDailog> 
 					</div>
 				</div>
 			);
@@ -146,13 +143,8 @@ const RenderRow = ({ r ,collection,i:ii,setCollection }: { r: Field , collection
 						{a.structure?.map((o, i) => {
 							return render(o,[...index,i]);
 						})}
-          {/* <AddRowDialog setCollection={setCollection} index={index}>
-          <Button
-            className=" mr-2 w-full mt-2 gap-2" variant={"outline"}>
-              <Plus size={18} />
-              add new row
-          </Button>
-          </AddRowDialog> */}
+            <AddDailog setCollection={setCollection} index={index}> 
+            </AddDailog> 
 					</div>
 				</div>
 			);
@@ -222,8 +214,7 @@ const RenderRow = ({ r ,collection,i:ii,setCollection }: { r: Field , collection
 								<Input placeholder="new option" size="sm" className="" value={option} onChange={(e) => setOption(e.target.value)}/>
 								<Button
                   variant="bordered"
-									onClick={() => {
-										if(!a.options) return
+									onPress={() => {
 										if(!option) return
 										setCollection(
 											{
@@ -231,7 +222,7 @@ const RenderRow = ({ r ,collection,i:ii,setCollection }: { r: Field , collection
 												rows: setSelect({
 													rows: collection.structure,
 													index,
-													newValue: [...a.options,{name:option,value:option}] || [{name:option,value:option}],
+													newValue:a.options ? [...a.options,{name:option,value:option}] : [{name:option,value:option}],
 												}),
 											}
 										);
