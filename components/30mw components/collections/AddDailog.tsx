@@ -8,8 +8,8 @@ import {
 	useDisclosure,
 	Button,
 	Input,
-  Select,
-  SelectItem,
+	Select,
+	SelectItem,
 } from "@nextui-org/react";
 
 type Props = {
@@ -42,20 +42,55 @@ import { CollectionType } from "@/types/collection";
 import { addRow } from "@/lib/utils/collectionsManager";
 
 const FieldsTypes = [
-    { name: "string", icon: (p: any) => <TypeIcon {...p} />, description: "Text data" },
-    { name: "number", icon: (p: any) => <Hash {...p} />, description: "Numeric data" },
-    { name: "text", icon: (p: any) => <Text {...p} />, description: "Long text" },
-    { name: "image", icon: (p: any) => <ImageIcon {...p} />, description: "Image" },
-    { name: "reference", icon: (p: any) => <MousePointer {...p} />, description: "Reference" },
-    { name: "select", icon: (p: any) => <ListIcon {...p} />, description: "Selection" },
-    { name: "array", icon: (p: any) => <Brackets {...p} />, description: "Array" },
-    { name: "date", icon: (p: any) => <Calendar {...p} />, description: "Date" },
-    { name: "boolean", icon: (p: any) => <ToggleLeft {...p} />, description: "True or False" },
-    { name: "object", icon: (p: any) => <Group {...p} />, description: "Group of fields" },
-    { name: "avatar", icon: (p: any) => <CircleUser {...p} />, description: "Profile picture" },
-    { name: "time", icon: (p: any) => <ClockIcon {...p} />, description: "Time" },
+	{
+		name: "string",
+		icon: (p: any) => <TypeIcon {...p} />,
+		description: "Text data",
+	},
+	{
+		name: "number",
+		icon: (p: any) => <Hash {...p} />,
+		description: "Numeric data",
+	},
+	{ name: "text", icon: (p: any) => <Text {...p} />, description: "Long text" },
+	{
+		name: "image",
+		icon: (p: any) => <ImageIcon {...p} />,
+		description: "Image",
+	},
+	{
+		name: "reference",
+		icon: (p: any) => <MousePointer {...p} />,
+		description: "Reference",
+	},
+	{
+		name: "select",
+		icon: (p: any) => <ListIcon {...p} />,
+		description: "Selection",
+	},
+	{
+		name: "array",
+		icon: (p: any) => <Brackets {...p} />,
+		description: "Array",
+	},
+	{ name: "date", icon: (p: any) => <Calendar {...p} />, description: "Date" },
+	{
+		name: "boolean",
+		icon: (p: any) => <ToggleLeft {...p} />,
+		description: "True or False",
+	},
+	{
+		name: "object",
+		icon: (p: any) => <Group {...p} />,
+		description: "Group of fields",
+	},
+	{
+		name: "avatar",
+		icon: (p: any) => <CircleUser {...p} />,
+		description: "Profile picture",
+	},
+	{ name: "time", icon: (p: any) => <ClockIcon {...p} />, description: "Time" },
 ];
-
 
 function AddDailog({ setCollection, index }: Props) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -69,6 +104,8 @@ function AddDailog({ setCollection, index }: Props) {
 	const { collections } = useCollections();
 
 	const addRowFunction = () => {
+		console.log((type as any).currentKey)
+		// return 
 		if (!name || !type) return;
 		// if (type === "reference") {
 		// 	if (!refCollection || !refKey) return;
@@ -81,7 +118,7 @@ function AddDailog({ setCollection, index }: Props) {
 					index,
 					newValue: {
 						name,
-						type,
+						type:"string"
 					},
 				}),
 			};
@@ -90,7 +127,9 @@ function AddDailog({ setCollection, index }: Props) {
 
 	return (
 		<>
-			<Button onPress={onOpen} className="mt-2" variant="bordered">Add Field</Button>
+			<Button onPress={onOpen} className="mt-2" variant="bordered">
+				Add Field
+			</Button>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
 				<ModalContent>
 					{(onClose) => (
@@ -104,12 +143,16 @@ function AddDailog({ setCollection, index }: Props) {
 										placeholder="Name"
 										value={name}
 										onChange={(e) => setName(e.target.value)}
-										
 									/>
-									<Select selectedKeys={type} onSelectionChange={setType as any} label="Select an type" className="max-w-xs">
+									<Select
+										selectedKeys={type}
+										onSelectionChange={setType as any}
+										label="Select an type"
+										className="max-w-xs"
+									>
 										{FieldsTypes.map((field) => (
 											<SelectItem key={field.name} value={field.name}>
-													{field.name}
+												{field.name}
 											</SelectItem>
 										))}
 									</Select>
@@ -119,7 +162,13 @@ function AddDailog({ setCollection, index }: Props) {
 								<Button variant="light" onPress={onClose}>
 									Close
 								</Button>
-								<Button color="primary" onPress={()=>{addRowFunction();onClose();}}>
+								<Button
+									color="primary"
+									onPress={() => {
+										addRowFunction();
+										onClose();
+									}}
+								>
 									Create
 								</Button>
 							</ModalFooter>
@@ -132,3 +181,13 @@ function AddDailog({ setCollection, index }: Props) {
 }
 
 export default AddDailog;
+
+[
+	{ name: "image", type: "image" },
+	{ name: "userid", type: { anchorKey: "string", currentKey: "string" } },
+	{
+		name: "in stock",
+		type: "boolean",
+		labels: { true: "in stock", false: "out of stock" },
+	},
+];
