@@ -201,7 +201,39 @@ function EditDailog({
 										))}
 									</Select>
 								</div>
-								{type.has("reference") && <div>hello world</div>}
+
+
+
+								
+								{type.has("reference") && <div className="flex gap-4">
+									<Select
+										selectedKeys={refCollection}
+										onSelectionChange={setRefCollection as any}
+										label="Select collection"
+										className=""
+									>
+										{collections.map((field) => (
+											<SelectItem key={field.name} value={field.name}>
+												{field.name}
+											</SelectItem>
+										))}
+									</Select>
+									<Select
+										selectedKeys={refCollection}
+										onSelectionChange={setRefCollection as any}
+										label="Select collection"
+										className=""
+									>
+										{collections.map((field) => (
+											<SelectItem key={field.name} value={field.name}>
+												{field.name}
+											</SelectItem>
+										))}
+									</Select>
+								</div>}
+
+
+
 								{type.has("boolean") && (
 									<div className="flex gap-2 ">
 										<Input

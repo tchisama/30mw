@@ -21,12 +21,13 @@ const CollectionPage = (props: Props) => {
     setDocs([])
     setLoading(true)
     if(!selectedCollection.collection) return
-    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false),orderBy('_30mw_createdAt', 'desc'));
+    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false));
     onSnapshot(q, (snapshot) => {
       setDocs(snapshot.docs.map((doc) => {
         return {...doc.data(), id: doc.id} as CollectionType
       }))
     })
+    setDocs(p=>p.sort((a:any,b:any)=>new Date(b._30mw_createdAt).getTime()-new Date(a._30mw_createdAt).getTime()))
     setLoading(false)
   },[selectedCollection])
 
@@ -73,6 +74,12 @@ const CollectionPage = (props: Props) => {
         })
       }
     </div>
+      {
+        docs.length === 0 && 
+        <div className='min-h-[50vh]  flex-1 w-full flex items-center justify-center'>
+          <p className=' text-3xl w-fit'>🥲 No documents</p>
+        </div>
+      }
     </div>
   )
 }

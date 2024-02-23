@@ -1,9 +1,11 @@
-import { moveRowDown, moveRowUp, setRow, setSelect } from "@/lib/utils/collectionsManager";
-import { CollectionType, Field } from "@/types/collection";
 import {
-	Button,
-	Input,
-} from "@nextui-org/react";
+	moveRowDown,
+	moveRowUp,
+	setRow,
+	setSelect,
+} from "@/lib/utils/collectionsManager";
+import { CollectionType, Field } from "@/types/collection";
+import { Button, Input } from "@nextui-org/react";
 import {
 	ArrowRight,
 	Brackets,
@@ -64,12 +66,32 @@ export const RenderRow = ({
 	const [option, setOption] = useState<string>("");
 	const render = (a: Field, index: number[]) => {
 		const AddRelativeDiv = (children: React.ReactNode) => {
-
 			return (
 				<div className="relative flex group ">
 					<div className="flex flex-col h-full  mt-2 ">
-						<button disabled={index[index.length -1] === 0} onClick={()=>setCollection({...collection,structure:moveRowUp({rows:collection.structure,index})})} className="flex-1 w-4 hover:bg-slate-200"><ChevronUp size={14} /></button>
-						<button  onClick={()=>setCollection({...collection,structure:moveRowDown({rows:collection.structure,index})})} className="flex-1 w-4 hover:bg-slate-200"><ChevronDown size={14} /></button>
+						<button
+							disabled={index[index.length - 1] === 0}
+							onClick={() =>
+								setCollection({
+									...collection,
+									structure: moveRowUp({ rows: collection.structure, index }),
+								})
+							}
+							className="flex-1 w-4 hover:bg-slate-200"
+						>
+							<ChevronUp size={14} />
+						</button>
+						<button
+							onClick={() =>
+								setCollection({
+									...collection,
+									structure: moveRowDown({ rows: collection.structure, index }),
+								})
+							}
+							className="flex-1 w-4 hover:bg-slate-200"
+						>
+							<ChevronDown size={14} />
+						</button>
 					</div>
 					<div className=" w-full">{children}</div>
 					<EditDailog
@@ -162,6 +184,56 @@ export const RenderRow = ({
 									key={i}
 									className="flex gap-2 justify-between bg-white rounded-xl p-1 border pl-4 items-center"
 								>
+									<div className="flex flex-col h-full   ">
+										<button
+											onClick={() => {
+												const newValue = [...a.options];
+												if (i > 0 && i < newValue.length) {
+													// Ensure i is within bounds
+													// Swap positions of items at index i and i-1
+													[newValue[i], newValue[i - 1]] = [
+														newValue[i - 1],
+														newValue[i],
+													];
+													setCollection({
+														...collection,
+														structure: setSelect({
+															rows: collection.structure,
+															index,
+															newValue,
+														}),
+													});
+												}
+											}}
+											className="flex-1 w-4 hover:bg-slate-200"
+										>
+											<ChevronUp size={14} />
+										</button>
+										<button
+											onClick={() => {
+												const newValue = [...a.options];
+												if (i < newValue.length - 1) {
+													// Ensure i is not the last index
+													// Swap positions of items at index i and i+1
+													[newValue[i], newValue[i + 1]] = [
+														newValue[i + 1],
+														newValue[i],
+													];
+													setCollection({
+														...collection,
+														structure: setSelect({
+															rows: collection.structure,
+															index,
+															newValue,
+														}),
+													});
+												}
+											}}
+											className="flex-1 w-4 hover:bg-slate-200"
+										>
+											<ChevronDown size={14} />
+										</button>
+									</div>
 									{o.name}
 									<Button
 										isIconOnly

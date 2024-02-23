@@ -3,6 +3,8 @@ import { Copy, Edit, Menu, MoreHorizontal, Trash } from "lucide-react";
 import React from 'react'
 import EditModal from "./Edit";
 import { CollectionType } from "@/types/collection";
+import { Timestamp, addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 
 type Props = {
   document: any,
@@ -13,14 +15,26 @@ type Props = {
 function Controllers({
   document:_document,
   setDocument,
-  collection
+  collection:_collection
 }: Props) {
   const iconClasses = "text-xl w-5 h-5 mr-2 text-default-500 pointer-events-none flex-shrink-0";
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
+
+  const deleteDocument = () => {
+    if(!_document) return
+    updateDoc(doc(db,_collection.collection,_document.id),{
+      _30mw_deleted : true
+    })
+  }
+  const copyDocument = () => {
+    if(!_document) return
+    addDoc(collection(db,_collection.collection),
+    {..._document,_30mw_createdAt : Timestamp.now(),_30mw_updatedAt : Timestamp.now()})
+  }
   return (
     <>
-    <EditModal document={_document} setDocument={setDocument} collection={collection} model={{isOpen, onOpen, onOpenChange}} />
+    <EditModal document={_document} setDocument={setDocument} collection={_collection} model={{isOpen, onOpen, onOpenChange}} />
     <Dropdown>
       <DropdownTrigger>
         <Button 
@@ -39,23 +53,25 @@ function Controllers({
           description="Allows you to edit the file"
           startContent={<Edit className={iconClasses} />}
         >
-          Edit file
+          Edit 
         </DropdownItem>
         <DropdownItem
           key="copy"
-          description="Copy the file link"
+          description="duplicate the document link"
+          onClick={copyDocument}
           startContent={<Copy className={iconClasses} />}
         >
-          Copy link
+          Duplicate
         </DropdownItem>
         <DropdownItem
           key="delete"
           className="text-danger"
           color="danger"
           description="Permanently delete the file"
+          onClick={deleteDocument}
           startContent={<Trash className={cn(iconClasses)} />}
         >
-          Delete file
+          Delete 
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
