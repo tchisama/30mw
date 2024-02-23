@@ -110,3 +110,57 @@ export const deleteRow = ({ rows, index }: { rows: any[]; index: number[] }): an
 
     return newRows;
 };
+
+
+
+
+export const moveRowUp = ({ rows, index }: { rows: any[]; index: number[] }): any[] => {
+    // Make a shallow copy of the rows array
+    const newRows = [...rows];
+
+    // If index is empty, return the original rows array
+    if (index.length === 0) {
+        return newRows;
+    }
+
+    // If the index is at the top level, swap the rows
+    if (index.length === 1 && index[0] > 0) {
+        const temp = newRows[index[0] - 1];
+        newRows[index[0] - 1] = newRows[index[0]];
+        newRows[index[0]] = temp;
+        return newRows;
+    }
+
+    // For deeper levels, recursively move the row up
+    const currentItem = newRows[index[0]];
+    const modifiedStructure = moveRowUp({ rows: currentItem.structure, index: index.slice(1) });
+    newRows[index[0]].structure = modifiedStructure;
+
+    return newRows;
+};
+
+
+export const moveRowDown = ({ rows, index }: { rows: any[]; index: number[] }): any[] => {
+    // Make a shallow copy of the rows array
+    const newRows = [...rows];
+
+    // If index is empty or the last item, return the original rows array
+    if (index.length === 0 || index[0] === newRows.length - 1) {
+        return newRows;
+    }
+
+    // If the index is at the top level, swap the rows
+    if (index.length === 1) {
+        const temp = newRows[index[0] + 1];
+        newRows[index[0] + 1] = newRows[index[0]];
+        newRows[index[0]] = temp;
+        return newRows;
+    }
+
+    // For deeper levels, recursively move the row down
+    const currentItem = newRows[index[0]];
+    const modifiedStructure = moveRowDown({ rows: currentItem.structure, index: index.slice(1) });
+    newRows[index[0]].structure = modifiedStructure;
+
+    return newRows;
+};

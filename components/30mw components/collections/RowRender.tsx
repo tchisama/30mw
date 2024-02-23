@@ -1,4 +1,4 @@
-import { setSelect } from "@/lib/utils/collectionsManager";
+import { moveRowDown, moveRowUp, setRow, setSelect } from "@/lib/utils/collectionsManager";
 import { CollectionType, Field } from "@/types/collection";
 import {
 	Button,
@@ -64,11 +64,12 @@ export const RenderRow = ({
 	const [option, setOption] = useState<string>("");
 	const render = (a: Field, index: number[]) => {
 		const AddRelativeDiv = (children: React.ReactNode) => {
+
 			return (
-				<div className="relative flex  ">
-					<div className="flex flex-col h-full bg-white mt-2 opacity-0">
-						<button className="flex-1 w-4 hover:bg-slate-200"><ChevronUp size={14} /></button>
-						<button className="flex-1 w-4 hover:bg-slate-200"><ChevronDown size={14} /></button>
+				<div className="relative flex group ">
+					<div className="flex flex-col h-full  mt-2 ">
+						<button disabled={index[index.length -1] === 0} onClick={()=>setCollection({...collection,structure:moveRowUp({rows:collection.structure,index})})} className="flex-1 w-4 hover:bg-slate-200"><ChevronUp size={14} /></button>
+						<button  onClick={()=>setCollection({...collection,structure:moveRowDown({rows:collection.structure,index})})} className="flex-1 w-4 hover:bg-slate-200"><ChevronDown size={14} /></button>
 					</div>
 					<div className=" w-full">{children}</div>
 					<EditDailog
@@ -199,7 +200,7 @@ export const RenderRow = ({
 								if (!option) return;
 								setCollection({
 									...collection,
-									rows: setSelect({
+									structured: setSelect({
 										rows: collection.structure,
 										index,
 										newValue: a.options
