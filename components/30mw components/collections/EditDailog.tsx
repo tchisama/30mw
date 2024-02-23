@@ -165,8 +165,8 @@ function EditDailog({
 			})
 		}
 		if(value.type == "reference"){
-			setRefCollection(new Set( [value.reference.collection]) as any);
-			setRefKey(new Set([value.reference.key]) as any);
+			setRefCollection(new Set( [value?.reference?.collection]) as any);
+			setRefKey(new Set([value?.reference?.key]) as any);
 		}
 	}, [value]);
 
@@ -226,18 +226,21 @@ function EditDailog({
 											</SelectItem>
 										))}
 									</Select>
+									{
+										refCollection && 
 									<Select
 										selectedKeys={refKey as any}
 										onSelectionChange={setRefKey as any}
 										label="Select key"
 										className=""
 									>
-										{collections.find(c=>c.name == ((refCollection as any).currentKey??(value as any).reference.collection) )?.structure.filter(r=>!["array","reference","object","select"].includes(r.name)).map((field) => (
+										{collections.find(c=>c.name == ((refCollection as any).currentKey??(value as any)?.reference?.collection) )?.structure.filter(r=>!["array","reference","object","select"].includes(r.name)).map((field) => (
 											<SelectItem key={field.name} value={field.name}>
 												{field.name}
 											</SelectItem>
 										)) as any}
 									</Select>
+									}
 								</div>}
 
 

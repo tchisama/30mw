@@ -41,7 +41,7 @@ function DashboardProvider({children}: Props) {
   },[collections,pathname,router,setSelectedCollection])
 
   return (
-    <div className='max-w-[1900px] px-8 mx-auto'>{children}</div>
+    <div className='max-w-[1900px] 2xl:max-w-[2400px] px-8 mx-auto'>{children}</div>
   )
 }
 

@@ -66,7 +66,7 @@ const CollectionPage = (props: Props) => {
         <CreateModal collection={selectedCollection} model={{isOpen, onOpen, onOpenChange}}/>
       </NavbarContent>
     </Navbar>
-    <div className='p-5 grid gap-4 grid-cols-3 mt-12'>
+    <div className='p-5 grid gap-4 grid-cols-3 3xl:grid-cols-4 mt-12'>
       {
         !loading &&
         docs.map((doc,index) => {

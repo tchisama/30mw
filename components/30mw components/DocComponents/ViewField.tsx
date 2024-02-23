@@ -12,6 +12,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '@/firebase'
+import ImageViewer from '../ImageViewer'
 
 type Props = {
   field:Field,
@@ -24,7 +27,7 @@ function ViewField({field,index,document,setDocument}: Props) {
 
 
   const [loading, setLoading] = React.useState<boolean>(false)
-
+  const [refDoc,setRefDoc] = React.useState<any>(null)
   useEffect(() => {
     if(field.type !== "array" && field.type !== "object"){ 
       setLoading(true)
@@ -32,7 +35,19 @@ function ViewField({field,index,document,setDocument}: Props) {
         setLoading(false)
       },300)
     }
-  }, [field])
+    if(field.type === "reference"){
+      try{
+
+      getDoc(
+        doc(db,field.reference.collection,getValue(index,document))
+      ).then((doc)=>{
+        setRefDoc(doc.data())
+      })
+      }catch(e){
+        console.log(e)
+      }
+    }
+  }, [field,document,index])
 
   if(loading) return (
       <Skeleton className="rounded-lg">
@@ -105,6 +120,7 @@ function ViewField({field,index,document,setDocument}: Props) {
           <div className='font-medium mb-2 capitalize'>{field.name}</div>
         </div>
         <div className=' bg-slate-400/5 p-2 border rounded-xl w-fit flex items-center justify-center space-y-1'>
+          <ImageViewer src={getValue(index,document) ?? ""}>
           <Image
             width={200}
             height={200}
@@ -113,6 +129,7 @@ function ViewField({field,index,document,setDocument}: Props) {
             src={getValue(index,document)??""}
             className="h-[200px] object-contain w-[200px] mx-auto"
           />
+          </ImageViewer>
         </div>
       </div>
     )
@@ -182,6 +199,21 @@ function ViewField({field,index,document,setDocument}: Props) {
       </div>
     )
   }
+
+
+  if(field.type === "reference"){
+    return (
+    	<div className="flex justify-between bg-white pr-2  p-2 rounded-xl border px-4">
+				<div className="font-medium capitalize">{field.name}</div>
+        {
+      refDoc && field.reference.collection && field.reference.key ?
+        <p className=''>{refDoc[field.reference.key]}</p>
+        : <p className='text-red-500'>no reference</p>
+        }
+			</div>
+    )
+  }
+
 
 	if (field.type == "text") {
 		return (

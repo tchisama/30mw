@@ -38,7 +38,7 @@ import {
 	CarouselPrevious,
 } from "@/components/ui/carousel";
 import UploadImage from "./UploadImage";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/firebase";
 
 type Props = {
@@ -60,11 +60,11 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 
 	useEffect(()=>{
 		if(field.type === "reference"){
-				
+			const q = query(collection(db,field.reference.collection),where('_30mw_deleted', '==', false));
 			getDocs(
-				collection(db,field.reference.collection)
+				q
 			).then((docs)=>{
-				setRefDocs(docs.docs.map((d)=>d.data())as any[])
+				setRefDocs(docs.docs.map((d)=>({...d.data(),id:d.id}))as any[])
 			})
 		}
 	},[field])
@@ -406,18 +406,20 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 				<div className="font-medium capitalize">{field.name}</div>
 				<Select
 					// defaultValue={getValue(index,_document) ?? ""}
-					value={getValue(index, _document) ?? ""}
-					onValueChange={(v) => {
+					selectedKeys={[getValue(index, _document)]}
+					onSelectionChange={(v:any) => {
 						setDocument((p: any) => {
-							return returnUpdated(index, p, v);
+							console.log(v.currentKey,p)
+							return returnUpdated(index, p, v.currentKey);
 						});
 					}}
+
 					label="Select an animal"
 					className="max-w-xs"
 				>
 					{refDocs.map((doc) => (
 						<SelectItem key={doc.id} value={doc.id}>
-							{option.name}
+							{doc[field.reference.key] ?? "no data in reference"}
 						</SelectItem>
 					))}
 				</Select>
