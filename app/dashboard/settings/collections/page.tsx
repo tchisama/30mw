@@ -22,7 +22,7 @@ function Page({}: Props) {
       <SideNavbar />
       <div className='flex-1'>
         		<div className="min-h-screen">
-			<div className="px-4 max-w-[2400px] mx-auto py-8 relative flex gap-2">
+			<div className="px-4 max-w-[2400px] min-h-[110vh] mx-auto py-8 relative flex gap-2">
 				<div className="flex-1">
           <div className="flex justify-between">
             <div className='flex items-end gap-2 mb-24'>
@@ -31,7 +31,7 @@ function Page({}: Props) {
             </div>
             <AddCollection />
           </div>
-          <div className="grid grid-cols-2 mt-4 gap-2">
+          <div className="grid grid-cols-2 mt-4 gap-6  ">
             {
               collections && collections.map((c:CollectionType,i)=>{
                 return (

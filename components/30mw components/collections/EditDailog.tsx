@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Modal,
 	ModalContent,
@@ -10,12 +10,13 @@ import {
 	Input,
 	Select,
 	SelectItem,
+	Divider,
 } from "@nextui-org/react";
 
 type Props = {
 	index: number[];
 	setCollection: Function;
-	collection : CollectionType
+	collection: CollectionType;
 };
 
 import {
@@ -39,8 +40,9 @@ import {
 	TypeIcon,
 } from "lucide-react";
 import useCollections from "@/store/30mw/collections";
-import { CollectionType } from "@/types/collection";
-import { addRow } from "@/lib/utils/collectionsManager";
+import { CollectionType, Field, FieldTypes } from "@/types/collection";
+import { addRow, deleteRow, setRow } from "@/lib/utils/collectionsManager";
+import { getValue } from "firebase/remote-config";
 
 const FieldsTypes = [
 	{
@@ -93,68 +95,96 @@ const FieldsTypes = [
 	{ name: "time", icon: (p: any) => <ClockIcon {...p} />, description: "Time" },
 ];
 
-function EditDailog({ setCollection, index , collection }: Props) {
+function EditDailog({
+	r,
+	index,
+	setCollection,
+	collection,
+	value,
+}: {
+	r: Field;
+	index: number[];
+	setCollection: Function;
+	collection: CollectionType;
+	value: Field;
+}) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-	const [name, setName] = useState("");
-	const [type, setType] = useState(new Set([]));
+	const [name, setName] = useState(value.name);
+	const [type, setType] = useState(new Set(value.type));
 
 	const [refCollection, setRefCollection] = useState<string>("");
 	const [refKey, setRefKey] = useState<string>("");
 
+	const [booleanLabels, setBooleanLabels] = useState(value?.labels ?? { true:"", false:"" });
+
+	const [prefix, setPrefix] = useState<string>(value?.prefix);
+
 	const { collections } = useCollections();
 
 	const addRowFunction = () => {
-		// return 
+		// return
 		if (!name || !type) return;
 		// if (type === "reference") {
 		// 	if (!refCollection || !refKey) return;
 		// }
-		setCollection((prev: CollectionType) => {
-			return {
-				...prev,
-				structure: addRow({
-					rows: prev.structure,
-					index:index,
-					newValue: {
-						name,
-						type:(type as any).currentKey
-					},
 
-				}),
-			};
+		setCollection({
+			...collection,
+			// structure: setType({ r: collection.structure, index: [...index], newValue: type.currentKey })
+			structure: setRow({
+				rows: collection.structure,
+				index: [...index],
+				newRow: {
+					...r,
+					name,
+					prefix,
+					// if type is boolean i want to add booleanlabels
+					labels:booleanLabels,
+					type: (type as any).currentKey as FieldTypes ?? value.type,
+				} as Field,
+			}),
 		});
 
 		setName("");
 		setType(new Set());
-
-		
 	};
+	useEffect(() => {
+		setName(value.name);
+		setType(new Set([value.type]));
+	}, [value]);
 
 	return (
 		<>
-			<Button onPress={onOpen} size="sm" isIconOnly className="mt-1 ml-1" variant="light">
-				<MoreHorizontal size={15}/>
+			<Button
+				onPress={onOpen}
+				size="sm"
+				isIconOnly
+				className="mt-1 ml-1"
+				variant="light"
+			>
+				<MoreHorizontal size={15} />
 			</Button>
-			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+			<Modal size="3xl" isOpen={isOpen} onOpenChange={onOpenChange}>
 				<ModalContent>
 					{(onClose) => (
 						<div>
 							<ModalHeader className="flex flex-col gap-1">
-								Add Field 
+								Edit Field
 							</ModalHeader>
 							<ModalBody>
 								<div className="flex gap-2">
 									<Input
 										placeholder="Name"
 										value={name}
+										label="Name"
 										onChange={(e) => setName(e.target.value)}
 									/>
 									<Select
 										selectedKeys={type}
 										onSelectionChange={setType as any}
 										label="Select an type"
-										className="max-w-xs"
+										className=""
 									>
 										{FieldsTypes.map((field) => (
 											<SelectItem key={field.name} value={field.name}>
@@ -162,6 +192,58 @@ function EditDailog({ setCollection, index , collection }: Props) {
 											</SelectItem>
 										))}
 									</Select>
+								</div>
+								{type.has("reference") && <div>hello world</div>}
+								{type.has("boolean") && (
+									<div className="flex gap-2 ">
+										<Input
+											// placeholder="true"
+											value={booleanLabels.true}
+											label="true label"
+											onChange={(e) =>
+												setBooleanLabels({
+													...booleanLabels,
+													true: e.target.value,
+												})
+											}
+										/>
+										<Input
+											// placeholder="false"
+											value={booleanLabels.false}
+											label="false label"
+											onChange={(e) =>
+												setBooleanLabels({
+													...booleanLabels,
+													false: e.target.value,
+												})
+											}
+										/>
+									</div>
+								)}
+								<Input
+									label="Prefix"
+									className="w-[200px]"
+									value={prefix}
+									onChange={(e) => setPrefix(e.target.value)}
+								/>
+
+								<Divider />
+								<div>
+									<Button
+										onPress={() => {
+											setCollection({
+												...collection,
+												structure: deleteRow({
+													rows: collection.structure,
+													index: [...index],
+												}),
+											});
+											onClose();
+										}}
+									>
+										{" "}
+										<Trash size={16} /> Delete Field
+									</Button>
 								</div>
 							</ModalBody>
 							<ModalFooter>
@@ -175,7 +257,7 @@ function EditDailog({ setCollection, index , collection }: Props) {
 										onClose();
 									}}
 								>
-									Create
+									save
 								</Button>
 							</ModalFooter>
 						</div>
@@ -187,4 +269,3 @@ function EditDailog({ setCollection, index , collection }: Props) {
 }
 
 export default EditDailog;
-

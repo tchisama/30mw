@@ -1,3 +1,5 @@
+import { Field } from "@/types/collection";
+
 export const setSelect = ({ rows, index, newValue }: { rows: any[]; index: number[]; newValue: any }): any[] => {
 
     const newRows = [...rows]; // Create a shallow copy of the original rows array
@@ -59,3 +61,52 @@ export const addRow = ({ rows, index, newValue }: { rows: any[]; index: number[]
     return newRows;
 };
 
+
+
+
+
+export const setRow = ({ rows, index, newRow }: { rows: any[]; index: number[]; newRow: Field }): any[] => {
+    // Make a shallow copy of the rows array
+    const newRows = [...rows];
+
+    if (index.length === 0) {
+        // If index is empty, return the original rows array
+        return newRows;
+    }
+
+    const currentItem = newRows[index[0]];
+
+    if (!currentItem || !currentItem.structure || index.length === 1) {
+        // If the currentItem is not found or it's the target value directly, update it
+        newRows[index[0]] = newRow;
+    } else {
+        // If the currentItem is an object or array, go one level deeper
+        newRows[index[0]].structure = setRow({ rows: currentItem.structure, index: index.slice(1), newRow });
+    }
+
+    return newRows;
+};
+
+
+
+export const deleteRow = ({ rows, index }: { rows: any[]; index: number[] }): any[] => {
+    // Make a shallow copy of the rows array
+    const newRows = [...rows];
+
+    if (index.length === 0) {
+        // If index is empty, return the original rows array
+        return newRows;
+    }
+
+    const currentItem = newRows[index[0]];
+
+    if (!currentItem || !currentItem.structure || index.length === 1) {
+        // If the currentItem is not found or it's the target value directly, remove it
+        newRows.splice(index[0], 1);
+    } else {
+        // If the currentItem is an object or array, go one level deeper
+        newRows[index[0]].structure = deleteRow({ rows: currentItem.structure, index: index.slice(1) });
+    }
+
+    return newRows;
+};

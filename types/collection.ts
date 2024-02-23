@@ -11,7 +11,7 @@ export type CollectionType = {
   href: string
 }
 
-
+export type FieldTypes = "string" | "image" | "number" | "boolean" | "date" | "time" | "select" | "object" | "array" | "reference" | "avatar"
 
 
 export type Field = {

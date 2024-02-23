@@ -104,7 +104,7 @@ const RenderRow = ({ r ,collection,i:ii,setCollection }: { r: Field , collection
 				<div className="relative flex  ">
 					<div className=" w-full">{children}
 					</div>
-					<EditDailog setCollection={setCollection} index={index} collection={collection}/>
+					<EditDailog value={a} r={r} setCollection={setCollection} index={index} collection={collection}/>
 				</div>
 			);
 		};
