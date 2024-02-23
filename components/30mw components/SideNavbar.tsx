@@ -24,7 +24,7 @@ function SideNavbar({}: Props) {
   // }
   return (
       <div>
-        <Card className='w-[250px] p-4 min-h-[90vh] h-fit sticky top-10'>
+        <Card className='w-[270px] p-4 min-h-[90vh] h-fit sticky top-10'>
           <div className='flex items-center gap-4'>
             <div className='bg-slate-100 border w-12 h-12 rounded-xl'></div>
             <div className=''>
@@ -42,7 +42,7 @@ function SideNavbar({}: Props) {
                   {_?.icon}</div>
                   <div className=''>
                     <div className='font-medium capitalize'>{_?.name}</div>
-                    <div className='text-xs '>{_?.subtitle}</div>
+                    <div className='text-xs '>{_?.subtitle.slice(0,22)}</div>
                   </div>
                 </div></Link>
               })

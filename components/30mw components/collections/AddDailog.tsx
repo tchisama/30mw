@@ -10,6 +10,7 @@ import {
 	Input,
 	Select,
 	SelectItem,
+	Tooltip,
 } from "@nextui-org/react";
 
 type Props = {
@@ -132,9 +133,14 @@ function AddDailog({ setCollection, index }: Props) {
 
 	return (
 		<>
-			<Button onPress={onOpen} className="mt-2 w-full" variant="bordered">
-				Add Field
+
+		<div className="w-full flex justify-end pr-1">
+			<Tooltip showArrow={true} content={"add new field"}>
+			<Button size="sm" onPress={onOpen} className="mt-2 ml-auto" isIconOnly color="primary">
+				<Plus size={16}/>
 			</Button>
+			</Tooltip>
+		</div>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
 				<ModalContent>
 					{(onClose) => (

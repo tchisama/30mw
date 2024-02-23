@@ -74,7 +74,7 @@ function ViewField({field,index,document,setDocument}: Props) {
                   (value, index2) => {
                 
                     return (
-                      <CarouselItem className='basis-3/4' key={index2 + field.name}>
+                      <CarouselItem className='basis-4/5' key={index2 + field.name}>
                         <div key={index2 + field.name} className="rounded-xl space-y-1 my-1 ">
                           {field.structure.map((field2: Field, index3) => {
                             return <div key={index3}>
@@ -100,7 +100,7 @@ function ViewField({field,index,document,setDocument}: Props) {
 
   if(field.type === 'image'){
     return (
-      <div className='p-2 bg-white rounded-xl gap-2 flex justify-between border '>
+      <div className='p-2 bg-white rounded-xl gap-2 flex flex-col 2xl:flex-row justify-between border '>
         <div className="flex flex-col flex-1 p-0">
           <div className='font-medium mb-2 capitalize'>{field.name}</div>
         </div>

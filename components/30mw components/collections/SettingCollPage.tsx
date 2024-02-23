@@ -1,7 +1,7 @@
 import { db } from "@/firebase";
 import { setSelect } from "@/lib/utils/collectionsManager";
 import { CollectionType, Field } from "@/types/collection";
-import { Button, Card, Input } from "@nextui-org/react";
+import { Accordion, AccordionItem, Button, Card, Input } from "@nextui-org/react";
 import { doc, updateDoc } from "firebase/firestore";
 import {
   ArrowRight,
@@ -81,13 +81,17 @@ useEffect(() => {
 					</h1>
 				</div>
 			</div>
-			<div className="bg-slate-50 flex flex-col border rounded-xl mt-4 p-2 ">
-				{collection.structure &&
-					collection.structure.map((r, i) => {
-						return <RenderRow setCollection={setCollection} key={i} r={r} collection={collection} i={[i]} />;
-					})}
-          <AddDailog setCollection={setCollection} index={[]}/>
-			</div>
+			<Accordion>
+				<AccordionItem key="1" aria-label="Structure" title="Edit Structure">
+				<div className="bg-slate-50 flex flex-col border rounded-xl p-2 ">
+					{collection.structure &&
+						collection.structure.map((r, i) => {
+							return <RenderRow setCollection={setCollection} key={i} r={r} collection={collection} i={[i]} />;
+						})}
+						<AddDailog setCollection={setCollection} index={[]}/>
+				</div>
+				</AccordionItem>
+			</Accordion>
 		</Card>
 	);
 };
