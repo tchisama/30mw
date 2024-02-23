@@ -116,9 +116,17 @@ function EditDailog({
 	const [refCollection, setRefCollection] = useState<string>("");
 	const [refKey, setRefKey] = useState<string>("");
 
-	const [booleanLabels, setBooleanLabels] = useState(value?.labels ?? { true:"", false:"" });
+	const [booleanLabels, setBooleanLabels] = useState({ true:"", false:"" });
+	useEffect(() => {
+		if(value.type == "boolean"){
+			setBooleanLabels(value.labels?? {
+				true: "Yes",
+				false: "No",
+			})
+		}
+	},[value])
 
-	const [prefix, setPrefix] = useState<string>(value?.prefix);
+	const [prefix, setPrefix] = useState<string>(value?.prefix??"");
 
 	const { collections } = useCollections();
 
