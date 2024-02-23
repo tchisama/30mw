@@ -29,10 +29,12 @@ import {
 	TypeIcon,
 	X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddDailog from "./AddDailog";
 import EditDailog from "./EditDailog";
 import { SettingCollPage } from "./SettingCollPage";
+import { getDocs,collection as FireCollection } from "firebase/firestore";
+import { db } from "@/firebase";
 export type Props = {
 	i: number;
 	c: CollectionType;
@@ -64,6 +66,10 @@ export const RenderRow = ({
 	setCollection: Function;
 }) => {
 	const [option, setOption] = useState<string>("");
+
+
+
+
 	const render = (a: Field, index: number[]) => {
 		const AddRelativeDiv = (children: React.ReactNode) => {
 			return (
@@ -147,6 +153,11 @@ export const RenderRow = ({
 				</div>
 			);
 		} else if (a.type === "reference") {
+
+
+
+
+
 			return AddRelativeDiv(
 				<div className="flex bg-white border rounded-xl px-4 my-1   border-t py-1 gap-2 justify-between">
 					<div className="font-medium">{a.name}</div>
@@ -168,6 +179,12 @@ export const RenderRow = ({
 					</div>
 				</div>
 			);
+
+
+
+
+
+
 		} else if (a.type === "select") {
 			return AddRelativeDiv(
 				<div className="flex flex-col bg-white border rounded-xl px-4 my-1   border-t py-1 gap-2 justify-between">

@@ -27,7 +27,7 @@ import {
 	Upload,
 	X,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { fileURLToPath } from "url";
 import NextImage from "next/image";
 import {
@@ -38,6 +38,8 @@ import {
 	CarouselPrevious,
 } from "@/components/ui/carousel";
 import UploadImage from "./UploadImage";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase";
 
 type Props = {
 	field: Field;
@@ -52,11 +54,23 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 
 
 
+
+
+	const [refDocs,setRefDocs] = useState<any[]>([])
+
+	useEffect(()=>{
+		if(field.type === "reference"){
+				
+			getDocs(
+				collection(db,field.reference.collection)
+			).then((docs)=>{
+				setRefDocs(docs.docs.map((d)=>d.data())as any[])
+			})
+		}
+	},[field])
+
+
 	if (field === null) return null;
-
-
-
-
 
 	if (field.type === "object") {
 		return (
@@ -385,6 +399,31 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 
 
 
+
+	if(field.type == "reference"){
+		return(
+			<div className="p-2 bg-white rounded-xl gap-2 flex justify-between border ">
+				<div className="font-medium capitalize">{field.name}</div>
+				<Select
+					// defaultValue={getValue(index,_document) ?? ""}
+					value={getValue(index, _document) ?? ""}
+					onValueChange={(v) => {
+						setDocument((p: any) => {
+							return returnUpdated(index, p, v);
+						});
+					}}
+					label="Select an animal"
+					className="max-w-xs"
+				>
+					{refDocs.map((doc) => (
+						<SelectItem key={doc.id} value={doc.id}>
+							{option.name}
+						</SelectItem>
+					))}
+				</Select>
+			</div>
+		)
+	}
 
 
 
