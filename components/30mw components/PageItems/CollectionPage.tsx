@@ -21,7 +21,7 @@ const CollectionPage = (props: Props) => {
     setDocs([])
     setLoading(true)
     if(!selectedCollection.collection) return
-    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false));
+    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false),orderBy('_30mw_createdAt', 'desc'));
     onSnapshot(q, (snapshot) => {
       setDocs(snapshot.docs.map((doc) => {
         return {...doc.data(), id: doc.id} as CollectionType

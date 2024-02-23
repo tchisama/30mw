@@ -1,7 +1,7 @@
 "use client"
 import SideNavbar from '@/components/30mw components/SideNavbar'
 import AddCollection from '@/components/30mw components/collections/AddCollection'
-import SettingCollPage from '@/components/30mw components/collections/SettingCollPage'
+import  SettingCollPage  from '@/components/30mw components/collections/RowRender'
 import DashboardProvider from '@/components/30mw components/providers/DashboardProvider'
 import { db } from '@/firebase'
 import useCollections from '@/store/30mw/collections'

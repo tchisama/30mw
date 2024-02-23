@@ -1,6 +1,6 @@
 import { db } from '@/firebase'
 import { CollectionType } from '@/types/collection'
-import { addDoc, collection } from 'firebase/firestore'
+import { Timestamp, addDoc, collection } from 'firebase/firestore'
 import React, { useState } from 'react'
 import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Button, useDisclosure, Input} from "@nextui-org/react";
 import { Plus } from 'lucide-react';
@@ -19,7 +19,7 @@ function AddCollection({}: Props) {
   })
   const createCollection = ()=>{
     if(!coll.name || !coll.collection || !coll.icon || !coll.subtitle || !coll.href ) return
-    addDoc(collection(db,"collections"),{...coll,structure:"[]"})
+    addDoc(collection(db,"collections"),{...coll,structure:"[]",_30mw_createdAt:Timestamp.now()})
   }
 
   return (

@@ -147,7 +147,7 @@ function EditDailog({
 					...r,
 					name,
 					prefix,
-					// if type is boolean i want to add booleanlabels
+					// if type is boolean i want to add booleanLabels
 					labels:booleanLabels,
 					type: (type as any).currentKey as FieldTypes ?? value.type,
 				} as Field,
