@@ -113,18 +113,11 @@ function EditDailog({
 	const [name, setName] = useState(value.name);
 	const [type, setType] = useState(new Set(value.type));
 
-	const [refCollection, setRefCollection] = useState<string>("");
-	const [refKey, setRefKey] = useState<string>("");
+	const [refCollection, setRefCollection] = useState(new Set([]));
+	const [refKey, setRefKey] = useState(new Set([]));
 
 	const [booleanLabels, setBooleanLabels] = useState({ true:"", false:"" });
-	useEffect(() => {
-		if(value.type == "boolean"){
-			setBooleanLabels(value.labels?? {
-				true: "Yes",
-				false: "No",
-			})
-		}
-	},[value])
+
 
 	const [prefix, setPrefix] = useState<string>(value?.prefix??"");
 
@@ -149,6 +142,10 @@ function EditDailog({
 					prefix,
 					// if type is boolean i want to add booleanLabels
 					labels:booleanLabels,
+					reference: {
+						collection: (refCollection as any).currentKey,
+						key:	(refKey as any).currentKey,
+					},
 					type: (type as any).currentKey as FieldTypes ?? value.type,
 				} as Field,
 			}),
@@ -160,6 +157,17 @@ function EditDailog({
 	useEffect(() => {
 		setName(value.name);
 		setType(new Set([value.type]));
+		setPrefix(value?.prefix??"");
+		if(value.type == "boolean"){
+			setBooleanLabels(value.labels?? {
+				true: "Yes",
+				false: "No",
+			})
+		}
+		if(value.type == "reference"){
+			setRefCollection(new Set( [value.reference.collection]) as any);
+			setRefKey(new Set([value.reference.key]) as any);
+		}
 	}, [value]);
 
 	return (
@@ -207,7 +215,7 @@ function EditDailog({
 								
 								{type.has("reference") && <div className="flex gap-4">
 									<Select
-										selectedKeys={refCollection}
+										selectedKeys={refCollection as any}
 										onSelectionChange={setRefCollection as any}
 										label="Select collection"
 										className=""
@@ -219,16 +227,16 @@ function EditDailog({
 										))}
 									</Select>
 									<Select
-										selectedKeys={refCollection}
-										onSelectionChange={setRefCollection as any}
-										label="Select collection"
+										selectedKeys={refKey as any}
+										onSelectionChange={setRefKey as any}
+										label="Select key"
 										className=""
 									>
-										{collections.map((field) => (
+										{collections.find(c=>c.name == ((refCollection as any).currentKey??(value as any).reference.collection) )?.structure.filter(r=>!["array","reference","object","select"].includes(r.name)).map((field) => (
 											<SelectItem key={field.name} value={field.name}>
 												{field.name}
 											</SelectItem>
-										))}
+										)) as any}
 									</Select>
 								</div>}
 
