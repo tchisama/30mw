@@ -14,6 +14,7 @@ const Home = () => {
         <div className="flex gap-8">
           <SideNavbar />
           <div className="min-h-[110vh] flex flex-1">
+
             <CollectionPage />
           </div>
         </div>

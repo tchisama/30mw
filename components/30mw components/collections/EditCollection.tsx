@@ -15,10 +15,11 @@ function EditCollection({collection,setCollection}: Props) {
     name:collection.name,
     subtitle:collection.subtitle,
     icon:collection.icon,
+    motherCollection:collection.motherCollection
   })
   const editCollection = ()=>{
     if(!coll.name || !coll.icon || !coll.subtitle) return
-    setCollection({...collection,name:coll.name,icon:coll.icon,subtitle:coll.subtitle})
+    setCollection({...collection,name:coll.name,icon:coll.icon,subtitle:coll.subtitle,motherCollection:coll.motherCollection})
   }
   const deleteCollection = ()=>{
     if(!confirm("are you sure")) return
@@ -36,6 +37,8 @@ function EditCollection({collection,setCollection}: Props) {
                 <Input label="Name" value={coll.name} onInput={(e:any)=>setColl({...coll,name:e.target.value})}></Input>
                 <Input label="Collection subtitle" value={coll.subtitle} onInput={(e:any)=>setColl({...coll,subtitle:e.target.value})}></Input>
                 <Input label="Collection icon" value={coll.icon} onInput={(e:any)=>setColl({...coll,icon:e.target.value})}></Input>
+            
+                <Input label="Mother Collection" value={coll.motherCollection} onInput={(e:any)=>setColl({...coll,motherCollection:e.target.value})}></Input>
                 <Divider />
                 <Button onPress={()=>{deleteCollection();onClose()}} color="danger" className='w-fit' > <Trash size={16}/> Delete</Button>
               </ModalBody>

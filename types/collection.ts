@@ -9,6 +9,7 @@ export type CollectionType = {
   subtitle: string
   structure:Field[]
   href: string
+  motherCollection?: string
 }
 
 export type FieldTypes = "string" | "image" | "number" | "boolean" | "date" | "time" | "select" | "object" | "array" | "reference" | "avatar"

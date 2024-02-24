@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect, useMemo } from 'react'
 import Doc from '../DocComponents/Doc'
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, Input, useDisclosure, Skeleton} from "@nextui-org/react";
-import { Filter, Plus, Search, Trash } from 'lucide-react';
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, Input, useDisclosure, Skeleton, Card, Divider} from "@nextui-org/react";
+import { Divide, Filter, Plus, Search, Trash } from 'lucide-react';
 import { CollectionType } from '@/types/collection';
 import { addDoc, collection, getDocs, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { db } from '@/firebase';
@@ -66,7 +66,39 @@ const CollectionPage = (props: Props) => {
         <CreateModal collection={selectedCollection} model={{isOpen, onOpen, onOpenChange}}/>
       </NavbarContent>
     </Navbar>
-    <div className='p-5 grid gap-4 grid-cols-3 3xl:grid-cols-4 mt-12'>
+
+
+
+        <div className='mt-6 text-2xl font-medium py-4'>Sub Collections</div>
+        <div className=' flex gap-4'>
+        {
+              collections.filter(c=>c?.motherCollection == selectedCollection?.collection).map((c,i)=>{
+                return (
+                  <Link href={`/dashboard/${c.collection}`} key={i}>
+                  <Card  className='p-4 flex gap-4'>
+                    <div className='flex gap-4'>
+                        
+                      <div className='text-3xl'>{c?.icon}</div>
+                      <div className='pr-2'>
+                      <h2 className='text-xl capitalize font-medium'>
+                      {c.name}
+                      </h2>
+                      <p className='text-sm'>{c.subtitle}</p>
+                      </div>
+                    </div>
+                  </Card>
+                  </Link>
+                )
+              })
+        }
+        </div>
+
+
+
+        <Divider className='my-12' />
+
+        <div className=' text-2xl font-medium pb-4'>Documents</div>
+    <div className='py-5 grid gap-4 grid-cols-3 3xl:grid-cols-4 '>
       {
         !loading &&
         docs.map((doc,index) => {
