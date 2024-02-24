@@ -68,19 +68,22 @@ const CollectionPage = (props: Props) => {
     </Navbar>
 
 
+{
+      collections.filter(c=>c?.motherCollection == selectedCollection?.collection).length > 0 &&
 
+      <>
         <div className='mt-6 text-2xl font-medium py-4'>Sub Collections</div>
         <div className=' flex gap-4'>
         {
-              collections.filter(c=>c?.motherCollection == selectedCollection?.collection).map((c,i)=>{
-                return (
-                  <Link href={`/dashboard/${c.collection}`} key={i}>
-                  <Card  className='p-4 flex gap-4'>
+              collections.filter(c=>c?.motherCollection == selectedCollection?.collection)
+              .map((c,i)=>{
+                const card =                   <Link href={`/dashboard/${c.collection}`} >
+                  <Card  className='p-4 flex gap-4 border-2 hover:border-blue-200 duration-200'>
                     <div className='flex gap-4'>
                         
                       <div className='text-3xl'>{c?.icon}</div>
                       <div className='pr-2'>
-                      <h2 className='text-xl capitalize font-medium'>
+                      <h2 className='text-lg capitalize font-medium'>
                       {c.name}
                       </h2>
                       <p className='text-sm'>{c.subtitle}</p>
@@ -88,16 +91,27 @@ const CollectionPage = (props: Props) => {
                     </div>
                   </Card>
                   </Link>
+                return (
+                  <LoadingTiming key={i}>
+                    {
+                      (loading)=>(
+                        loading ? <Skeleton className=" rounded-xl" >{card}</Skeleton> :
+                        card
+                      )
+                    }
+                  </LoadingTiming>
                 )
               })
         }
         </div>
-
-
-
         <Divider className='my-12' />
+        <div className=' text-2xl font-medium pb-4 '>Documents</div>
+      </>
+}
 
-        <div className=' text-2xl font-medium pb-4'>Documents</div>
+
+
+
     <div className='py-5 grid gap-4 grid-cols-3 3xl:grid-cols-4 '>
       {
         !loading &&

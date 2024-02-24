@@ -243,7 +243,7 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 							return returnUpdated(index, p, v.currentKey);
 						});
 					}}
-					label="Select an animal"
+					label={"Select "+field.name}
 					className="max-w-xs"
 				>
 					{field.options.map((option) => (
@@ -414,7 +414,7 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 						});
 					}}
 
-					label="Select an animal"
+					label={"Select " + field.name}
 					className="max-w-xs"
 				>
 					{refDocs.map((doc) => (

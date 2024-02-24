@@ -25,7 +25,9 @@ function page({}: Props) {
 		<DashboardProvider>
 			<div className="flex gap-8 w-full flex-1">
 				<SideNavbar />
-				<div className="min-h-[110vh] flex-1 p-4">
+				<div className="min-h-[110vh] pt-8 flex-1 p-4">
+					<h1 className="text-5xl my-2">🚀 Dashboard</h1>
+					<h1 className="text-3xl"> welcome tchisama 👋</h1>
 					<div className="mt-12 grid grid-cols-4 ml-auto gap-4">
             <CollectionsCard />
 						<NotificationsCard />
