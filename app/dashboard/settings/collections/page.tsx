@@ -31,7 +31,7 @@ function Page({}: Props) {
             </div>
             <AddCollection />
           </div>
-          <div className="grid grid-cols-2 mt-4 gap-6  ">
+          <div className="grid grid-cols-2 mt-4 gap-3  ">
             {
               collections && collections.map((c:CollectionType,i)=>{
                 return (

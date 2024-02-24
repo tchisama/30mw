@@ -32,7 +32,7 @@ function DashboardProvider({children}: Props) {
     const coll = collections.find((c) => c.href === pathname) 
     if(!coll && collections.length > 0){
       setSelectedCollection(collections[0])
-      if(!pathname.includes("/dashboard/settings")){
+      if(!(pathname == "/dashboard" || pathname.includes("/dashboard/settings/"))) {
         router.push((collections[0] as CollectionType)?.href)
       }
     }
