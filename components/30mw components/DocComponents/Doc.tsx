@@ -5,6 +5,8 @@ import React from 'react'
 import ViewField from './ViewField';
 import Controllers from './Controllers';
 import useCollections from '@/store/30mw/collections';
+import { ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
 
 type Props = {
   doc: any
@@ -26,6 +28,9 @@ function Doc({doc}: Props) {
             {document._30mw_createdAt.toDate().toDateString()} - {document._30mw_createdAt.toDate().toLocaleTimeString()}
           </span>
         </div>
+        <Link href={selectedCollection.href+"/"+document.id} className='ml-auto mr-1' >
+          <Button variant='bordered' isIconOnly ><ArrowUpRight size={16}/></Button>
+        </Link>
         <Controllers document={document} setDocument={setDocument} collection={selectedCollection}/>
       </CardHeader>
       <Divider/>
