@@ -11,7 +11,7 @@ function LoadingTiming({children}: Props) {
     setTimeout(
       () => {
         setLoading(false)
-      },Math.random()*1000 + 200
+      },Math.random()*200 + 500
     )
   },[])
   return (

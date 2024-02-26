@@ -181,10 +181,10 @@ const CollectionsCard = ()=>{
 									<div className="flex gap-2 flex-col">
 										<p className="">you have now {collections.length} collections</p>
                     <Divider />
-										<div className="flex gap-1">
+										<div className=" gap-1">
                       {
                         collections.map((_,i)=>{
-                          return <div key={i} className="text-xl p-1 bg-slate-100 border rounded-xl">{_.icon}</div>
+                          return <div key={i} className="text-xl mx-1 my-1 inline-block  p-1 bg-slate-100 border rounded-xl">{_.icon}</div>
                         })
                       }
 										</div>
