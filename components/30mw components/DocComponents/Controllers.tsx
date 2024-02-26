@@ -32,6 +32,7 @@ function Controllers({
     addDoc(collection(db,_collection.collection),
     {..._document,_30mw_createdAt : Timestamp.now(),_30mw_updatedAt : Timestamp.now()})
   }
+  console.log(_document)
   return (
     <>
     <EditModal document={_document} setDocument={setDocument} collection={_collection} model={{isOpen, onOpen, onOpenChange}} />

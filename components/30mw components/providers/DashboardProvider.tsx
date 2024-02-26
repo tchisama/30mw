@@ -3,7 +3,7 @@ import { db } from '@/firebase';
 import useCollections from '@/store/30mw/collections';
 import { CollectionType } from '@/types/collection';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react'
 
 type Props = {
@@ -15,6 +15,7 @@ function DashboardProvider({children}: Props) {
   const { collections , setCollections , setSelectedCollection , selectedCollection } = useCollections();
   const pathname = usePathname()
   const router = useRouter()
+  const params = useParams()
   useEffect( () => {
     try{
       onSnapshot(collection(db, "collections"), (snapshot) => {
@@ -29,7 +30,8 @@ function DashboardProvider({children}: Props) {
   },[setCollections])
   useEffect(() => {
     if(collections.length < 0) return
-    const coll = collections.find((c) => c.href === pathname) 
+    // alert(searchParams.get("collectionName"))
+    const coll = collections.find((c) => c.collection === params.collectionName)
     if(!coll && collections.length > 0){
       setSelectedCollection(collections[0])
       if(!(pathname == "/dashboard" || pathname.includes("/dashboard/settings/"))) {
@@ -38,7 +40,7 @@ function DashboardProvider({children}: Props) {
     }
     if(coll) setSelectedCollection(coll)
     // console.log(coll)
-  },[collections,pathname,router,setSelectedCollection])
+  },[collections,pathname,router,setSelectedCollection,params.collectionName])
 
   return (
     <div className='max-w-[1900px] 2xl:max-w-[2400px] px-8 mx-auto'>{children}</div>

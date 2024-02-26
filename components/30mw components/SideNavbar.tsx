@@ -7,7 +7,7 @@ import { Button, Card, Divider, User } from '@nextui-org/react'
 import { addDoc, collection, getDocs } from 'firebase/firestore'
 import { ChevronLeft, Home, Settings } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import path from 'path'
 import React, { useEffect } from 'react'
 
@@ -22,6 +22,7 @@ function SideNavbar({}: Props) {
   //     structure:JSON.stringify(usersColl.structure)
   //   })
   // }
+  const params = useParams()
   const [collapsed, setCollapsed] = React.useState(true)
   return (
       <div className='flex sticky top-10 min-h-[90vh] h-fit duration-200  flex-row-reverse items-center'>
@@ -56,7 +57,7 @@ function SideNavbar({}: Props) {
             {
               collections.filter(c=>!c?.motherCollection).map((_,i)=>{
                 return <Link href={_?.href} key={i}>
-                <div className={cn('flex hover:bg-slate-50  duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-2 pl-2 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":pathname === _?.href})}>
+                <div className={cn('flex hover:bg-slate-50  duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-2 pl-2 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":params?.collectionName === _?.collection})}>
                   {/* <Home size={24} strokeWidth={1}/> */}
                   <div className='text-2xl bg-white rounded-lg w-10 h-10 text-center flex items-center justify-center'> {" "}
                   {_?.icon}</div>
