@@ -1,27 +1,28 @@
 "use client"
 import { db } from '@/firebase'
 import { cn } from '@/lib/utils'
+import { useAdminStore } from '@/store/30mw/admin'
 import useCollections from '@/store/30mw/collections'
 import { CollectionType, usersColl } from '@/types/collection'
-import { Button, Card, Divider, User } from '@nextui-org/react'
+import { Avatar, Button, Card, Divider, User } from '@nextui-org/react'
 import { addDoc, collection, getDocs } from 'firebase/firestore'
-import { ChevronLeft, Home, Settings } from 'lucide-react'
+import { ChevronLeft, Home, LogOut, Settings, User2 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 import path from 'path'
 import React, { useEffect } from 'react'
-
+import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@nextui-org/react";
 type Props = {}
 
 function SideNavbar({}: Props) {
   const {collections, setCollections ,setSelectedCollection} = useCollections()
   const pathname = usePathname()
-  // const createCollection = ()=>{
-  //   addDoc(collection(db,"collections"),{
-  //     ...usersColl,
-  //     structure:JSON.stringify(usersColl.structure)
-  //   })
-  // }
+
+
+  const {admin} = useAdminStore()
+
+
+
   const params = useParams()
   const [collapsed, setCollapsed] = React.useState(true)
   return (
@@ -55,8 +56,8 @@ function SideNavbar({}: Props) {
                 </Link>
                 <Divider  className='my-2'/>
             {
-              collections.filter(c=>!c?.motherCollection).map((_,i)=>{
-                return <Link href={_?.href} key={i}>
+              collections.filter(c=>!c?.motherCollection && !c?.for_30mw).map((_,i)=>{
+                return <Link draggable href={_?.href} key={i}>
                 <div className={cn('flex hover:bg-slate-50  duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-2 pl-2 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":params?.collectionName === _?.collection})}>
                   {/* <Home size={24} strokeWidth={1}/> */}
                   <div className='text-2xl bg-white rounded-lg w-10 h-10 text-center flex items-center justify-center'> {" "}
@@ -72,15 +73,34 @@ function SideNavbar({}: Props) {
               })
             }
           </div>
-          {/* <Button className='w-full mt-4' onPress={createCollection}> Create Collection</Button> */}
           <div className='flex mt-auto flex-col gap-2 w-full items-start'>
-           {/* <User 
-                  name="Jane Doe"
-                  description="Product Designer"
-                  avatarProps={{
-                    src: "https://i.pravatar.cc/140?u=a04258114e29026702d"
-                  }}
-           ></User>  */}
+                <Dropdown>
+                  <DropdownTrigger>
+                    
+
+             <div className={cn('flex hover:bg-slate-50 w-full duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-2 pl-2 py-2 gap-4')}>
+              {
+                !collapsed ?
+                <Avatar src={admin?.photo}></Avatar>
+                :
+                <User 
+                        name={  admin?.fullName}
+                        description={admin?.email}
+                        avatarProps={{
+                          src: admin?.photo
+                        }}
+                ></User> 
+              }
+             </div>
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="Static Actions">
+                    <DropdownItem key="new" startContent={<User2 size={16} />}>Open Profile</DropdownItem>
+                    <DropdownItem onClick={()=>{
+                      localStorage.removeItem("_30mw_admin")
+                      window.location.reload()
+                    }} key="edit" startContent={<LogOut size={16} />}> Logout</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
           </div>
 
         </Card>

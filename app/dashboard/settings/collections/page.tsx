@@ -26,14 +26,16 @@ function Page({}: Props) {
 				<div className="flex-1">
           <div className="flex justify-between">
             <div className='flex items-end gap-2 mb-24'>
-              <h1 className="text-4xl capitalize">🗃️ collections</h1>
+              <h1 className="text-5xl capitalize">🗃️ collections</h1>
               <h1 className="text-xl">Manager</h1>
             </div>
             <AddCollection />
           </div>
-          <div className="grid grid-cols-2 mt-4 gap-3  ">
+          <div className="grid grid-cols-1 mt-4 gap-3  ">
             {
-              collections && collections.map((c:CollectionType,i)=>{
+              collections && collections
+              // .filter((c:CollectionType)=>!c?.for_30mw)
+              .map((c:CollectionType,i)=>{
                 return (
                   <SettingCollPage key={i} c={c} i={i} />
                 )

@@ -42,7 +42,7 @@ const CollectionPage = (props: Props) => {
   return (
     selectedCollection && !loading &&
     <div className='flex-1'>
-    <Navbar maxWidth='2xl' isBlurred={false} height={"80px"} isBordered shouldHideOnScroll className=''>
+    <Navbar maxWidth='2xl'   isBlurred={false} height={"80px"} isBordered shouldHideOnScroll className=''>
       <NavbarBrand>
         <LoadingTiming>
           {
@@ -105,60 +105,67 @@ const CollectionPage = (props: Props) => {
     </Navbar>
     <div className='flex flex-col gap-4 mt-6'>
 
-    {
-      docs.length > 0 &&
-    <Card className=' p-1 w-fit'>
-      <div className='h-[100px] flex  w-[400px]'>
-      <Bar docs={docs}/>
-      </div>
-    </Card>
-    }
 
-{
-      collections.filter(c=>c?.motherCollection == selectedCollection?.collection).length > 0 &&
+    <Accordion   defaultExpandedKeys={["1"]} selectionMode='multiple'>
+          {
+                collections.filter(c=>c?.motherCollection == selectedCollection?.collection).length > 0 &&
+                <AccordionItem  className=' text-2xl  font-medium ' key="1" aria-label="Accordion 1" title={"Sub Collections ("+collections.filter(c=>c?.motherCollection == selectedCollection?.collection).length+")"}>
+                  <div className='p-1 w-full'>
+                    
+                  {
+                        collections.filter(c=>c?.motherCollection == selectedCollection?.collection)
+                        .map((c,i)=>{
+                          const card =                   <Link className='inline-block w-fit m-2' href={`/dashboard/${c.collection}`} >
+                            <Card shadow='sm' className='p-4 inline-block w-fit bg-white gap-4  duration-200'>
+                              <div className='flex gap-4'>
+                                  
+                                <div className='text-4xl'>{c?.icon}</div>
+                                <div className='pr-4'>
+                                <h2 className='text-lg capitalize font-medium'>
+                                {c.name}
+                                </h2>
+                                <p className='text-sm'>{c.subtitle}</p>
+                                </div>
+                              </div>
+                            </Card>
+                            </Link>
+                          return (
+                            // <LoadingTiming key={i} >
+                            //   {
+                            //     (loading)=>(
+                            //       loading ? <Skeleton className=" rounded-xl w-fit inline-block m-2" >{card}</Skeleton> :
+                            //       card
+                            //     )
+                            //   }
+                            // </LoadingTiming>
+                            card
+                          )
+                        })
+                  }
+                  </div>
+                  
+                </AccordionItem> as any
+          }
 
-      <>
 
-        {/* <div className='mt-6 text-2xl font-medium py-4'>Sub Collections</div> */}
-    <Accordion variant='shadow'>
-      <AccordionItem className=' text-2xl font-medium bg-white' key="1" aria-label="Accordion 1" title={"Sub Collections ("+collections.filter(c=>c?.motherCollection == selectedCollection?.collection).length+")"}>
-        <div className=' grid bg-slate-50 border rounded-2xl p-2 grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 gap-2 max-w-[1500px]'>
-        {
-              collections.filter(c=>c?.motherCollection == selectedCollection?.collection)
-              .map((c,i)=>{
-                const card =                   <Link className='w-full' href={`/dashboard/${c.collection}`} >
-                  <Card shadow='sm' className='p-4 flex w-full gap-4 border-2 hover:border-blue-200 duration-200'>
-                    <div className='flex gap-4'>
-                        
-                      <div className='text-3xl'>{c?.icon}</div>
-                      <div className='pr-2'>
-                      <h2 className='text-md capitalize font-medium'>
-                      {c.name}
-                      </h2>
-                      <p className='text-xs'>{c.subtitle}</p>
-                      </div>
-                    </div>
-                  </Card>
-                  </Link>
-                return (
-                  <LoadingTiming key={i} >
-                    {
-                      (loading)=>(
-                        loading ? <Skeleton className=" rounded-xl w-full" >{card}</Skeleton> :
-                        card
-                      )
-                    }
-                  </LoadingTiming>
-                )
-              })
-        }
-        </div>
-      </AccordionItem>
+
+
+            <AccordionItem className=' text-2xl  font-medium ' key="2" aria-label="Accordion 2" title={"Analytics"}>
+          {
+            docs.length > 0 && view !== "analytics" && 
+          <Card shadow='sm' className=' p-1 mx-2 w-fit cursor-pointer' onClick={(e)=>{e.preventDefault() ; setView("analytics")}}>
+            <div className='h-[150px] flex  w-[400px]'>
+            <Bar docs={docs}/>
+            </div>
+          </Card>
+          }
+        
+            </AccordionItem>
     </Accordion>
-        {/* <Divider className='my-12' /> */}
-        {/* <div className=' text-2xl font-medium py-4 '>Documents</div> */}
-      </>
-}
+
+
+
+
 
 
     </div>

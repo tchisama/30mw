@@ -60,12 +60,16 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 
 	useEffect(()=>{
 		if(field.type === "reference"){
+			try{
 			const q = query(collection(db,field.reference.collection),where('_30mw_deleted', '==', false));
 			getDocs(
 				q
 			).then((docs)=>{
 				setRefDocs(docs.docs.map((d)=>({...d.data(),id:d.id}))as any[])
 			})
+			}catch(err){
+				console.log(err)
+			}
 		}
 	},[field])
 

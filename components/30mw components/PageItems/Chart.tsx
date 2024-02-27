@@ -13,6 +13,7 @@ export default function Bar({docs}:any) {
   const [data,setData] = useState<{label:string,data:MyDatum[]}[]>([
     {
      label: 'products',
+     
      data : [{
        date: new Date(),
        docs: 0,
@@ -58,6 +59,7 @@ export default function Bar({docs}:any) {
    const primaryAxis = React.useMemo(
      (): AxisOptions<MyDatum> => ({
        getValue: datum => datum.date,
+       
      }),
      []
    )
@@ -66,6 +68,9 @@ export default function Bar({docs}:any) {
      (): AxisOptions<MyDatum>[] => [
        {
          getValue: datum => datum.docs,
+        //  stacked:true,
+         elementType:"area"
+        //  min:10
        },
      ],
      []

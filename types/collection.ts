@@ -9,6 +9,7 @@ export type CollectionType = {
   subtitle: string
   structure:Field[]
   href: string
+  for_30mw?: boolean
   motherCollection?: string
 }
 
