@@ -14,11 +14,11 @@ export type AdminType = {
 }
 export type Rule = {
   name:string,
-  "but collection":{
+  "but collections":{
     "collection name":string,
     "write / update": boolean
   }[]
-  "access to all":boolean
+  "access to all ":boolean
   "read all only":boolean
   id:string
 }

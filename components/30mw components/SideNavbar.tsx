@@ -19,7 +19,7 @@ function SideNavbar({}: Props) {
   const pathname = usePathname()
 
 
-  const {admin} = useAdminStore()
+  const {admin , selectedRule} = useAdminStore()
 
 
 
@@ -56,7 +56,29 @@ function SideNavbar({}: Props) {
                 </Link>
                 <Divider  className='my-2'/>
             {
-              collections.filter(c=>!c?.motherCollection && !c?.for_30mw).map((_,i)=>{
+              selectedRule!==null &&
+              collections
+              .filter(c=>!c?.motherCollection && !c?.for_30mw)
+              .filter(c=>{
+                if(selectedRule['access to all '] ){
+                  if(!selectedRule["but collections"]){
+                    return true
+                  }else if(!selectedRule["but collections"].find(_=>_['collection name'] === c?.name)){
+                    return true
+                  }else{
+                    return false
+                  }
+                }else{
+                  if(!selectedRule["but collections"]){
+                    return false
+                  }else if(!selectedRule["but collections"].find(_=>_['collection name'] === c?.name)){
+                    return false
+                  }else{
+                    return true
+                  }
+                }
+             })
+              .map((_,i)=>{
                 return <Link draggable href={_?.href} key={i}>
                 <div className={cn('flex hover:bg-slate-50  duration-200 cursor-pointer items-center border hover:border-slate-300 border-slate-900/5 rounded-xl px-2 pl-2 py-2 gap-4',{"bg-primary hover:bg-primary/90 text-white":params?.collectionName === _?.collection})}>
                   {/* <Home size={24} strokeWidth={1}/> */}
