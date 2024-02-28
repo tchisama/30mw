@@ -33,9 +33,9 @@ function page({}: Props) {
 					<h1 className="text-5xl my-2">🚀 Dashboard</h1>
 					<h1 className="text-3xl"> welcome tchisama 👋</h1>
 					<div className="mt-12 grid grid-cols-4 ml-auto gap-4">
-            <CollectionsCard />
-						<NotificationsCard />
 						<FileCard />
+						<NotificationsCard />
+            <CollectionsCard />
 						<DashboardCard />
 						<UsersCard />
 						<TrashCard />
@@ -111,7 +111,7 @@ const FileCard = ()=>{
 								</div>
 							</CardHeader>
 							<Divider />
-							<CardBody className="flex gap-2 overflow-hidden">
+							<CardBody className="flex gap-2 overflow-hidden h-full justify-end">
 								<div className="flex   items-end gap-14 ">
 									<div className="relative h-20 w-[100px] ">
 										{
@@ -176,9 +176,8 @@ const UsersCard = ()=>{
 }
 
 const NotificationsCard = ()=>{
-  const {collections} = useCollections()
   return (
-          <Link  className=" " href="/dashboard/settings/collections">
+          <Link  className=" row-span-2 " href="/dashboard/settings/notifications">
 						<Card className="w-full h-full ">
 							<CardHeader className="flex gap-3">
 								<div className="flex justify-between w-full">
@@ -189,7 +188,6 @@ const NotificationsCard = ()=>{
 							<CardBody className="flex gap-2  items-end">
 								<div className="flex gap-4 items-center">
 									<div className="flex gap-2 flex-col">
-										<p className="">{collections.length} deleted items</p>
 									</div>
 								</div>
 							</CardBody>
@@ -206,7 +204,7 @@ const CollectionsCard = ()=>{
 		return collections.filter((c)=>!c.for_30mw)
 	},[collections])
   return (
-                  <Link  className=" col-span-2 row-span-2" href="/dashboard/settings/collections">
+                  <Link  className=" col-span-2 " href="/dashboard/settings/collections">
 						<Card className="w-full h-full ">
 							<CardHeader className="flex gap-3">
 								<div className="flex justify-between w-full">

@@ -101,7 +101,7 @@ const FolderComp = ({ file }: { file: FileType }) => {
                 <motion.div  className='w-full aspect-[5/4] group m-2 inline-block  relative cursor-pointer'>
                     <Card className='w-full h-full flex items-center justify-center p-6'>
                       {/* <ImageViewer src={file.url}> */}
-                        <Image  src={file.url} width={200} height={200} alt={file.name} className='w-full rounded-xl border bg-slate-50 h-full object-contain ' />
+                        <Image  src={file.url} width={200} height={200} alt={file.name} className='w-full rounded-xl border p-2 bg-slate-50 h-full object-contain ' />
                       {/* </ImageViewer> */}
                       <Dropdown>
                         <DropdownTrigger>
