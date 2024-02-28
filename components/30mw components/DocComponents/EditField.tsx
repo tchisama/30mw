@@ -27,7 +27,7 @@ import {
 	Upload,
 	X,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { fileURLToPath } from "url";
 import NextImage from "next/image";
 import {
@@ -38,8 +38,10 @@ import {
 	CarouselPrevious,
 } from "@/components/ui/carousel";
 import UploadImage from "./UploadImage";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { Timestamp, addDoc, and, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/firebase";
+import useCollections from "@/store/30mw/collections";
+import { FileType } from "@/app/dashboard/settings/filesystem/[folderId]/components/FolderComp";
 
 type Props = {
 	field: Field;
@@ -49,7 +51,6 @@ type Props = {
 };
 
 function EditField({ field, index, document: _document, setDocument }: Props) {
-
 
 
 
@@ -73,6 +74,7 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 		}
 	},[field])
 
+	const {selectedCollection} = useCollections()
 
 	if (field === null) return null;
 
@@ -304,6 +306,7 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 					{/* <div>{getValue(index,_document)}</div> */}
 					<div className="flex flex-col flex-1 p-2 justify-end items-end gap-2 ">
 						<UploadImage
+							folder={selectedCollection.collection}
 							returnImage={(v) => {
 								setDocument((p: any) => {
 									return returnUpdated(index, p, v);
@@ -378,6 +381,7 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 				<div className="font-medium capitalize">{field.name}</div>
 				{/* <div>{getValue(index,_document)}</div> */}
 				<UploadImage
+					folder={selectedCollection.collection}
 					returnImage={(v) => {
 						setDocument((p: any) => {
 							return returnUpdated(index, p, v);
