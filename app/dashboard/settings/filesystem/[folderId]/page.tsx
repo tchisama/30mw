@@ -11,29 +11,12 @@ import {
 } from "@/components/ui/resizable"
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { Timestamp } from 'firebase/firestore/lite'
-import { collection, onSnapshot, query, where } from 'firebase/firestore'
+import { Timestamp, addDoc, collection, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '@/firebase'
+import FolderComp, { FileType } from './components/FolderComp'
 
 type Props = {}
 
-type FileType = {
-  name:string,
-  _30mw_createdAt : Timestamp
-  _30mw_updatedAt : Timestamp
-  _30mw_deleted : boolean
-  id:string
-} & (
-  {
-    type:"file",
-    url:string
-  }
-  |
-  {
-    type:"folder",
-    name:string,
-  }
-)
 
 function Page({ }: Props) {
   const [selected , setSelected] = useState<number[]>([])
@@ -59,7 +42,16 @@ function Page({ }: Props) {
   )
 
 
-
+  const createNewFolder = ()=>{
+    addDoc(collection(db, "_30mw_filesystem"), {
+      _30mw_deleted: false,
+      _30mw_createdAt: Timestamp.now(),
+      _30mw_updatedAt: Timestamp.now(),
+      motherFolder: params.folderId,
+      name: "new folder",
+      type: "folder",
+    })
+  }
 
   return (
     <DashboardProvider>
@@ -73,7 +65,8 @@ function Page({ }: Props) {
           </div>
           <div className='flex gap-2'>
             <Button variant='solid' color='primary'><Upload size={16}/>  Upload</Button>
-            <Button variant='bordered' >📁 new folder</Button>
+            <Button onPress={createNewFolder} variant='bordered' >📁 new folder</Button>
+            {/* <CreateNewFile/> */}
           </div>
 
           </div>
@@ -82,7 +75,7 @@ function Page({ }: Props) {
                   {
                     files.map((file, i) => {
                       return (
-                        <FolderComp key={i} />
+                        <FolderComp key={i} file={file} />
                       )
                     })
                   }
@@ -102,17 +95,6 @@ function Page({ }: Props) {
 
 
 
-const FolderComp = ()=>{
- return(
-  <Link   href={`/dashboard/settings/filesystem/${i}`}>
-    <Card shadow='sm' className='w-[200px] m-2 inline-block p-2 h-[150px] cursor-pointer' >
-      <div className='w-full h-full flex flex-col justify-center items-center gap-2'>
-        <div className='w-full h-fit text-7xl text-center my-auto'>📂</div>
-        <div className='w-full h-fit text-center text-sm'>file {i}</div>
-      </div>
-    </Card>
-  </Link>
- )
-}
+
 
 export default Page
