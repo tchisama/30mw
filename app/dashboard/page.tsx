@@ -1,6 +1,9 @@
 "use client";
 import SideNavbar from "@/components/30mw components/SideNavbar";
 import DashboardProvider from "@/components/30mw components/providers/DashboardProvider";
+import { db } from "@/firebase";
+import { cn } from "@/lib/utils";
+import { AdminType, useAdminStore } from "@/store/30mw/admin";
 import useCollections from "@/store/30mw/collections";
 import {
 	Card,
@@ -14,9 +17,10 @@ import {
 	Avatar,
   AvatarGroup,
 } from "@nextui-org/react";
+import { and, collection, getDocs, query, where } from "firebase/firestore";
 import { ArrowRight } from "lucide-react";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 type Props = {};
 
@@ -91,7 +95,13 @@ const DashboardCard = ()=>{
 }
 
 const FileCard = ()=>{
-  const {collections} = useCollections()
+  const [files,setFiles]=useState<any[]>([])
+	useEffect(()=>{
+		getDocs(query(collection(db, "_30mw_filesystem"), and( where("_30mw_deleted", "==", false) , where("type", "==", "file") ) )).then(_=>{
+			setFiles(_?.docs?.map(_=>_.data()) as any[])
+			console.log(_?.docs?.map(_=>_.data()))
+		})
+	},[])
   return (
           <Link  className=" " href="/dashboard/settings/filesystem/home">
 						<Card className="w-full h-full">
@@ -101,10 +111,27 @@ const FileCard = ()=>{
 								</div>
 							</CardHeader>
 							<Divider />
-							<CardBody className="flex gap-2 items-end">
-								<div className="flex gap-4 items-center">
+							<CardBody className="flex gap-2 overflow-hidden">
+								<div className="flex   items-end gap-14 ">
+									<div className="relative h-20 w-[100px] ">
+										{
+											files.slice(0,4).reverse().map((file,i)=>{
+												return (
+													<Image
+														key={file.name}
+														src={file.url}
+														alt="File"
+														width={80}
+														className={cn("absolute w-[80px] h-[80px] object-contain  top-0 bg-slate-50 p-1 drop-shadow-md rounded-xl border left-0", ["-rotate-3 left-0","rotate-0 left-5","rotate-3 left-10","rotate-6 left-16"][i])}
+														height={80}
+													/>
+												)
+											})
+										}
+
+									</div>
 									<div className="flex gap-2 flex-col">
-										<p className="">{collections.length} deleted items</p>
+										<p className="">{files.length} files </p>
 									</div>
 								</div>
 							</CardBody>
@@ -115,7 +142,14 @@ const FileCard = ()=>{
 
 
 const UsersCard = ()=>{
-	  const {collections} = useCollections()
+	// cont {} = useAdminStore()
+	const [admins,setAdmins]=useState<AdminType[]>([])
+	useEffect(()=>{
+		getDocs(query(collection(db, "_30mw_admins"), and( where("_30mw_deleted", "==", false) , where("accepted", "==", true) ) )).then(_=>{
+			setAdmins(_?.docs?.map(_=>_.data()) as any[])
+			console.log(_?.docs?.map(_=>_.data()))
+		})
+	},[])
   return (
           <Link  className=" " href="/dashboard/_30mw_admins">
 						<Card className="w-full h-full ">
@@ -126,12 +160,15 @@ const UsersCard = ()=>{
 							</CardHeader>
 							<Divider />
 							<CardBody className="flex gap-2 ">
-								<div className="flex gap-4 items-center">
-									<div className="flex gap-2 items-end">
-										<p className="text-3xl">{collections.length} </p>
-										<p className="text-lg"> users</p>
-									</div>
-								</div>
+									    <AvatarGroup isBordered className="w-fit">
+											{admins.map(_=>(
+												<Avatar
+													key={_.email}
+													name={_.fullName}
+													src={_.photo}
+												/>
+											))}
+									    </AvatarGroup>
 							</CardBody>
 						</Card>
 					</Link>
