@@ -93,7 +93,7 @@ const DashboardCard = ()=>{
 const FileCard = ()=>{
   const {collections} = useCollections()
   return (
-          <Link  className=" " href="/dashboard/settings/filesystem">
+          <Link  className=" " href="/dashboard/settings/filesystem/root">
 						<Card className="w-full h-full">
 							<CardHeader className="flex gap-3">
 								<div className="flex justify-between w-full">
