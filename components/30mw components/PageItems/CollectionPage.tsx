@@ -14,9 +14,11 @@ import LoadingTiming from '../LoadingTiming';
 import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@nextui-org/react";
 import Bar from './Chart';
 
-type Props = {}
+type Props = {
+  readOnly : boolean
+}
 
-const CollectionPage = (props: Props) => {
+const CollectionPage = ({readOnly}: Props) => {
   const [docs, setDocs] = React.useState<CollectionType[]>([])
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const {collections, setCollections ,selectedCollection, setSelectedCollection} = useCollections()
@@ -98,8 +100,10 @@ const CollectionPage = (props: Props) => {
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <Button onPress={onOpen} variant='shadow' size='lg' color="primary" className='capitalize' >✨ new</Button>
-        {/* <Button variant='faded' color="primary"><Trash size={16}/> Trash</Button> */}
+        {
+          readOnly && <Button onPress={onOpen} variant='shadow' size='lg' color="primary" className='capitalize' >✨ new</Button>
+        }
+        
         <CreateModal collection={selectedCollection} model={{isOpen, onOpen, onOpenChange}}/>
       </NavbarContent>
     </Navbar>
@@ -180,7 +184,7 @@ const CollectionPage = (props: Props) => {
       {
         !loading && 
         docs.map((doc,index) => {
-          return <Doc doc={doc} key={doc.id}/>
+          return <Doc readOnly={readOnly} doc={doc} key={doc.id}/>
         })
       }
     </div>

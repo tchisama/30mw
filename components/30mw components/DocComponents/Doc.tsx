@@ -10,9 +10,10 @@ import Link from 'next/link';
 
 type Props = {
   doc: any
+  readOnly : boolean
 }
 
-function Doc({doc}: Props) {
+function Doc({doc , readOnly}: Props) {
   const [document, setDocument] = React.useState<any>(doc);
   const {selectedCollection} = useCollections()
   // console.log(selectedCollection)
@@ -31,7 +32,10 @@ function Doc({doc}: Props) {
         <Link href={selectedCollection.href+"/"+document.id} className='ml-auto mr-1' >
           <Button variant='bordered' isIconOnly ><ArrowUpRight size={16}/></Button>
         </Link>
+        {
+          readOnly &&
         <Controllers document={document} setDocument={setDocument} collection={selectedCollection}/>
+        }
       </CardHeader>
       <Divider/>
       <CardBody className='space-y-1 bg-slate-300/5 '>

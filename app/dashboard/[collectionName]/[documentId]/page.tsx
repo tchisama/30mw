@@ -4,6 +4,7 @@ import ViewField from '@/components/30mw components/DocComponents/ViewField'
 import SideNavbar from '@/components/30mw components/SideNavbar'
 import DashboardProvider from '@/components/30mw components/providers/DashboardProvider'
 import { db } from '@/firebase'
+import { useAdminStore } from '@/store/30mw/admin'
 import useCollections from '@/store/30mw/collections'
 import { Field } from '@/types/collection'
 import { Card } from '@nextui-org/react'
@@ -23,6 +24,40 @@ function Page({}: Props) {
       setDocument(doc.data())
     })
   },[params.collectionName,params.documentId])
+
+
+
+
+  const { selectedRule} = useAdminStore()
+  const [haveAccess, setHaveAccess] = React.useState(false)
+  const [readOnly, setReadOnly] = React.useState(false)
+  useEffect(() => {
+    if(!selectedRule) return
+    const access = ()=>{
+        if(selectedRule['access to all '] ){
+          setReadOnly(!selectedRule["read all only"])
+          if(!selectedRule["but collections"]){
+            return true
+          }else if(!selectedRule["but collections"].find(_=>_['collection name'] === selectedCollection?.name)){
+            return true
+          }else{
+            return false
+          }
+        }else{
+          if(!selectedRule["but collections"]){
+            return false
+          }else if(!selectedRule["but collections"].find(_=>_['collection name'] === selectedCollection?.name)){
+            return false
+          }else{
+            setReadOnly(selectedRule["but collections"].find(_=>_['collection name'] === selectedCollection?.name)?.["write / update"] ?? false)
+            return true
+          }
+        }
+    }
+    setHaveAccess(access())
+  },[ selectedRule, selectedCollection])
+
+
 
 
 
@@ -47,7 +82,7 @@ function Page({}: Props) {
               <Card className='p-4 h-fit space-y-2  flex'>
               <h1 className='text-xl'>Actions</h1>
               {
-                selectedCollection && document &&
+                selectedCollection && document && readOnly &&
               <Controllers document={document} setDocument={setDocument} collection={selectedCollection}/>
               }
               </Card>
