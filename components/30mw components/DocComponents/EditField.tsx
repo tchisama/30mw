@@ -42,6 +42,7 @@ import { Timestamp, addDoc, and, collection, getDocs, query, where } from "fireb
 import { db } from "@/firebase";
 import useCollections from "@/store/30mw/collections";
 import { FileType } from "@/app/dashboard/settings/filesystem/[folderId]/components/FolderComp";
+import ChooseUploadMethod from "./ChooseUploadMethod";
 
 type Props = {
 	field: Field;
@@ -305,6 +306,13 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 					<div className="font-medium mb-2 capitalize">{field.name}</div>
 					{/* <div>{getValue(index,_document)}</div> */}
 					<div className="flex flex-col flex-1 p-2 justify-end items-end gap-2 ">
+						<ChooseUploadMethod folder={selectedCollection.collection} returnedImage={
+							(v) => {
+								setDocument((p: any) => {
+									return returnUpdated(index, p, v);
+								});
+							}
+						}/>
 						<UploadImage
 							folder={selectedCollection.collection}
 							returnImage={(v) => {

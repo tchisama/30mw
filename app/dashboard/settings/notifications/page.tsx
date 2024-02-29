@@ -60,7 +60,7 @@ function Page({}: Props) {
                 return (
                   admin &&
                   <motion.div  initial={{scale:1,x:-300,opacity:0}} key={notification.id} animate={{scale:1,x:0,opacity:1}} transition={{duration:0.3,delay:i*0.1}} className={cn('flex z-[0] flex-col gap-4')}>
-                                                      <Card key={notification.id} className={cn(notification.seenBy.includes(admin.fullName) ? "opacity-70 scale-[0.995]" : "opacity-100")}>
+                                                      <Card key={notification.id} className={cn(notification.seenBy.includes(admin.fullName) ? "opacity-80 mx-4 " : "opacity-100")}>
                                                       <CardBody className='p-4 items-start flex flex-row justify-between gap-2'>
                                                         <div>
                                                           <div className='flex gap-4'>
@@ -76,7 +76,7 @@ function Page({}: Props) {
                                                           </div>
                                                         </div>
                                               {
-                                                notification.type === "update" && 
+                                                notification.action == "update" && 
                                               <Accordion className='flex-1' variant='splitted'>
                                                 <AccordionItem key="1" aria-label="Accordion 1" title="See Details" className=''>
                                                   <div className='flex gap-2'>

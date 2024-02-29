@@ -218,7 +218,7 @@ const NotificationsCard = ()=>{
 								<div className="flex gap-4 items-center">
 									<ScrollShadow hideScrollBar  className="flex w-full max-h-[250px] pb-4 gap-2 flex-col">
 										{
-											notifications.slice(0,5).map((notification)=>{
+											notifications.slice(0,10).map((notification)=>{
 												return (
 													<div className="flex gap-2 bg-white shadow rounded-xl border items-center p-2 px-4 border-b w-full" key={notification.id}>
 														<Avatar
