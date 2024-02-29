@@ -26,7 +26,7 @@ function SideNavbar({}: Props) {
   const params = useParams()
   const [collapsed, setCollapsed] = React.useState(true)
   return (
-      <div className='flex sticky top-10 min-h-[90vh] h-fit duration-200  flex-row-reverse items-center'>
+      <div className='flex sticky top-10 min-h-[90vh] h-fit duration-200 z-20  flex-row-reverse items-center'>
         <button className='bg-slate-50 rounded-r-xl border pl-0 p-1 py-3 ' onClick={() => setCollapsed(!collapsed)} >
           <ChevronLeft size={16} className={cn("duration-200",{"rotate-180":!collapsed})}/></button>
         <Card className='w-fit p-4 h-full min-h-[90vh] '>

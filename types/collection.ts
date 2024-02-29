@@ -11,6 +11,7 @@ export type CollectionType = {
   href: string
   for_30mw?: boolean
   motherCollection?: string
+  addAsField?: string
 }
 
 export type FieldTypes = "string" | "image" | "number" | "boolean" | "date" | "time" | "select" | "object" | "array" | "reference" | "avatar"

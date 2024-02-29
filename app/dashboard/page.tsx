@@ -5,6 +5,7 @@ import { db } from "@/firebase";
 import { cn } from "@/lib/utils";
 import { AdminType, useAdminStore } from "@/store/30mw/admin";
 import useCollections from "@/store/30mw/collections";
+import { Notification } from "@/types/main";
 import {
 	Card,
 	CardHeader,
@@ -16,8 +17,11 @@ import {
 	Button,
 	Avatar,
   AvatarGroup,
+	Chip,
+	ScrollShadow,
 } from "@nextui-org/react";
 import { and, collection, getDocs, query, where } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore/lite";
 import { ArrowRight } from "lucide-react";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -176,19 +180,54 @@ const UsersCard = ()=>{
 }
 
 const NotificationsCard = ()=>{
+
+	  const [notifications , setNotifications] = React.useState<Notification[]>([])
+		const {collections} = useCollections()
+		const {admin} = useAdminStore()
+		useEffect(()=>{
+			if(!admin) return
+			if(!admin.id) return
+			getDocs(
+				query(
+					collection(db,"_30mw_notifications"),
+					and(
+						where("maker.id","!=",admin.id),
+					),
+					// orderBy("_30mw_createdAt", "desc"),
+					)
+				).then((res)=>{
+				setNotifications(res.docs.map((doc)=>({...doc.data(), id: doc.id}) as Notification ).sort((a,b)=> (b._30mw_createdAt.toDate()) as any - (a._30mw_createdAt.toDate() as any) ).filter(_=>!_.seenBy.includes(admin.fullName)) as Notification[])
+			})
+		},[setNotifications,admin])
   return (
           <Link  className=" row-span-2 " href="/dashboard/settings/notifications">
 						<Card className="w-full h-full ">
 							<CardHeader className="flex gap-3">
 								<div className="flex justify-between w-full">
-									<p className="text-2xl">🔔 Notifications </p>
+									<p className="text-2xl">🔔 Notifications ( {notifications.length} )</p>
 								</div>
 							</CardHeader>
 							<Divider />
-							<CardBody className="flex gap-2  items-end">
+							<CardBody className="flex gap-2  bg-slate-50">
 								<div className="flex gap-4 items-center">
-									<div className="flex gap-2 flex-col">
-									</div>
+									<ScrollShadow hideScrollBar  className="flex w-full max-h-[250px] pb-4 gap-2 flex-col">
+										{
+											notifications.slice(0,5).map((notification)=>{
+												return (
+													<div className="flex gap-2 bg-white shadow rounded-xl border items-center p-2 px-4 border-b w-full" key={notification.id}>
+														<Avatar
+															name={notification.maker.fullName}
+															src={notification.maker.photo}
+														/>
+														<div className="flex flex-1 flex-col ">
+															{/* <Chip size="sm">{notification.action}</Chip> */}
+															<p className="text-sm">{notification.maker.fullName} has {notification.action} a document in {notification.collection}</p>
+														</div>
+													</div>
+												)
+											})
+										}
+									</ScrollShadow>
 								</div>
 							</CardBody>
 						</Card>

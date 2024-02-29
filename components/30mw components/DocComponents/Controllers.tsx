@@ -5,6 +5,7 @@ import EditModal from "./Edit";
 import { CollectionType } from "@/types/collection";
 import { Timestamp, addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase";
+import { useAdminStore } from "@/store/30mw/admin";
 
 type Props = {
   document: any,
@@ -19,10 +20,33 @@ function Controllers({
 }: Props) {
   const iconClasses = "text-xl w-5 h-5 mr-2 text-default-500 pointer-events-none flex-shrink-0";
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
-
+  const {admin} = useAdminStore()
 
   const deleteDocument = () => {
     if(!_document) return
+
+
+    addDoc(collection(db,"_30mw_notifications"),{
+      collection : _collection.collection,
+      document : _document.id,
+      type:"system",
+      action:"delete",
+      _30mw_createdAt : Timestamp.now(),
+      _30mw_updatedAt : Timestamp.now(),
+      _30mw_deleted : false,
+      seenBy:[admin?.fullName],
+      maker:{
+        fullName:admin?.fullName,
+        id:admin?.id,
+        photo: admin?.photo
+      },
+      data:{
+        document:_document,
+      }
+    })
+
+
+
     updateDoc(doc(db,_collection.collection,_document.id),{
       _30mw_deleted : true
     })

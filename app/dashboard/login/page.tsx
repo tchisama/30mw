@@ -28,7 +28,7 @@ export default function App() {
         alert("Wrong Credentials")
         setLoading(false)
       }else{
-        localStorage.setItem("_30mw_admin", JSON.stringify(res.docs[0].data()))
+        localStorage.setItem("_30mw_admin", JSON.stringify({...res.docs[0].data(), id: res.docs[0].id}))
         setLoading(false)
         
         router.push("/dashboard/")

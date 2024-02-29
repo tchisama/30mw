@@ -10,7 +10,8 @@ export type AdminType = {
   rule:string,
   _30mw_deleted:boolean,
   photo:string,
-  accepted:boolean
+  accepted:boolean,
+  id:string
 }
 export type Rule = {
   name:string,

@@ -7,6 +7,7 @@ import EditField from './EditField';
 import { createEmptyObject } from '@/lib/utils/index';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import { db } from '@/firebase';
+import { useAdminStore } from '@/store/30mw/admin';
 type Props = {
   model:{
     isOpen: boolean,
@@ -18,8 +19,13 @@ type Props = {
 
 function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange}}: Props) {
   const [document, setDocument] = React.useState<any>(createEmptyObject(_collection.structure));
+  const {admin} = useAdminStore()
   const createDocument = () => {
-    console.log(document)
+    if(!document) return
+
+
+
+
     addDoc(
       collection(db, _collection.collection),{
         ...document,
@@ -27,8 +33,23 @@ function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange
         _30mw_updatedAt: Timestamp.now(),
         _30mw_deleted: false
       }
-    ).then(() => {
+    ).then((doc) => {
       setDocument(createEmptyObject(_collection.structure))
+          addDoc(collection(db,"_30mw_notifications"),{
+            collection : _collection.collection,
+            document : doc.id,
+            type:"system",
+            action:"create",
+            _30mw_createdAt : Timestamp.now(),
+            _30mw_updatedAt : Timestamp.now(),
+            _30mw_deleted : false,
+            seenBy:[admin?.fullName],
+            maker:{
+              fullName:admin?.fullName,
+              id:admin?.id,
+              photo: admin?.photo
+            },
+    })
     })
   }
   useEffect(() => {

@@ -55,7 +55,7 @@ function Page({}: Props) {
           <div className="grid grid-cols-1 mt-4 gap-3  ">
             {
               collections && collections
-              // .filter((c:CollectionType)=>!c?.for_30mw)
+              .filter((c:CollectionType)=>!c?.for_30mw)
               .map((c:CollectionType,i)=>{
                 return (
                   <SettingCollPage key={i} c={c} i={i} />
