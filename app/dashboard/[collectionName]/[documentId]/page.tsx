@@ -6,14 +6,16 @@ import DashboardProvider from '@/components/30mw components/providers/DashboardP
 import { db } from '@/firebase'
 import { useAdminStore } from '@/store/30mw/admin'
 import useCollections from '@/store/30mw/collections'
-import { Field } from '@/types/collection'
-import { Button, Card, CardBody, CardHeader } from '@nextui-org/react'
-import { doc, getDoc } from 'firebase/firestore'
+import { CollectionType, Field } from '@/types/collection'
+import { Button, Card, CardBody, CardHeader, useDisclosure } from '@nextui-org/react'
+import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore'
 import { useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { Tabs, Tab } from "@nextui-org/react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Home } from 'lucide-react'
+import CreateModal from '@/components/30mw components/DocComponents/Create'
+import Doc from '@/components/30mw components/DocComponents/Doc'
 type Props = {}
 
 function Page({ }: Props) {
@@ -62,7 +64,6 @@ function Page({ }: Props) {
 
 
 
-
   return (
     <DashboardProvider>
       {
@@ -71,11 +72,11 @@ function Page({ }: Props) {
           <SideNavbar />
           <div className="min-h-[110vh] flex flex-col  flex-1">
             <div className='flex justify-between items-center'>
-              <h1 className='text-3xl mt-12'>Document</h1>
+              {/* <h1 className='text-3xl mt-12'>Document</h1> */}
             </div>
             <div>
 
-              <Tabs aria-label="Options" className=' mt-4'>
+              <Tabs size='lg' aria-label="Options" className='px-6 mt-8'>
 
                 <Tab key="main" title="Main">
 
@@ -87,8 +88,6 @@ function Page({ }: Props) {
                         <CardHeader>
                           <div className='flex-1'>
                             <h1 className='text-xl'>Customer</h1>
-                            <h1 className='text-sm '>⌚ created at - {document?._30mw_createdAt.toDate().toDateString()} - {document?._30mw_createdAt.toDate().toLocaleTimeString()}</h1>
-                            <h1 className='text-sm '>🖋️ last update - {document?._30mw_updatedAt.toDate().toDateString()} - {document?._30mw_updatedAt.toDate().toLocaleTimeString()}</h1>
                           </div>
 
                           {
@@ -108,7 +107,10 @@ function Page({ }: Props) {
                           }
                         </CardBody>
                       </Card>
-
+                      <div className='py-8'>
+                            <h1 className='text-sm '>⌚ created at - {document?._30mw_createdAt.toDate().toDateString()} - {document?._30mw_createdAt.toDate().toLocaleTimeString()}</h1>
+                            <h1 className='text-sm '>🖋️ last update - {document?._30mw_updatedAt.toDate().toDateString()} - {document?._30mw_updatedAt.toDate().toLocaleTimeString()}</h1>
+                      </div>
                     </ResizablePanel>
                     <ResizableHandle withHandle  className=' rounded-xl '>
                     </ResizableHandle>
@@ -118,8 +120,18 @@ function Page({ }: Props) {
                 
                 </Tab>
 
-                <Tab key="sections" title="sections">
-                </Tab>
+
+                {
+                  collections.filter(c=>c?.addAsField == selectedCollection.name).map((collection)=>{
+                    return (
+                    <Tab key={collection.name} title={collection.name} className='px-6'>
+                      <TabDocs key={collection.name} collection={collection} forDocument={params.documentId as string} />
+                    </Tab>
+
+                    )
+                  })
+                }
+
               </Tabs>
 
 
@@ -132,5 +144,45 @@ function Page({ }: Props) {
     </DashboardProvider>
   )
 }
+
+
+
+
+const TabDocs = ({collection:_collection, forDocument}:{collection:CollectionType, forDocument:string})=>{
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const [docs, setDocs] = React.useState<any[]>([]);
+  useEffect(()=>{
+    onSnapshot(query(collection(db, _collection.name), where("forDocument", "==", forDocument)) , (snapshot) => {
+      setDocs(snapshot.docs.map(_=>({..._.data(), id : _.id})))
+    })
+  },[_collection,setDocs,forDocument])
+  return(
+    <div>
+        <div className='flex items-center justify-between'>
+          <h1 className='text-3xl capitalize font-medium'>
+          {
+            _collection.name
+          }
+          </h1>
+          <Button onPress={onOpen} color="primary" >✨ Create</Button>
+          {
+            document &&
+          <CreateModal forDocument={forDocument} collection={_collection} model={{isOpen, onOpen , onOpenChange}} />
+          }
+        </div>
+        <div className='mt-4 grid grid-cols-3 gap-4'>
+          {
+            docs && docs.length > 0 &&
+            docs.map((doc,i)=>{
+              return <Doc key={i} doc={doc} coll={_collection} readOnly={false} />
+            })
+          }
+        </div>
+    </div>
+  )
+}
+
+
+
 
 export default Page

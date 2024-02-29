@@ -15,9 +15,10 @@ type Props = {
     onOpenChange: () => void
   }
   collection: CollectionType
+  forDocument?: string
 }
 
-function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange}}: Props) {
+function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange},forDocument}: Props) {
   const [document, setDocument] = React.useState<any>(createEmptyObject(_collection.structure));
   const {admin} = useAdminStore()
   const createDocument = () => {
@@ -31,7 +32,9 @@ function CreateModal({collection:_collection,model:{isOpen, onOpen, onOpenChange
         ...document,
         _30mw_createdAt: Timestamp.now(),
         _30mw_updatedAt: Timestamp.now(),
-        _30mw_deleted: false
+        _30mw_deleted: false,
+        ...(forDocument && {forDocument})
+
       }
     ).then((doc) => {
       setDocument(createEmptyObject(_collection.structure))

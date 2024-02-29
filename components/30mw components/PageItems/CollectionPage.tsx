@@ -112,12 +112,13 @@ const CollectionPage = ({readOnly}: Props) => {
 
     <Accordion   defaultExpandedKeys={["1"]} selectionMode='multiple'>
           {
-                collections.filter(c=>c?.motherCollection == selectedCollection?.collection).length > 0 &&
-                <AccordionItem  className=' text-2xl  font-medium ' key="1" aria-label="Accordion 1" title={"Sub Collections ("+collections.filter(c=>c?.motherCollection == selectedCollection?.collection).length+")"}>
+            
+                collections.filter(c=>c?.motherCollection == selectedCollection?.collection&& c?.addAsField !== selectedCollection?.name).length > 0 &&
+                <AccordionItem  className=' text-2xl  font-medium ' key="1" aria-label="Accordion 1" title={"Sub Collections ("+collections.filter(c=>c?.motherCollection == selectedCollection?.collection&& c?.addAsField !== selectedCollection?.name).length+")"}>
                   <div className='p-1 w-full'>
                     
                   {
-                        collections.filter(c=>c?.motherCollection == selectedCollection?.collection)
+                        collections.filter(c=>c?.motherCollection == selectedCollection?.collection && c?.addAsField !== selectedCollection?.name)
                         .map((c,i)=>{
                           const card =                   <Link className='inline-block w-fit m-2' href={`/dashboard/${c.collection}`} >
                             <Card shadow='sm' className='p-4 inline-block w-fit bg-white gap-4  duration-200'>

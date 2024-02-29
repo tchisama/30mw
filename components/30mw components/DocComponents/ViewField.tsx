@@ -116,10 +116,10 @@ function ViewField({field,index,document,setDocument}: Props) {
   if(field.type === 'image'){
     return (
       <div className='p-2 bg-white rounded-xl gap-2 flex flex-col 2xl:flex-row justify-between border '>
-        <div className="flex flex-col flex-1 p-0">
+        <div className="flex flex-col  p-0">
           <div className='font-medium mb-2 capitalize'>{field.name}</div>
         </div>
-        <div className=' bg-slate-400/5 p-2 border rounded-xl w-fit flex items-center justify-center space-y-1'>
+        {/* <div className=' bg-slate-400/5 p-2 border rounded-xl flex-1  space-y-1'> */}
           <ImageViewer src={getValue(index,document) ?? ""}>
           <Image
             width={200}
@@ -127,10 +127,10 @@ function ViewField({field,index,document,setDocument}: Props) {
             as={NextImage}
             alt="NextUI hero Image"
             src={getValue(index,document)??""}
-            className="h-[200px] object-contain w-[200px] mx-auto"
+            className="h-full aspect-auto w-full max-w-[300px] max-h-[300px] object-contain mx-auto"
           />
           </ImageViewer>
-        </div>
+        {/* </div> */}
       </div>
     )
   }
