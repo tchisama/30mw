@@ -20,7 +20,7 @@ import {
 	Chip,
 	ScrollShadow,
 } from "@nextui-org/react";
-import { and, collection, getDocs, query, where } from "firebase/firestore";
+import { and, collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore/lite";
 import { ArrowRight } from "lucide-react";
 
@@ -75,21 +75,27 @@ const TrashCard = ()=>{
   )
 }
 const DashboardCard = ()=>{
-  const {collections} = useCollections()
+    const [configBrand, setConfigBrand] = React.useState<any>({})
+		useEffect(()=>{
+			getDoc(doc(db, "config", "brand")).then(doc=>{
+				setConfigBrand(doc.data())
+			})
+		},[])
   return (
-          <Link  className=" " href="/dashboard/settings/collections">
+          <Link  className=" " href="/dashboard/settings/config">
 						<Card className="w-full h-full ">
 							<CardHeader className="flex gap-3">
 								<div className="flex justify-between w-full">
-									<p className="text-2xl">⚙️ Dashboard</p>
+									<p className="text-2xl">⚙️ Config</p>
 								</div>
 							</CardHeader>
 							<Divider />
-							<CardBody className="flex gap-2 items-end">
+							<CardBody className="flex gap-2 items-start">
 								<div className="flex gap-4 items-center">
 
-									<div className="flex gap-2 flex-col">
-										<p className="">{collections.length} deleted items</p>
+									<div className="flex gap-2 ">
+										<Image src={configBrand.logo} alt="logo" width={50} height={50}/>
+										<p className="">manage {configBrand.brandName} brand , and more </p>
 									</div>
 								</div>
 							</CardBody>

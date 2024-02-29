@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils'
 import { useAdminStore } from '@/store/30mw/admin'
 import useCollections from '@/store/30mw/collections'
 import { CollectionType, usersColl } from '@/types/collection'
-import { Avatar, Button, Card, Divider, User } from '@nextui-org/react'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
+import { Avatar, Button, Card, Divider, Image, User } from '@nextui-org/react'
+import { addDoc, collection, doc, getDoc, getDocs } from 'firebase/firestore'
 import { ChevronLeft, Home, LogOut, Settings, User2 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
@@ -21,7 +21,12 @@ function SideNavbar({}: Props) {
 
   const {admin , selectedRule} = useAdminStore()
 
-
+  const [configBrand, setConfigBrand] = React.useState<any>({})
+  useEffect(()=>{
+    getDoc(doc(db, "config", "brand")).then(doc=>{
+      setConfigBrand(doc.data())
+    })
+  },[])
 
   const params = useParams()
   const [collapsed, setCollapsed] = React.useState(true)
@@ -31,12 +36,14 @@ function SideNavbar({}: Props) {
           <ChevronLeft size={16} className={cn("duration-200",{"rotate-180":!collapsed})}/></button>
         <Card className='w-fit p-4 h-full min-h-[90vh] '>
           <div className='flex justify-center items-center gap-4'>
-            <div className='bg-slate-100 border w-12 h-12 rounded-xl'></div>
+            <div className=' w-12 h-12 rounded-xl'>
+              <Image src={configBrand?.logo} width={48} height={48} alt="logo" />
+            </div>
                               {
             collapsed &&
             <div className='flex-1'>
-              <div className='font-bold text-md'>Logo Name</div>
-              <div className='text-sm'>sologo here </div>
+              <div className='font-bold text-md'>{configBrand?.brandName}</div>
+              <div className='text-sm'>{configBrand?.sologoName} </div>
             </div>
               }
           </div>
