@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/context-menu"
 
 import { Button } from '@nextui-org/react';
+import DocumentNode from '../nodes/Document';
 
 
 
@@ -33,7 +34,8 @@ import { Button } from '@nextui-org/react';
 
 const nodeTypes = {
     start: Start,
-    whatsapp: Whatsapp
+    whatsapp: Whatsapp,
+    document: DocumentNode
 }
 
 

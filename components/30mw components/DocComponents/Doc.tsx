@@ -11,7 +11,7 @@ import { deleteDoc, doc as docRef, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { update } from 'firebase/database';
 import { Action } from '@/store/30mw/actions';
-import useRunAction from '@/lib/utils/action';
+import useRunAction from '@/lib/hooks/action';
 
 type Props = {
   doc: any

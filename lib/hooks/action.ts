@@ -19,14 +19,20 @@ function useRunAction() {
   const FireNode = ({node,nodes,edges}:{node:Node , nodes:Node[] , edges:Edge[]}):any =>{
     const nextNode = getNode(edges.find((edge)=>edge.target === node.id)?.source as string,nodes)
     
-    
+    console.log({node,nodes,edges,nextNode})
     
     /// if node == start
     if(node.type === "start" && nextNode) return FireNode({node:nextNode,nodes,edges})
 
-    if(node.type === "whatsapp") return window.open(`https://wa.me/${node.data["phone number"]}?text=${node.data.message}`)
+    // if(node.type === "whatsapp") return window.open(`https://wa.me/${
+    //   node.data["phone number"]
+    // }?text=${
+    //   node.data.message
+    // }`)
+    
+    // if(node.type === "document") return window.open(`https://wa.me/${node.data["phone number"]}?text=${node.data.message}`)
 
-    console.log(nextNode)
+    // console.log(nextNode)
   }
 
 

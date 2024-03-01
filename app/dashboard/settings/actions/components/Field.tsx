@@ -5,6 +5,7 @@ import { Input, Textarea } from '@nextui-org/react'
 import { transform } from 'next/dist/build/swc'
 import React, { useCallback } from 'react'
 import { Edge, Handle, Node, Position } from 'reactflow'
+import useNodesAndEdges from '../hooks/useNodesAndEdges'
 
 type Props = {
   type:string
@@ -29,29 +30,9 @@ function Field({
 }: Props) {
 	const { nodes, setNodes ,edges } = useAction();
 
+  const {getValue,UpdateValue} = useNodesAndEdges()
 
 
-  const UpdateValue = (_id:string,inputName:string,newValue:any)=>{
-    setNodes(
-      nodes.map((node:Node)=>{
-        if(node.id === _id) {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              [inputName]:  newValue
-            }
-          }
-        }
-        return node
-      })
-    )
-  }
-
-  const getValue = (_id:string,inputName:string)=>{
-    return nodes.find((node:Node)=>node.id === _id)?.data[inputName]
-    
-  }
 
 
   const disabled = useCallback(()=>{
