@@ -74,7 +74,7 @@ export const RenderRow = ({
 		const AddRelativeDiv = (children: React.ReactNode) => {
 			return (
 				<div className="relative flex group ">
-					<div className="flex flex-col h-full  mt-2 ">
+					<div className="flex flex-col items-start justify-start h-fit  mt-2 ">
 						<button
 							disabled={index[index.length - 1] === 0}
 							onClick={() =>
@@ -251,7 +251,9 @@ export const RenderRow = ({
 											<ChevronDown size={14} />
 										</button>
 									</div>
+									<div className="flex-1">
 									{o.name}
+									</div>
 									<Button
 										isIconOnly
 										onPress={() => {

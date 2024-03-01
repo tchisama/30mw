@@ -17,6 +17,7 @@ export type FileType = {
   name: string,
   _30mw_createdAt: Timestamp
   _30mw_updatedAt: Timestamp
+  motherFolder: string
   _30mw_deleted: boolean
   id: string
   path: {
@@ -36,7 +37,7 @@ export type FileType = {
     }
   )
 
-const FolderComp = ({ file }: { file: FileType }) => {
+const FolderComp = ({ file , nolink=false }: { file: FileType , nolink?: boolean }) => {
   const route = useRouter()
   const [editMode , setEditMode] = React.useState(false)
   const [name, setName] = React.useState(file.name)
@@ -66,7 +67,7 @@ const FolderComp = ({ file }: { file: FileType }) => {
   return (
     file.type === "folder" ?
 
-                <motion.div className='w-full group m-2 inline-block  aspect-[5/4] relative cursor-pointer' onClick={() => !editMode &&  route.push(`/dashboard/settings/filesystem/${file.id}`)}>
+                <motion.div className='w-full group m-2 inline-block  aspect-[5/4] relative cursor-pointer' onClick={() => !editMode &&  !nolink  &&  route.push(`/dashboard/settings/filesystem/${file.id}`)}>
                   <Card shadow='sm' className='w-full h-full p-2' >
                     <div className='w-full h-full flex flex-col justify-center items-center gap-2'>
                       <div className={cn('w-full h-fit text-7xl text-center my-auto flex-1 flex items-center border bg-slate-50 rounded-xl justify-center duration-200', editMode && 'scale-[0.95]')}>📂</div>

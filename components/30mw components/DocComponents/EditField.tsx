@@ -305,7 +305,7 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 				<div className="flex flex-col flex-1 p-0">
 					<div className="font-medium mb-2 capitalize">{field.name}</div>
 					{/* <div>{getValue(index,_document)}</div> */}
-					<div className="flex flex-col flex-1 p-2 justify-end items-end gap-2 ">
+					<div className="flex flex-row flex-1 p-2 justify-end items-end gap-2 ">
 						<ChooseUploadMethod folder={selectedCollection.collection} returnedImage={
 							(v) => {
 								setDocument((p: any) => {
@@ -313,43 +313,17 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 								});
 							}
 						}/>
-						<UploadImage
-							folder={selectedCollection.collection}
-							returnImage={(v) => {
-								setDocument((p: any) => {
-									return returnUpdated(index, p, v);
-								});
-							}}
-						>
-							{({ id, loading }) => {
-								return (
-									<Button
-										onPress={() => {
-											document.getElementById(id)?.click();
-										}}
-										variant="solid"
-										color="primary"
-									>
-										{loading ? (
-											<Spinner color="white" size="sm" />
-										) : (
-											<Upload size={16} />
-										)}
-										Upload Image
-									</Button>
-								);
-							}}
-						</UploadImage>
+						
 						<Button
 							onPress={() => {
 								setDocument((p: any) => {
 									return returnUpdated(index, p, null);
 								});
 							}}
-							variant="solid"
+							variant="bordered"
+							isIconOnly
 						>
 							<X size={16} />
-							Clear Image
 						</Button>
 					</div>
 				</div>
@@ -388,27 +362,20 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 			<div className="p-2 bg-white rounded-xl gap-2 flex justify-between border ">
 				<div className="font-medium capitalize">{field.name}</div>
 				{/* <div>{getValue(index,_document)}</div> */}
-				<UploadImage
-					folder={selectedCollection.collection}
-					returnImage={(v) => {
-						setDocument((p: any) => {
-							return returnUpdated(index, p, v);
-						});
-					}}
-				>
-					{({ loading }) => {
-						return loading ? (
-							<div className="flex w-10 h-10 items-center justify-center">
-								<Spinner size="sm" />
-							</div>
-						) : (
+						<div className="flex gap-4">
+
+						<ChooseUploadMethod folder={selectedCollection.collection} returnedImage={
+							(v) => {
+								setDocument((p: any) => {
+									return returnUpdated(index, p, v);
+								});
+							}
+						}/>
 							<Avatar
-								className="cursor-pointer"
+								className=""
 								src={getValue(index, _document)}
 							/>
-						);
-					}}
-				</UploadImage>
+						</div>
 			</div>
 		);
 	}

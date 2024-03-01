@@ -97,4 +97,5 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #777777;
   width: 10px;
+  height: 10px;
 }
