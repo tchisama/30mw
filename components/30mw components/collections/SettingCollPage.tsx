@@ -22,7 +22,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
 
-
+import { Reorder } from "framer-motion";
 
 
 const typeMap = {
@@ -35,6 +35,7 @@ const typeMap = {
 	date : "Timestamp",
 	time : "string",
 	text: "string",
+	richText: "string",
 }
 
 
@@ -129,17 +130,21 @@ type ${collection.name[0].toUpperCase() + collection.name.slice(1)}Type = ${getT
   <ResizablePanel >
 				
 						<div className="bg-slate-50 flex flex-col border flex-[2] rounded-xl p-2 ">
+							<Reorder.Group values={collection.structure} onReorder={(v)=>setCollection({...collection,structure:v})}>
 								{collection.structure &&
 									collection.structure.map((r, i) => {
 										return (
-											<RenderRow
-												setCollection={setCollection}
-												key={i}
-												r={r}
-												collection={collection}
-												i={[i]} />
+											<Reorder.Item key={JSON.stringify(r)} value={r} >
+												<RenderRow
+													setCollection={setCollection}
+													key={i}
+													r={r}
+													collection={collection}
+													i={[i]} />
+											</Reorder.Item>
 										);
 									})}
+							</Reorder.Group>
 							<AddDailog setCollection={setCollection} index={[]} />
 						</div>
 
@@ -151,7 +156,8 @@ type ${collection.name[0].toUpperCase() + collection.name.slice(1)}Type = ${getT
 				<Button onClick={copyType} size="sm" isIconOnly variant="light" className="text-white absolute top-2 right-2">
 					<Copy size={18} />
 				</Button>
-				<span className="text-sm font-medium">Typescript Type</span>
+				<span className="text-sm font-medium">Collection Type</span>
+				<span className="text-xs font-light">Typescript</span>
 				<SyntaxHighlighter language="typescript" style={atomOneDark}>
 						{typeText}
 				</SyntaxHighlighter>

@@ -23,7 +23,7 @@ const Home = () => {
               <div className="px-4 max-w-[2400px] min-h-[110vh] mx-auto py-8 relative flex gap-2">
                 <div className="flex-1">
                   <div className="flex justify-between">
-                    <h1 className="text-5xl font-medium capitalize">🔐 admins</h1>
+                    <h1 className="text-5xl font-bold capitalize">🔐 admins</h1>
                     <CreateNewUser />
                   </div>
                   <Divider className="my-8" />

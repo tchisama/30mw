@@ -43,57 +43,8 @@ import useCollections from "@/store/30mw/collections";
 import { CollectionType, Field, FieldTypes } from "@/types/collection";
 import { addRow, deleteRow, setRow } from "@/lib/utils/collectionsManager";
 import { getValue } from "firebase/remote-config";
+import { FieldsTypes } from "./AddDailog";
 
-const FieldsTypes = [
-	{
-		name: "string",
-		icon: (p: any) => <TypeIcon {...p} />,
-		description: "Text data",
-	},
-	{
-		name: "number",
-		icon: (p: any) => <Hash {...p} />,
-		description: "Numeric data",
-	},
-	{ name: "text", icon: (p: any) => <Text {...p} />, description: "Long text" },
-	{
-		name: "image",
-		icon: (p: any) => <ImageIcon {...p} />,
-		description: "Image",
-	},
-	{
-		name: "reference",
-		icon: (p: any) => <MousePointer {...p} />,
-		description: "Reference",
-	},
-	{
-		name: "select",
-		icon: (p: any) => <ListIcon {...p} />,
-		description: "Selection",
-	},
-	{
-		name: "array",
-		icon: (p: any) => <Brackets {...p} />,
-		description: "Array",
-	},
-	{ name: "date", icon: (p: any) => <Calendar {...p} />, description: "Date" },
-	{
-		name: "boolean",
-		icon: (p: any) => <ToggleLeft {...p} />,
-		description: "True or False",
-	},
-	{
-		name: "object",
-		icon: (p: any) => <Group {...p} />,
-		description: "Group of fields",
-	},
-	{
-		name: "avatar",
-		icon: (p: any) => <CircleUser {...p} />,
-		description: "Profile picture",
-	},
-	{ name: "time", icon: (p: any) => <ClockIcon {...p} />, description: "Time" },
-];
 
 function EditDailog({
 	r,
@@ -203,7 +154,7 @@ function EditDailog({
 										className=""
 									>
 										{FieldsTypes.map((field) => (
-											<SelectItem key={field.name} value={field.name}>
+											<SelectItem startContent={field.icon({ size: 18 })} key={field.name} value={field.name}>
 												{field.name}
 											</SelectItem>
 										))}
@@ -235,7 +186,7 @@ function EditDailog({
 										className=""
 									>
 										{collections.find(c=>c.name == ((refCollection as any).currentKey??(value as any)?.reference?.collection) )?.structure.filter(r=>!["array","reference","object","select"].includes(r.name)).map((field) => (
-											<SelectItem key={field.name} value={field.name}>
+											<SelectItem  key={field.name} value={field.name}>
 												{field.name}
 											</SelectItem>
 										)) as any}

@@ -1,6 +1,6 @@
 import React from 'react'
 import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, useDisclosure, Button, DropdownItem} from "@nextui-org/react";
-import { Edit, Phone } from 'lucide-react';
+import { Edit, Expand, Phone, X } from 'lucide-react';
 import { CollectionType, Field } from '@/types/collection';
 import ViewField from './ViewField';
 import EditField from './EditField';
@@ -56,8 +56,8 @@ function EditModal({document,setDocument,collection:_collection,model:{isOpen, o
   }
   return(
     <>
-      <Modal  scrollBehavior='inside' size='3xl' isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent >
+      <Modal className='relative'  size={"5xl"} isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent className='relative'>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Edit Document</ModalHeader>

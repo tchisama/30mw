@@ -1,7 +1,7 @@
 import { getValue } from '@/lib/utils/index'
 import { Field } from '@/types/collection'
-import { Accordion, AccordionItem, Avatar, Button, Chip, Image, Skeleton } from '@nextui-org/react'
-import { MoreHorizontal, Plus, Settings } from 'lucide-react'
+import { Accordion, AccordionItem, Avatar, Button, Chip, Image, Skeleton, useDisclosure } from '@nextui-org/react'
+import { ArrowUpRight, MoreHorizontal, Plus, Settings } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { fileURLToPath } from 'url'
 import NextImage from "next/image"
@@ -15,7 +15,7 @@ import {
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
 import ImageViewer from '../ImageViewer'
-
+import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter} from "@nextui-org/react";
 type Props = {
   field:Field,
   index: (string | number)[],
@@ -223,7 +223,14 @@ function ViewField({field,index,document,setDocument}: Props) {
 			</div>
 		);
 	}
-
+	if (field.type == "richText") {
+		return (
+			<div className="flex justify-between bg-white pr-2 p-2 rounded-xl border px-4">
+				<div className="font-medium capitalize">{field.name}</div>
+        <ViewRichText value={getValue(index,document)}/>
+			</div>
+		);
+	}
   return (
     <div className='flex justify-between bg-white pr-2 font-normal p-2 rounded-xl border px-4'>
       <div className='font-medium capitalize'>
@@ -242,9 +249,29 @@ function ViewField({field,index,document,setDocument}: Props) {
       </div>
     </div>
   )
+}
 
 
+const ViewRichText = ({value}:{value:string}) => {
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
+  return (
+    <>
+      <Button size='sm' variant='bordered' onPress={onOpen}>View <ArrowUpRight size={16} /></Button>
+      <Modal scrollBehavior='inside' size='5xl'  className='h-[calc(100vh-50px)]' isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody className='pt-4'>
+                  <div className="w-full rich-text" dangerouslySetInnerHTML={{__html: value}}></div>
+                  {/* <textarea>{value}</textarea> */}
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+  );
 }
 
 export default ViewField

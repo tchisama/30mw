@@ -14,7 +14,7 @@ export type CollectionType = {
   addAsField?: string
 }
 
-export type FieldTypes = "string" | "image" | "number" | "boolean" | "date" | "time" | "select" | "object" | "array" | "reference" | "avatar"
+export type FieldTypes = "richText" | "string" | "image" | "number" | "boolean" | "date" | "time" | "select" | "object" | "array" | "reference" | "avatar"
 
 
 export type Field = {
@@ -27,7 +27,7 @@ export type Field = {
 /// all the types
 
 type StringField ={
-  type : "string" | "text" 
+  type : "string" | "text" | "richText"
   defaultValue?: string
   value?: string
 }

@@ -25,7 +25,7 @@ import { Timestamp } from "firebase/firestore/lite";
 import { ArrowRight } from "lucide-react";
 
 import React, { useEffect, useMemo, useState } from "react";
-
+import { Reorder } from "framer-motion";
 type Props = {};
 
 function page({}: Props) {
@@ -34,21 +34,49 @@ function page({}: Props) {
 			<div className="flex gap-8 w-full flex-1">
 				<SideNavbar />
 				<div className="min-h-[110vh] pt-8 flex-1 p-4">
-					<h1 className="text-5xl my-2">🚀 Dashboard</h1>
+					<h1 className="text-5xl my-2 font-bold">🚀 Dashboard</h1>
 					<h1 className="text-3xl"> welcome tchisama 👋</h1>
 					<div className="mt-12 grid grid-cols-4 ml-auto gap-4">
+
 						<FileCard />
 						<NotificationsCard />
             <CollectionsCard />
 						<DashboardCard />
 						<UsersCard />
 						<TrashCard />
+						<ActionsCard />
 					</div>
 				</div>
 			</div>
 		</DashboardProvider>
 	);
 }
+
+const ActionsCard = ()=>{
+  const {collections} = useCollections()
+  return (
+          <Link  className=" " href="/dashboard/settings/actions">
+						<Card className="w-full h-full">
+							<CardHeader className="flex gap-3">
+								<div className="flex justify-between w-full">
+									<p className="text-2xl">🔥 Actions</p>
+								</div>
+							</CardHeader>
+							<Divider />
+							<CardBody className="flex gap-2 items-end">
+								<div className="flex gap-4 items-center">
+
+									<div className="flex gap-2 flex-col">
+										<p className="">{collections.length} deleted items</p>
+									</div>
+								</div>
+							</CardBody>
+						</Card>
+					</Link>
+  )
+}
+
+
 
 
 const TrashCard = ()=>{

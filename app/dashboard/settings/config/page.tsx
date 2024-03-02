@@ -19,7 +19,7 @@ const Page = (props: Props) => {
         <div className="min-h-[110vh] pt-8 flex-1 p-4">
           <div className="flex justify-between gap-2 ">
             <div>
-              <h1 className="text-4xl my-2 font-medium">⚙️ Config</h1>
+              <h1 className="text-4xl my-2  font-bold">⚙️ Config</h1>
             </div>
           </div>
           <div className='mt-8'>

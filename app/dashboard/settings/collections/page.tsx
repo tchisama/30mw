@@ -47,7 +47,7 @@ function Page({}: Props) {
 				<div className="flex-1">
           <div className="flex justify-between">
             <div className='flex items-end gap-2 mb-24'>
-              <h1 className="text-5xl capitalize">🗃️ collections</h1>
+              <h1 className="text-5xl font-bold capitalize">🗃️ collections</h1>
               <h1 className="text-xl">Manager</h1>
             </div>
             <AddCollection />

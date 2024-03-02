@@ -72,7 +72,7 @@ function Page({ }: Props) {
         <div className="min-h-[110vh] pt-8 flex-1 p-4">
           <div className="flex justify-between gap-2 ">
           <div>
-            <h1 className="text-4xl my-2"> 📂 File System</h1>
+            <h1 className="text-4xl font-bold my-2"> 📂 File System</h1>
             <h2 className="text-xl ml-14 ">{
               // selectedFile?.path.map((path) => <Link href={`/dashboard/settings/filesystem/${path.id}`} key={path.id}>{path.name}</Link> ).map((path, i) => <span key={i}> / {path}</span>)
               // !params.folderId ? "/ home" : 

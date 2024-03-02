@@ -29,6 +29,7 @@ import {
 	TypeIcon,
 	X,
 } from "lucide-react";
+import { Reorder } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddDailog from "./AddDailog";
 import EditDailog from "./EditDailog";

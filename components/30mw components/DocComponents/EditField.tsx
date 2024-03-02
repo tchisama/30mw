@@ -43,6 +43,7 @@ import { db } from "@/firebase";
 import useCollections from "@/store/30mw/collections";
 import { FileType } from "@/app/dashboard/settings/filesystem/[folderId]/components/FolderComp";
 import ChooseUploadMethod from "./ChooseUploadMethod";
+import Tiptap from "../Tiptap";
 
 type Props = {
 	field: Field;
@@ -410,6 +411,25 @@ function EditField({ field, index, document: _document, setDocument }: Props) {
 		)
 	}
 
+
+
+	if (field.type == "richText") {
+		return (
+			<div className="flex justify-between bg-white pr-2 flex-col p-2 rounded-xl border px-4">
+				<div className="font-medium capitalize">{field.name}</div>
+				{/* <Textarea
+					className="mt-2"
+					value={getValue(index, _document)}
+					onValueChange={(v: string) => {
+						setDocument((p: any) => {
+							return returnUpdated(index, p, v);
+						});
+					}}
+				></Textarea> */}
+				<Tiptap value={getValue(index, _document) as string} onChange={(v) => {setDocument((p: any) => {return returnUpdated(index, p, v);})}}  ></Tiptap>
+			</div>
+		);
+	}
 
 
 

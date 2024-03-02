@@ -24,6 +24,7 @@ import {
 	Calendar,
 	CircleUser,
 	ClockIcon,
+	FileType,
 	Group,
 	Hash,
 	ImageIcon,
@@ -42,7 +43,7 @@ import useCollections from "@/store/30mw/collections";
 import { CollectionType } from "@/types/collection";
 import { addRow } from "@/lib/utils/collectionsManager";
 
-const FieldsTypes = [
+export const FieldsTypes = [
 	{
 		name: "string",
 		icon: (p: any) => <TypeIcon {...p} />,
@@ -53,16 +54,25 @@ const FieldsTypes = [
 		icon: (p: any) => <Hash {...p} />,
 		description: "Numeric data",
 	},
-	{ name: "text", icon: (p: any) => <Text {...p} />, description: "Long text" },
+	{
+		name: "boolean",
+		icon: (p: any) => <ToggleLeft {...p} />,
+		description: "True or False",
+	},
 	{
 		name: "image",
 		icon: (p: any) => <ImageIcon {...p} />,
 		description: "Image",
 	},
 	{
-		name: "reference",
-		icon: (p: any) => <MousePointer {...p} />,
-		description: "Reference",
+		name: "avatar",
+		icon: (p: any) => <CircleUser {...p} />,
+		description: "Profile picture",
+	},
+	{
+		name: "object",
+		icon: (p: any) => <Group {...p} />,
+		description: "Group of fields",
 	},
 	{
 		name: "select",
@@ -74,23 +84,15 @@ const FieldsTypes = [
 		icon: (p: any) => <Brackets {...p} />,
 		description: "Array",
 	},
+	{
+		name: "reference",
+		icon: (p: any) => <MousePointer {...p} />,
+		description: "Reference",
+	},
 	{ name: "date", icon: (p: any) => <Calendar {...p} />, description: "Date" },
-	{
-		name: "boolean",
-		icon: (p: any) => <ToggleLeft {...p} />,
-		description: "True or False",
-	},
-	{
-		name: "object",
-		icon: (p: any) => <Group {...p} />,
-		description: "Group of fields",
-	},
-	{
-		name: "avatar",
-		icon: (p: any) => <CircleUser {...p} />,
-		description: "Profile picture",
-	},
 	{ name: "time", icon: (p: any) => <ClockIcon {...p} />, description: "Time" },
+	{ name: "text", icon: (p: any) => <Text {...p} />, description: "Long text" },
+	{ name: "richText", icon: (p: any) => <FileType {...p} />, description: "Rich text" },
 ];
 
 function AddDailog({ setCollection, index }: Props) {
@@ -160,9 +162,10 @@ function AddDailog({ setCollection, index }: Props) {
 										onSelectionChange={setType as any}
 										label="Select an type"
 										className="max-w-xs"
+
 									>
 										{FieldsTypes.map((field) => (
-											<SelectItem key={field.name} value={field.name}>
+											<SelectItem className="capitalize" startContent={field.icon({ size: 18 })} key={field.name} value={field.name}>
 												{field.name}
 											</SelectItem>
 										))}
