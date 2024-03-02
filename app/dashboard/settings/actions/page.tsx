@@ -17,8 +17,12 @@ import Whatsapp from './nodes/Whatsapp';
 
 
 import { ActionEdge, ActionNode } from './types';
-import useAction from '@/store/30mw/actions';
+import useAction, { Action } from '@/store/30mw/actions';
 import Playground from './components/Playground';
+import { addDoc, collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '@/firebase';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 
 type Props = {}
@@ -32,6 +36,7 @@ type Props = {}
 const Page = (props: Props) => {
   const {collections} = useCollections()
   const [selectedCollection, setSelectedCollection] = React.useState(new Set([]));
+  const router = useRouter()
   // const [actions, setActions] = React.useState([])
 
   useEffect(() => {
@@ -39,7 +44,18 @@ const Page = (props: Props) => {
     setSelectedCollection(new Set([collections[0]?.id as string])as any)
   }, [collections])
 
+  const [actions, setActions] = React.useState<Action[]>([])
 
+  useEffect(() => {
+    onSnapshot(
+      query(
+        collection(db,"actions"),
+        where("collection", "==", String(selectedCollection.values().next().value))
+      ),(snap)=>{
+        setActions(snap.docs.map((doc)=>({...doc.data(), id: doc.id} as Action)))
+      }
+    )
+  }, [selectedCollection])
 
 
 
@@ -75,11 +91,41 @@ const Page = (props: Props) => {
                 ))}
               </Select>
             </div>
-            <Button color="primary" variant='shadow' size='lg'>
+            <Button onClick={()=>{
+              addDoc(
+                collection(db,"actions"),{
+                  name: "New Action",
+                  nodes: "[]",
+                  edges: "[]",
+                  collection: selectedCollection.values().next().value
+                }
+              ).then((doc)=>{
+                router.push(`/dashboard/settings/actions/${doc.id}`)
+              })
+            }} color="primary" variant='shadow' size='lg'>
               ✨ Create
             </Button>
           </div>
-                <Playground />
+          <div className='mt-8 grid gap-2 grid-cols-4'>
+            {
+              actions.map((action)=>{
+                return (
+                  <Link href={`/dashboard/settings/actions/${action.id}`} key={action.id}>
+                <Card key={action.id}>
+                  <CardHeader className='flex flex-col items-start'>
+                    <div>
+                        <h1 className='text-3xl'>{action.icon}</h1>
+                        <h1 className='text-xl font-bold'>{action.name}</h1>
+                    </div>
+                    <p>{action.description ?? "No description"}</p>
+                  </CardHeader>
+                </Card>
+                  </Link>
+                )
+              })
+            }
+          </div>
+                
         </div>
       </div>
               }

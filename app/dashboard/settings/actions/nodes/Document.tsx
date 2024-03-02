@@ -1,13 +1,5 @@
-import {
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-	Input,
-	Textarea,
-} from "@nextui-org/react";
+
 import React from "react";
-import { useCallback } from "react";
 import { Edge, Handle,Node as NodeType , Position } from "reactflow";
 import {
 	ContextMenu,

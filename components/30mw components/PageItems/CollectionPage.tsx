@@ -13,6 +13,7 @@ import LoadingTiming from '../LoadingTiming';
 
 import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@nextui-org/react";
 import Bar from './Chart';
+import { Action } from '@/store/30mw/actions';
 
 type Props = {
   readOnly : boolean
@@ -25,6 +26,18 @@ const CollectionPage = ({readOnly}: Props) => {
   const [loading,setLoading] = React.useState(true)
 
   const [view,setView] = React.useState<"grid"|"table"|"analytics">("grid")
+
+
+
+  const [actions, setActions] = React.useState<Action[]>([])
+
+  useEffect(() => {
+    getDocs(
+      query(collection(db,"actions"),where("collection", "==", String(selectedCollection?.id)))
+    ).then((snap)=>{
+      setActions(snap.docs.map((doc)=>({...doc.data(), id: doc.id} as Action)))
+    })
+  },[selectedCollection])
 
 
   useMemo(() => {
@@ -185,7 +198,7 @@ const CollectionPage = ({readOnly}: Props) => {
       {
         !loading && 
         docs.map((doc,index) => {
-          return <Doc readOnly={readOnly} doc={doc} key={doc.id}/>
+          return <Doc actions={actions} readOnly={readOnly} doc={doc} key={doc.id}/>
         })
       }
     </div>

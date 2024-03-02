@@ -71,7 +71,7 @@ export const SettingCollPage = ({ c, i: _i }: Props) => {
 			return `{
 ${
 (structure?.map(
-	(r) => `${"	".repeat(deep+1)}${r.name} : ${
+	(r) => `${"	".repeat(deep+1)}${r.name.includes(" ") ? `"${r.name}"` : r.name} : ${
 		r.type == "array" ? `${getType(r.structure,deep + 1)}[]` :
 		r.type == "object" ? `${getType(r.structure, deep + 1)}` :
 		r.type == "select" ? `${(r?.options?.map((o) => `"${o.value}"`)??[]).join(" | ") }` : typeMap[r.type as keyof typeof typeMap] ?? "any"

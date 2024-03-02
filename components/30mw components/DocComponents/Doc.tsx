@@ -10,18 +10,21 @@ import Link from 'next/link';
 import { deleteDoc, doc as docRef, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { update } from 'firebase/database';
+import { Action } from '@/store/30mw/actions';
+import useRunAction from '@/lib/utils/action';
 
 type Props = {
   doc: any
   readOnly : boolean
   coll?: CollectionType
+  actions: Action[]
 }
 
-function Doc({doc , readOnly , coll}: Props) {
+function Doc({doc , readOnly , coll , actions}: Props) {
   const [document, setDocument] = React.useState<any>(doc);
   const {selectedCollection} = useCollections()
   const [collection , setCollection] = React.useState<CollectionType>()
-
+  const fire = useRunAction()
   useEffect(() => {
     if(!coll){
       setCollection(selectedCollection)
@@ -45,11 +48,23 @@ function Doc({doc , readOnly , coll}: Props) {
           </span>
         </div>
         {
+          actions &&
+          <div className='px-1 ml-auto flex flex-1 justify-end gap-1 '>
+            {
+              actions.map((act)=>{
+                return(
+                  <Button onClick={()=>fire(act)} variant='bordered' key={act.id} className='capitalize text-xl' isIconOnly>{act.icon}</Button>
+                )
+              })
+            }
+          </div>
+        }
+        {/* {
           !document._30mw_deleted &&
           <Link href={collection.href+"/"+document.id} className='ml-auto mr-1' >
             <Button variant='bordered' isIconOnly ><ArrowUpRight size={16}/></Button>
           </Link>
-        }
+        } */}
         {
           readOnly && !document._30mw_deleted &&
         <Controllers document={document} setDocument={setDocument} collection={collection}/>

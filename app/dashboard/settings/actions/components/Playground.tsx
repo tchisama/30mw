@@ -1,5 +1,5 @@
 "use client"
-import useAction from '@/store/30mw/actions';
+import useAction, { Action } from '@/store/30mw/actions';
 import React, { useCallback, useEffect, useRef } from 'react'
 import ReactFlow, { Background, Connection, Controls, Edge, addEdge, updateEdge, useEdgesState, useNodesState } from 'reactflow'
 import Start from '../nodes/Start';
@@ -39,13 +39,15 @@ const nodeTypes = {
 
 
 
-type Props = {}
+type Props = {
+  action: Action
+}
 
-function Playground({ }: Props) {
+function Playground({action }: Props) {
 
   const edgeUpdateSuccessful = useRef(true);
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(JSON.parse(action.nodes as any) as any );
+  const [edges, setEdges, onEdgesChange] = useEdgesState(JSON.parse(action.edges as any) as any );
 
   const {nodes: actionNodes, edges: actionEdges, setNodes: setActionNodes, setEdges: setActionEdges} = useAction()
 
@@ -80,9 +82,7 @@ useEffect(() => {
 }, [nodes, setActionNodes]);
 
 useEffect(() => {
-  if (edges.length > 0 && !isEqual(edges, actionEdges)) {
     setActionEdges(edges);
-  }
 }, [edges, setActionEdges]);
 
 // Define isEqual function
@@ -114,8 +114,8 @@ function isEqual(obj1:any, obj2:any) {
 
 
   return (
-    <ContextMenu>
-      <ContextMenuTrigger>
+    <ContextMenu >
+      <ContextMenuTrigger className='flex-1'>
         <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -127,8 +127,8 @@ function isEqual(obj1:any, obj2:any) {
             onEdgeUpdateStart={onEdgeUpdateStart}
             onEdgeUpdateEnd={onEdgeUpdateEnd}
             onConnect={onConnect}
-
-          className='border rounded-xl flex-1 mt-8 bg-slate-50 max-h-[calc(100vh-150px)]'>
+            fitView
+          className='border rounded-xl flex-1 bg-slate-50 '>
           <Background gap={12} size={1} />
           <Controls />
         </ReactFlow>
