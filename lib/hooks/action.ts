@@ -58,8 +58,8 @@ const fire = ( action:Action,doc:any)=>{
           : node.data["phone number"]
         }?text=${
           message ?
-          FireNode({node:message as Node , ...data})
-          : node.data["message"]
+          encodeURIComponent(FireNode({node:message as Node , ...data}))
+          : encodeURIComponent(node.data["message"])
         }`)
         break;
       case "document":
@@ -67,12 +67,19 @@ const fire = ( action:Action,doc:any)=>{
 
       case "embedding":
         let text = node.data.text
-        node.data.sources.forEach((sources:{ id:string,name:string })=>{
+        node.data?.sources?.forEach((sources:{ id:string,name:string })=>{
           const getSourceNode = getNode(node,sources.id,nodes,edges)
           text = text.replace(`{{${sources.name}}}`,FireNode({node:getSourceNode as Node , ...data}))
         })
         return text
-
+      case "code":
+        let code = node.data.code
+        node.data?.sources?.forEach((sources:{ id:string,name:string })=>{
+          const getSourceNode = getNode(node,sources.id,nodes,edges)
+          code = code.replace(`${sources.name}`,JSON.stringify(FireNode({node:getSourceNode as Node , ...data})) )
+        })
+        console.log(code)
+        return eval(code)
 
 
       default:

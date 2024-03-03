@@ -1,18 +1,25 @@
 "use client"
 import { cn } from '@/lib/utils'
 import useAction from '@/store/30mw/actions'
-import { Input, Textarea } from '@nextui-org/react'
+import { Input, Select, SelectItem, Textarea } from '@nextui-org/react'
 import { transform } from 'next/dist/build/swc'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Edge, Handle, Node, Position } from 'reactflow'
 import useNodesAndEdges from '../hooks/useNodesAndEdges'
+import { updateDoc } from 'firebase/firestore'
 
 type Props = {
-  type:string
   name:string
   id:string
-  props: any
-}
+  props?: any
+} & ({
+  type:"input"
+}|{
+  type:"textarea"
+}|{
+  type:"select"
+  options:string[]
+})
 
 
 
@@ -25,15 +32,13 @@ const handleStyle = {
   transform: "translate(3px,0px)",
 };
 
-function Field({
-  type,name,id,props
-}: Props) {
+function Field(props: Props) {
+  const {
+    type,name,id,props : _props 
+  } = props
 	const { nodes, setNodes ,edges } = useAction();
 
   const {getValue,UpdateValue} = useNodesAndEdges()
-
-
-
 
   const disabled = useCallback(()=>{
    return edges.find((edge:Edge)=>edge.target === id && edge.targetHandle === name ) ? true : false
@@ -47,7 +52,7 @@ function Field({
             type === "input" &&(
             !disabled() ?
             <Input
-              {...props}
+              {..._props}
               value={getValue(id,name) ?? ""}
               onChange={(e)=>{UpdateValue(id,name,e.target.value)}}
               className={cn("nodrag",disabled() ? "opacity-50" : "")}
@@ -70,7 +75,7 @@ function Field({
 
             !disabled() ?
             <Textarea
-              {...props}
+              {..._props}
               value={getValue(id,name) ?? ""}
               labelPlacement="outside"
 
@@ -87,7 +92,22 @@ function Field({
             )
           }
 
-
+          {
+            type== "select" &&(
+                  <Select 
+                    label={"Select an "+name} 
+                    className="max-w-xs"
+                    selectedKeys={[getValue(id,name)]} // Converting Set to an array before passing to selectedKeys
+                    onSelectionChange={(e)=>{console.log(e);UpdateValue(id,name,(e as any).currentKey)}}
+                  >
+                    {props.options.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </Select>
+            )
+          }
 					<Handle
 						type="target"
 						style={handleStyle}
