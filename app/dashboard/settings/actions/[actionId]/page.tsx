@@ -86,7 +86,7 @@ const Page = (props: Props) => {
               (e)=>{
                 setIcon(e.target.value)
               }
-            }  placeholder="Icon" className='w-[60px]' size='sm'></Input>
+            }  placeholder="Icon" className='w-[60px] text-center'  size='sm'></Input>
             <Input value={name} 
             onChange={(e)=>{setName(e.target.value)}}  placeholder="Action Name" className=' w-fit' size='sm'></Input>
             <Button size='lg' variant='shadow' color='primary' className='w-fit ml-auto'
