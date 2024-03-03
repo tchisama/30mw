@@ -28,6 +28,7 @@ const UpdateDoc = ({id}: Props) => {
       >
         <Field id={id} name='collection' type='select' options={collections.map((collection:CollectionType)=>collection.collection)} ></Field>
         <Field id={id} name='document id' type='input' ></Field>
+        <Field id={id} name='new updated fields' type='textarea' ></Field>
       </Node>
     </>
   )
