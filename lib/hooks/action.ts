@@ -1,54 +1,103 @@
 import { Action } from '@/store/30mw/actions'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Edge, Node } from 'reactflow'
 
 type Props = {}
 
 function useRunAction() {
   const router = useRouter()
-  const fire = (action:Action)=>{
+
+  // const [nodes,setNodes] = React.useState<Node[]>([])
+  // const [edges,setEdges] = React.useState<Edge[]>([])
+
+
+const fire = ( action:Action,doc:any)=>{
+
     const _nodes = JSON.parse(action.nodes as any) as Node[]
     const _edges = JSON.parse(action.edges as any) as Edge[]
-    FireNode({edges:_edges,nodes:_nodes,node:_nodes.find((node)=>node.id === "Node : start") as Node})
-    console.log({_edges,_nodes})
+
+    const getStart = () => {
+      return _nodes.find((e) => e.id == "Node : start");
+    };
+
+    FireNode({node:getStart() as Node,nodes:_nodes,edges:_edges,doc})
+}
+
+
+
+  const getNode = (node:Node, sourceHandle:string, nodes:Node[], edges:Edge[]) => {
+    if(!sourceHandle) return 
+    if(!edges) return 
+    const edge = edges.find((e) => e.target == node.id && e.targetHandle == sourceHandle);
+    console.log(edge)
+    if(!edge) return
+    return nodes.find((n) => n.id == edge.source);
+  };
+
+  
+
+
+
+  const FireNode = ({node,nodes,edges,doc}:{node:Node , nodes:Node[] , edges:Edge[],doc:any}):any =>{
+    const data = {nodes,edges,doc}
+    switch (node?.type) {
+      case "start":
+          FireNode({
+            node:getNode(node,"start",nodes,edges) as Node,
+            ...data
+          })
+          break;
+
+      case "whatsapp":
+        const phone = getNode(node,"phone number",nodes,edges)
+        const message = getNode(node,"message",nodes,edges)
+        window.open(`https://wa.me/${
+          phone ?
+          FireNode({node:phone as Node , ...data})
+          : node.data["phone number"]
+        }?text=${
+          message ?
+          FireNode({node:message as Node , ...data})
+          : node.data["message"]
+        }`)
+        break;
+      case "document":
+        return getValueFromIndexes(doc,node.data.indexes);
+
+      case "embedding":
+        let text = node.data.text
+        node.data.sources.forEach((sources:{ id:string,name:string })=>{
+          const getSourceNode = getNode(node,sources.id,nodes,edges)
+          text = text.replace(`{{${sources.name}}}`,FireNode({node:getSourceNode as Node , ...data}))
+        })
+        return text
+
+
+
+      default:
+        return null
   }
-
-
-
-  const FireNode = ({node,nodes,edges}:{node:Node , nodes:Node[] , edges:Edge[]}):any =>{
-    const nextNode = getNode(edges.find((edge)=>edge.target === node.id)?.source as string,nodes)
-    
-    console.log({node,nodes,edges,nextNode})
-    
-    /// if node == start
-    if(node.type === "start" && nextNode) return FireNode({node:nextNode,nodes,edges})
-
-    // if(node.type === "whatsapp") return window.open(`https://wa.me/${
-    //   node.data["phone number"]
-    // }?text=${
-    //   node.data.message
-    // }`)
-    
-    // if(node.type === "document") return window.open(`https://wa.me/${node.data["phone number"]}?text=${node.data.message}`)
-
-    // console.log(nextNode)
-  }
-
-
+}
 
 
   return fire
+
+}
+
+
+function getValueFromIndexes(obj: any, indexes: string[]): any {
+    let currentObj: any | undefined = obj;
+    try {
+        for (const index of indexes) {
+            currentObj = currentObj[index];
+        }
+        return currentObj;
+    } catch (error) {
+        return undefined;
+    }
 }
 
 
 
-
-
-
-
-
-const getNode = (id:string,nodes:Node[])=>{
-  return nodes.find((node)=>node.id === id)
-}
 export default useRunAction

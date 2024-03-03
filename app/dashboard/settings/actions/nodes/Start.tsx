@@ -13,7 +13,7 @@ const Start = (props: Props) => {
   return (
     name &&
     <>
-     <Handle type="target" style={{width: 10, height: 10 , borderRadius: 20 ,zIndex:100 }} position={Position.Bottom} />
+     <Handle id="start" type="target" style={{width: 10, height: 10 , borderRadius: 20 ,zIndex:100 }} position={Position.Bottom} />
       <Node
         header={
           <>

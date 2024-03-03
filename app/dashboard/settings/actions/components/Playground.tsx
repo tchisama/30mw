@@ -18,6 +18,7 @@ import {
 
 import { Button } from '@nextui-org/react';
 import DocumentNode from '../nodes/Document';
+import StringEmbedding from '../nodes/StringEmbedding';
 
 
 
@@ -35,7 +36,8 @@ import DocumentNode from '../nodes/Document';
 const nodeTypes = {
     start: Start,
     whatsapp: Whatsapp,
-    document: DocumentNode
+    document: DocumentNode,
+    embedding: StringEmbedding
 }
 
 

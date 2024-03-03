@@ -53,7 +53,7 @@ function Doc({doc , readOnly , coll , actions}: Props) {
             {
               actions.map((act)=>{
                 return(
-                  <Button onClick={()=>fire(act)} variant='bordered' key={act.id} className='capitalize text-xl' isIconOnly>{act.icon}</Button>
+                  <Button onClick={()=>fire(act,document)} variant='bordered' key={act.id} className='capitalize text-xl' isIconOnly>{act.icon}</Button>
                 )
               })
             }
