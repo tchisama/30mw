@@ -21,6 +21,7 @@ import DocumentNode from '../nodes/Document';
 import StringEmbedding from '../nodes/StringEmbedding';
 import Code from '../nodes/Code';
 import UpdateDoc from '../nodes/UpdateDoc';
+import ActionIcon from '../nodes/Icon';
 
 
 
@@ -41,7 +42,8 @@ const nodeTypes = {
     document: DocumentNode,
     embedding: StringEmbedding,
     code:Code,
-    "update document":UpdateDoc
+    "update document":UpdateDoc,
+    "action icon":ActionIcon
 }
 
 
@@ -100,9 +102,10 @@ function isEqual(obj1:any, obj2:any) {
 
 
   const AddNode = (nodeType :string)=>{
+    const id =  nodeType ==  "start" ? "Node : start" : nodeType == "action icon" ?  "Node : icon" : "Node: "+ Math.random().toString()
     if(nodes.length === 0) return setNodes([
       {
-        id: nodeType == "start" ? "Node : start" : "Node: "+ Math.random().toString(),
+        id,
         type: nodeType,
         position: { x: 0, y: 0 },
         data: {},
@@ -111,7 +114,7 @@ function isEqual(obj1:any, obj2:any) {
     setNodes([
       ...nodes,
       {
-        id: nodeType == "start" ? "Node : start" : "Node: "+ Math.random().toString(),
+        id,
         type: nodeType,
         position: { x: 0, y: 0 },
         data: {},

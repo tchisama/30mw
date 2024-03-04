@@ -12,7 +12,19 @@ export type CollectionType = {
   for_30mw?: boolean
   motherCollection?: string
   addAsField?: string
-}
+  defaultView: "table" | "grid" | "analytics"
+} & (
+  {
+    table:false
+  }
+  |{
+  table: true ,
+  tableRows : {
+    title : string ,
+    indexes : (string | number)[]
+  }[]
+})
+
 
 export type FieldTypes = "richText" | "string" | "image" | "number" | "boolean" | "date" | "time" | "select" | "object" | "array" | "reference" | "avatar"
 
@@ -93,99 +105,6 @@ type ReferenceField ={
     collection: string
     key: string
   }
-}
-
-
-
-
-
-export const usersColl: CollectionType = {
-    "id": "abc123xyz456",
-    "collection": "users",
-    "icon" : "👥",
-    "href": "/dashboard/users",
-    "subtitle": "manage users",
-    "structure": [
-        {
-            "name": "avatar",
-            "type": "image"
-        },
-        {
-            "name": "name",
-            "type": "object",
-            "structure": [
-                {
-                    "name": "first",
-                    "type": "string"
-                },
-                {
-                    "name": "last",
-                    "type": "string"
-                }
-            ]
-        },
-        {
-            "name": "email",
-            "type": "string"
-        },
-        {
-            "name": "age",
-            "type": "number"
-        },
-        {
-            "name": "active",
-            "type": "boolean",
-            "labels": {
-                "true": "active",
-                "false": "inactive"
-            }
-        },
-        {
-            "name": "role",
-            "type": "select",
-            "options": [
-                {
-                    "name": "Admin",
-                    "value": "admin"
-                },
-                {
-                    "name": "User",
-                    "value": "user"
-                }
-            ]
-        },
-        {
-            "name": "createdAt",
-            "type": "date"
-        },
-        {
-            "name": "address",
-            "type": "object",
-            "structure": [
-                {
-                    "name": "street",
-                    "type": "string"
-                },
-                {
-                    "name": "city",
-                    "type": "string"
-                },
-                {
-                    "name": "zipcode",
-                    "type": "string"
-                },
-                {
-                    "name": "country",
-                    "type": "string"
-                }
-            ]
-        },
-        {
-            "name": "bio",
-            "type": "text"
-        }
-    ],
-    "name": "users"
 }
 
 

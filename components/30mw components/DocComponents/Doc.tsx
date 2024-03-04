@@ -1,6 +1,6 @@
 "use client"
 import { CollectionType, Field } from '@/types/collection';
-import { Button, Card, CardBody, CardHeader, Divider } from '@nextui-org/react';
+import { Button, Card, CardBody, CardHeader, Divider, Tooltip } from '@nextui-org/react';
 import React, { useEffect } from 'react'
 import ViewField from './ViewField';
 import Controllers from './Controllers';
@@ -49,22 +49,19 @@ function Doc({doc , readOnly , coll , actions}: Props) {
         </div>
         {
           actions &&
-          <div className='px-1 ml-auto flex flex-1 justify-end gap-1 '>
+          <div className='px-1 ml-auto flex flex-1 justify-end '>
             {
               actions.map((act)=>{
                 return(
-                  <Button onClick={()=>fire(act,document)} variant='bordered' key={act.id} className='capitalize text-xl' isIconOnly>{act.icon}</Button>
+                  <Tooltip key={act.id} content={act.name}>
+                  <Button onClick={()=>fire(act,document,setDocument)} variant='light' key={act.id} className='capitalize text-xl' isIconOnly>{fire(act,document,setDocument,"icon") ??act.icon}</Button>
+                  </Tooltip>
                 )
               })
             }
           </div>
         }
-        {/* {
-          !document._30mw_deleted &&
-          <Link href={collection.href+"/"+document.id} className='ml-auto mr-1' >
-            <Button variant='bordered' isIconOnly ><ArrowUpRight size={16}/></Button>
-          </Link>
-        } */}
+          <Divider orientation='vertical' className='mr-2 ml-1' />
         {
           readOnly && !document._30mw_deleted &&
         <Controllers document={document} setDocument={setDocument} collection={collection}/>

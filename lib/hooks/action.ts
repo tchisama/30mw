@@ -1,8 +1,10 @@
 import { Action } from '@/store/30mw/actions'
+import { updateDoc } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { Edge, Node } from 'reactflow'
-
+import {doc as docFirebase} from "firebase/firestore"
+import { db } from '@/firebase'
 type Props = {}
 
 function useRunAction() {
@@ -12,16 +14,25 @@ function useRunAction() {
   // const [edges,setEdges] = React.useState<Edge[]>([])
 
 
-const fire = ( action:Action,doc:any)=>{
+const fire = ( action:Action,doc:any,setDoc:any,type?:string)=>{
 
     const _nodes = JSON.parse(action.nodes as any) as Node[]
     const _edges = JSON.parse(action.edges as any) as Edge[]
 
+
+
     const getStart = () => {
       return _nodes.find((e) => e.id == "Node : start");
     };
+    const getIcon = () => {
+      return _nodes.find((e) => e.id == "Node : icon");
+    }
 
-    FireNode({node:getStart() as Node,nodes:_nodes,edges:_edges,doc})
+    if(type=="icon") {
+      console.log(getIcon())
+      return FireNode({node:getIcon() as Node,nodes:_nodes,edges:_edges,doc,setDoc,action})
+    }
+    FireNode({node:getStart() as Node,nodes:_nodes,edges:_edges,doc,setDoc,action})
 }
 
 
@@ -30,7 +41,6 @@ const fire = ( action:Action,doc:any)=>{
     if(!sourceHandle) return 
     if(!edges) return 
     const edge = edges.find((e) => e.target == node.id && e.targetHandle == sourceHandle);
-    console.log(edge)
     if(!edge) return
     return nodes.find((n) => n.id == edge.source);
   };
@@ -39,8 +49,8 @@ const fire = ( action:Action,doc:any)=>{
 
 
 
-  const FireNode = ({node,nodes,edges,doc}:{node:Node , nodes:Node[] , edges:Edge[],doc:any}):any =>{
-    const data = {nodes,edges,doc}
+  const FireNode = ({node,nodes,edges,doc ,setDoc ,action }:{node:Node , nodes:Node[] , edges:Edge[],doc:any,setDoc:Function ,action:Action}):any =>{
+    const data = {nodes,edges,doc,setDoc ,action}
     switch (node?.type) {
       case "start":
           FireNode({
@@ -61,6 +71,7 @@ const fire = ( action:Action,doc:any)=>{
           encodeURIComponent(FireNode({node:message as Node , ...data}))
           : encodeURIComponent(node.data["message"])
         }`)
+        FireNode({node:getNode(node,"next",nodes,edges) as Node , ...data})
         break;
       case "document":
         return getValueFromIndexes(doc,node.data.indexes);
@@ -73,15 +84,47 @@ const fire = ( action:Action,doc:any)=>{
         })
         return text
       case "code":
-        let code = node.data.code
-        node.data?.sources?.forEach((sources:{ id:string,name:string })=>{
-          const getSourceNode = getNode(node,sources.id,nodes,edges)
-          code = code.replace(`${sources.name}`,JSON.stringify(FireNode({node:getSourceNode as Node , ...data})) )
-        })
+
+let code =`(()=>{
+${node.data?.sources?.map((source:{ id:string,name:string })=>`const ${source.name} = ${JSON.stringify(FireNode({node:getNode(node,source.id,nodes,edges) as Node , ...data}))}`).join("; \n")} ;
+return (${node.data.code})
+})()
+`
+        // node.data?.sources?.forEach((sources:{ id:string,name:string })=>{
+        //   const getSourceNode = getNode(node,sources.id,nodes,edges)
+        //   code = code.replace(`{{${sources.name}}}`,JSON.stringify(FireNode({node:getSourceNode as Node , ...data})) )
+        // })
         console.log(code)
         return eval(code)
-
-
+      case "update document":
+        const collValue = FireNode({node:getNode(node,"collection",nodes,edges) as Node , ...data}) ?? node.data["collection"]
+        const docIdValue = FireNode({node:getNode(node,"document id",nodes,edges) as Node , ...data}) ?? node.data["document id"]
+        const newDocValue= JSON.parse(FireNode({node:getNode(node,"new updated fields",nodes,edges) as Node , ...data}) ?? node.data["new updated fields"])
+        console.log(newDocValue)
+        if(!collValue || !docIdValue || !newDocValue) return
+        try {
+          updateDoc(docFirebase(
+            db,
+            collValue,
+            docIdValue,
+          ),
+          newDocValue).then(()=>{
+            // window.location.reload()
+          //   // console.log(doc,newDocValue)
+            setDoc({
+              ...doc as any,
+              ...newDocValue
+            })
+          })
+        } catch (error) {
+          console.log(error)
+          return 
+        }
+        FireNode({node:getNode(node,"next",nodes,edges) as Node , ...data})
+        break;
+      case "action icon":
+        const icon = FireNode({node:getNode(node,"icon",nodes,edges) as Node , ...data}) ?? node.data["icon"]
+        return icon
       default:
         return null
   }

@@ -72,7 +72,7 @@ const Whatsapp = ({ data , id }: Props) => {
 			<Handle type="source" style={handleStyle} position={Position.Top}  />
 			<Handle
 				type="target"
-				id="3"
+				id="next"
 				style={handleStyle}
 				position={Position.Bottom}
 			/>
@@ -87,21 +87,9 @@ const Whatsapp = ({ data , id }: Props) => {
 					</>
 				}
 			>
-        {
-          [
-          {
-            type:"input",
-            name:"phone number",
-            props:{
-              type:"tel"
-            }
-          },
-          {
-            type:"textarea",
-            name:"message",
-          },
-          ].map(({type,name,props})=> <Field key={name} type={type} name={name} id={id} props={props} />)
-        }
+
+				<Field id={id} name='phone number' type='input' props={{type:"tel"}} ></Field>
+				<Field id={id} name='message' type='textarea' ></Field>
 			</Node>
 		</>
 	);

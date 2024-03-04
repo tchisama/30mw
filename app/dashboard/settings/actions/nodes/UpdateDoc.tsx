@@ -10,15 +10,27 @@ import { CollectionType } from '@/types/collection';
 type Props = {
   id:string
 }
-const handleStyle = {  };
- 
+const handleStyle = {
+	width: 10,
+	height: 10,
+	borderRadius: 20,
+	zIndex: 100,
+	backgroundColor: "#333",
+};
+
 const UpdateDoc = ({id}: Props) => {
   const {name , icon} = useAction()
   const {collections} = useCollections()
   return (
     name &&
     <>
-     <Handle id="start" type="target" style={{width: 10, height: 10 , borderRadius: 20 ,zIndex:100 }} position={Position.Top} />
+     <Handle type="source" style={{width: 10, height: 10 , borderRadius: 20 ,zIndex:100 }} position={Position.Top} />
+    <Handle
+				type="target"
+				id="next"
+				style={handleStyle}
+				position={Position.Bottom}
+			/>
       <Node
         header={
           <>
@@ -35,3 +47,4 @@ const UpdateDoc = ({id}: Props) => {
 }
 
 export default UpdateDoc
+

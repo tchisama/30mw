@@ -33,7 +33,7 @@ function ViewField({field,index,document,setDocument}: Props) {
       setLoading(true)
       setTimeout(() => {
         setLoading(false)
-      },300)
+      },0)
     }
     if(field.type === "reference"){
       try{

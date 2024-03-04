@@ -66,7 +66,17 @@ const DocumentNode = ({ data , id }: Props) => {
 					<DropdownMenuContent>
     {collections
       .find((collection) => collection.id === action.collection)
-      ?.structure.map((field: Field) => {
+      ?.structure.concat([
+        {
+          name: "id"
+        },
+        {
+          name: "_30mw_createdAt"
+        },
+        {
+          name: "_30mw_updatedAt"
+        }
+      ] as Field[]).map((field: Field) => {
         // if(field.type === "array") return null
 
         const getFields = (f: Field,indexes:(string | number)[]): JSX.Element | null => {
