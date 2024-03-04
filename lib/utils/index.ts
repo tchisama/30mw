@@ -62,3 +62,26 @@ export function createEmptyObject(collection: Field[]) {
 
 
 
+
+
+
+
+
+
+
+
+//// 
+
+export function getValueFromIndexes(obj: any, indexes: string[]): any {
+    let currentObj: any | undefined = obj;
+    try {
+        for (const index of indexes) {
+            currentObj = currentObj[index];
+        }
+        return currentObj;
+    } catch (error) {
+        return undefined;
+    }
+}
+
+

@@ -16,7 +16,7 @@ import AddDailog from "./AddDailog";
 import EditCollection from "./EditCollection";
 import { DndContext, closestCorners } from "@dnd-kit/core";
 import { Props, RenderRow } from "./RowRender";
-import { Code, Copy } from "lucide-react";
+import { Code, Copy, X } from "lucide-react";
 // import { Button } from "@/components/ui/button";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
@@ -28,7 +28,18 @@ import {
 
 import { Reorder } from "framer-motion";
 import useCollections from "@/store/30mw/collections";
-
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuPortal,
+	DropdownMenuSeparator,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const typeMap = {
 	string: "string",
@@ -209,28 +220,87 @@ const TableController = ({ collection, setCollection }: { collection: Collection
 					<div className="text-lg flex flex-row-reverse gap-2 justify-end mt-2">
 						Default View <Switch onValueChange={(e) => setCollection({ ...collection, defaultView: e ? "table" : "grid" })} isSelected={collection?.defaultView == "table"} />
 					</div>
-					<Button 
-					onClick={()=>{
-						if(!collection?.tableRows){
-							setCollection({ ...collection, tableRows: [{title:"",indexes:[]}] })
-						}else{
-							setCollection({ ...collection, tableRows: [...collection.tableRows, {title:""}] })
-						}
-					}}
-					 color="primary" className="mt-4"> Add Row To Table</Button>
-					<div className="p-4 bg-slate-50 flex flex-col gap-2 rounded-xl border mt-2">
+					<Button
+						onClick={() => {
+							if (!collection?.tableRows) {
+								setCollection({ ...collection, tableRows: [{ title: "", indexes: [] , id: Math.random().toString() }] })
+							} else {
+								setCollection({ ...collection, tableRows: [...collection.tableRows, { title: "" , indexes: [] , id: Math.random().toString() }] })
+							}
+						}}
+						color="primary" className="mt-4"> Add Row To Table</Button>
+						<div className="my-2 text-xl font-medium">
+							Table Rows 
+						</div>
+						<Reorder.Group  className="p-4 bg-slate-50 max-w-[900px] flex flex-col gap-2 rounded-xl border mt-2" values={collection?.tableRows} onReorder={(v) => setCollection({ ...collection, tableRows: v })}>
 						{
 							collection?.table &&
 							collection?.tableRows?.map((r, i) => {
-								return <div className="bg-white p-2 rounded-xl border flex justify-between" key={i}>
+								return <Reorder.Item value={r} key={r.id} className="flex gap-2">
+								<Button 
+								onPress={()=>{
+									setCollection({ ...collection, tableRows: collection.tableRows?.filter((r2, i2) => r2.id != r.id) })
+								}}
+								radius="full" className=""  size="sm" isIconOnly ><X size={12} /></Button>
+								<div className="bg-white p-2 flex-1 rounded-xl border flex justify-between" key={i}>
 									<Input size="sm" className="max-w-sm" value={r.title} onChange={(e) => {
 										setCollection({ ...collection, tableRows: collection.tableRows?.map((r2, i2) => i == i2 ? { ...r2, title: e.target.value } : r2) })
 									}} />
-									
+									<DropdownMenu>
+										<DropdownMenuTrigger>
+											<div className="text-sm text-left bg-slate-100 px-4 py-2 rounded-xl border ">
+												{r?.indexes?.join(" . ")}
+											</div>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent>
+											{collection
+												?.structure.concat([
+													{
+														name: "id"
+													},
+													{
+														name: "_30mw_createdAt"
+													},
+													{
+														name: "_30mw_updatedAt"
+													}
+												] as Field[]).map((field: Field) => {
+													if (field.type === "array") return null
+
+													const getFields = (f: Field, indexes: (string | number)[]): JSX.Element | null => {
+														return f.type === "object" ? (
+															<DropdownMenuSub key={f.name}>
+																<DropdownMenuSubTrigger>{f.name}</DropdownMenuSubTrigger>
+																<DropdownMenuPortal>
+																	<DropdownMenuSubContent>
+																		{f.structure.map((f2: Field) => {
+																			return getFields(f2, [...indexes, f2.name]);
+																		})}
+																	</DropdownMenuSubContent>
+																</DropdownMenuPortal>
+															</DropdownMenuSub>
+														) : (
+															<DropdownMenuItem
+																onClick={() => {
+																	setCollection({ ...collection, tableRows: collection.tableRows?.map((r2, i2) => i == i2 ? { ...r2, indexes: [...indexes] } : r2) })
+																}}
+																key={f.name}
+															>
+																{f.name}
+															</DropdownMenuItem>
+														);
+													};
+
+													return getFields(field, [field.name]);
+												})}
+										</DropdownMenuContent>
+									</DropdownMenu>
 								</div>
+								</Reorder.Item>
+
 							})
 						}
-					</div>
+						</Reorder.Group>
 				</div>
 			}
 		</div>

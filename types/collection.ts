@@ -21,7 +21,8 @@ export type CollectionType = {
   table: true ,
   tableRows : {
     title : string ,
-    indexes : (string | number)[]
+    indexes : (string | number)[],
+    id: string
   }[]
 })
 

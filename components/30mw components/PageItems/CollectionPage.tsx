@@ -14,6 +14,8 @@ import LoadingTiming from '../LoadingTiming';
 import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@nextui-org/react";
 import Bar from './Chart';
 import { Action } from '@/store/30mw/actions';
+import CollTable from './CollTable';
+import { Timestamp } from 'firebase/firestore/lite';
 
 type Props = {
   readOnly : boolean
@@ -38,17 +40,22 @@ const CollectionPage = ({readOnly}: Props) => {
       setActions(snap.docs.map((doc)=>({...doc.data(), id: doc.id} as Action)))
     })
   },[selectedCollection])
-
+  useEffect(
+    ()=>{
+      if(!selectedCollection) return
+      setView(selectedCollection.defaultView)
+    },[selectedCollection]
+  )
 
   useMemo(() => {
     setDocs([])
     setLoading(true)
     if(!selectedCollection.collection) return
-    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false));
+    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false) ,orderBy('_30mw_createdAt', 'desc'));
     onSnapshot(q, (snapshot) => {
       setDocs(snapshot.docs.map((doc) => {
-        return {...doc.data(), id: doc.id} as CollectionType
-      }))
+        return {...doc.data(), id: doc.id} as any
+      }).sort((a,b)=>(b._30mw_createdAt as Timestamp).toDate().getTime() - (a._30mw_createdAt as Timestamp).toDate().getTime() ))
     })
     setDocs(p=>p.sort((a:any,b:any)=>new Date(b._30mw_createdAt).getTime()-new Date(a._30mw_createdAt).getTime()))
     setLoading(false)
@@ -123,7 +130,7 @@ const CollectionPage = ({readOnly}: Props) => {
     <div className='flex flex-col gap-4 mt-6'>
 
 
-    <Accordion   defaultExpandedKeys={["1"]} selectionMode='multiple'>
+    <Accordion   defaultExpandedKeys={["1","2"]} selectionMode='multiple'>
           {
             
                 collections.filter(c=>c?.motherCollection == selectedCollection?.collection&& c?.addAsField !== selectedCollection?.name).length > 0 &&
@@ -192,7 +199,7 @@ const CollectionPage = ({readOnly}: Props) => {
 
 {
     view == "grid" &&
-
+    selectedCollection.table &&
     <div className='py-5 mt-6 grid gap-4 grid-cols-3 3xl:grid-cols-4 '>
 
       {
@@ -203,6 +210,13 @@ const CollectionPage = ({readOnly}: Props) => {
       }
     </div>
 }
+
+
+{
+    view == "table" &&
+    <CollTable {...{collection:selectedCollection,docs,actions}} />
+}
+
 
 {
 

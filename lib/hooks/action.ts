@@ -5,6 +5,7 @@ import React, { useEffect } from 'react'
 import { Edge, Node } from 'reactflow'
 import {doc as docFirebase} from "firebase/firestore"
 import { db } from '@/firebase'
+import { getValueFromIndexes } from '../utils/index'
 type Props = {}
 
 function useRunAction() {
@@ -136,17 +137,6 @@ return (${node.data.code})
 }
 
 
-function getValueFromIndexes(obj: any, indexes: string[]): any {
-    let currentObj: any | undefined = obj;
-    try {
-        for (const index of indexes) {
-            currentObj = currentObj[index];
-        }
-        return currentObj;
-    } catch (error) {
-        return undefined;
-    }
-}
 
 
 
