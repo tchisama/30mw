@@ -4,7 +4,7 @@ import DashboardProvider from '@/components/30mw components/providers/DashboardP
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {Select, SelectSection, SelectItem, Button, Card, CardHeader, CardBody, Input, Textarea} from "@nextui-org/react";
 import useCollections from '@/store/30mw/collections';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, Delete, Trash } from 'lucide-react';
 import { useEditor } from '@tiptap/react';
 import { useDragControls,motion } from 'framer-motion';
 
@@ -19,7 +19,7 @@ import Whatsapp from './nodes/Whatsapp';
 import { ActionEdge, ActionNode } from './types';
 import useAction, { Action } from '@/store/30mw/actions';
 import Playground from './components/Playground';
-import { addDoc, collection, onSnapshot, query, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -110,17 +110,22 @@ const Page = (props: Props) => {
             {
               actions.map((action)=>{
                 return (
-                  <Link href={`/dashboard/settings/actions/${action.id}`} key={action.id}>
                 <Card key={action.id}>
-                  <CardHeader className='flex flex-col items-start'>
+                  <CardHeader className='flex flex-col items-start relative'>
+                  <Link href={`/dashboard/settings/actions/${action.id}`} key={action.id}>
                     <div>
                         <h1 className='text-3xl'>{action.icon}</h1>
                         <h1 className='text-xl font-bold'>{action.name}</h1>
                     </div>
+                  </Link>
                     <p>{action.description ?? "No description"}</p>
+                    <Button onClick={()=>{
+                      if(confirm("Are you sure you want to delete this action?")){
+                        deleteDoc(doc(db,"actions",action.id))
+                      }
+                    }} color="primary" variant='light' className='absolute top-2 right-2' size='sm' isIconOnly ><Trash size={14} /></Button>
                   </CardHeader>
                 </Card>
-                  </Link>
                 )
               })
             }

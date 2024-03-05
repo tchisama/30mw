@@ -1,16 +1,17 @@
 import { Action } from '@/store/30mw/actions'
-import { updateDoc } from 'firebase/firestore'
+import { getDoc, getDocs, increment, updateDoc ,collection } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { Edge, Node } from 'reactflow'
 import {doc as docFirebase} from "firebase/firestore"
 import { db } from '@/firebase'
 import { getValueFromIndexes } from '../utils/index'
+import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter} from "@nextui-org/react";
 type Props = {}
 
 function useRunAction() {
   const router = useRouter()
-
+ 
   // const [nodes,setNodes] = React.useState<Node[]>([])
   // const [edges,setEdges] = React.useState<Edge[]>([])
 
@@ -126,6 +127,11 @@ return (${node.data.code})
       case "action icon":
         const icon = FireNode({node:getNode(node,"icon",nodes,edges) as Node , ...data}) ?? node.data["icon"]
         return icon
+
+      case "confirm":
+        // const confirmed = FireNode({node:getNode(node,"true",nodes,edges) as Node , ...data}) 
+        // const canceled = FireNode({node:getNode(node,"true",nodes,edges) as Node , ...data}) 
+        
       default:
         return null
   }
@@ -135,6 +141,64 @@ return (${node.data.code})
   return fire
 
 }
+
+
+
+
+
+
+
+
+const updateDocument = (collection:string,document:string,newValue:any)=>{
+  updateDoc(docFirebase(db,collection,document),{
+    ...newValue
+  })
+}
+const getDocument = async (collection:string,document:string,newValue:any)=>{
+  return await getDoc(docFirebase(db,collection,document)).then((doc)=>{
+    return ({
+      ...doc.data(),
+      id:doc.id
+    })
+  })
+}
+
+const getDocuments = async (coll:string)=>{
+  return await getDocs(collection(db,coll)).then((docs)=>{
+    return docs.docs.map((doc)=>{
+      return ({
+        ...doc.data(),
+        id:doc.id
+      })
+    })
+  })
+}
+
+
+
+
+
+// components 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

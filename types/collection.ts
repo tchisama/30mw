@@ -13,6 +13,7 @@ export type CollectionType = {
   motherCollection?: string
   addAsField?: string
   defaultView: "table" | "grid" | "analytics"
+  table : boolean
 } & (
   {
     table:false

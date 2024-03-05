@@ -32,7 +32,7 @@ const StringEmbedding = ({data,id}: Props) => {
           </>
         }
       >
-        <div className='ml-auto'><Button size='sm'  color='primary' isIconOnly 
+        <div className='ml-auto '><Button size='sm'  color='primary' isIconOnly 
           onClick={()=>{
             // alert("hello world")
             UpdateValue(id,"sources",[
@@ -63,7 +63,7 @@ const StringEmbedding = ({data,id}: Props) => {
               })
             }
         </div>
-        <Textarea  value={getValue(id,"text")} onChange={(e)=>{UpdateValue(id,"text",e.target.value)}} label="Embedding text" className='nodrag' >
+        <Textarea  value={getValue(id,"text")}  onChange={(e)=>{UpdateValue(id,"text",e.target.value)}} label="Embedding text" className='nodrag w-[475px] resize' >
 
         </Textarea>
       </Node>

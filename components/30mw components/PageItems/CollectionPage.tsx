@@ -29,7 +29,7 @@ const CollectionPage = ({readOnly}: Props) => {
 
   const [view,setView] = React.useState<"grid"|"table"|"analytics">("grid")
 
-
+  const [search, setSearch] = React.useState<string>("")
 
   const [actions, setActions] = React.useState<Action[]>([])
 
@@ -43,7 +43,7 @@ const CollectionPage = ({readOnly}: Props) => {
   useEffect(
     ()=>{
       if(!selectedCollection) return
-      setView(selectedCollection.defaultView)
+      setView(selectedCollection.defaultView ?? "grid")
     },[selectedCollection]
   )
 
@@ -51,13 +51,12 @@ const CollectionPage = ({readOnly}: Props) => {
     setDocs([])
     setLoading(true)
     if(!selectedCollection.collection) return
-    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false) ,orderBy('_30mw_createdAt', 'desc'));
+    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false),orderBy('_30mw_createdAt','desc'));
     onSnapshot(q, (snapshot) => {
-      setDocs(snapshot.docs.map((doc) => {
+      setDocs([...snapshot.docs.map((doc) => {
         return {...doc.data(), id: doc.id} as any
-      }).sort((a,b)=>(b._30mw_createdAt as Timestamp).toDate().getTime() - (a._30mw_createdAt as Timestamp).toDate().getTime() ))
+      })])
     })
-    setDocs(p=>p.sort((a:any,b:any)=>new Date(b._30mw_createdAt).getTime()-new Date(a._30mw_createdAt).getTime()))
     setLoading(false)
   },[selectedCollection])
 
@@ -95,7 +94,10 @@ const CollectionPage = ({readOnly}: Props) => {
       </DropdownTrigger>
       <DropdownMenu aria-label="Static Actions">
         <DropdownItem onClick={()=>setView("grid")} startContent={<LayoutGrid color='#444' size={18}/>} key="grid">             Grid</DropdownItem>
-        <DropdownItem onClick={()=>setView("table")} startContent={<List color='#444' size={18}/>} key="table">                 Table</DropdownItem>
+        {
+          (selectedCollection.table  &&
+          <DropdownItem onClick={()=>setView("table")} startContent={<List color='#444' size={18}/>} key="table">                 Table</DropdownItem> ) as any
+        }
         <DropdownItem onClick={()=>setView("analytics")} startContent={<BarChartBig color='#444' size={18}/>} key="analytics">  Analytics</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -110,12 +112,14 @@ const CollectionPage = ({readOnly}: Props) => {
           variant="bordered"
           placeholder={"Search in " + selectedCollection.name}
           labelPlacement="outside"
+          value={search}
+          onChange={(e)=>setSearch(e.target.value)}
           className='w-full min-w-[400px]'
           startContent={
             <Search size={16}/>
           }
         />
-        <Button isIconOnly variant='bordered'><Filter color='#444' size={18}/></Button>
+        {/* <Button isIconOnly variant='bordered'><Filter color='#444' size={18}/></Button> */}
         {/* <Divider orientation='vertical'  className='mx-2'/> */}
       </NavbarContent>
 
@@ -199,12 +203,11 @@ const CollectionPage = ({readOnly}: Props) => {
 
 {
     view == "grid" &&
-    selectedCollection.table &&
     <div className='py-5 mt-6 grid gap-4 grid-cols-3 3xl:grid-cols-4 '>
 
       {
         !loading && 
-        docs.map((doc,index) => {
+        docs.filter(doc=>JSON.stringify(doc).includes(search)).map((doc,index) => {
           return <Doc actions={actions} readOnly={readOnly} doc={doc} key={doc.id}/>
         })
       }
@@ -214,7 +217,7 @@ const CollectionPage = ({readOnly}: Props) => {
 
 {
     view == "table" &&
-    <CollTable {...{collection:selectedCollection,docs,actions}} />
+    <CollTable {...{collection:selectedCollection,docs:docs.filter(doc=>JSON.stringify(doc).includes(search)),actions}} />
 }
 
 

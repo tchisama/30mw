@@ -58,7 +58,7 @@ function Page({}: Props) {
               .filter((c:CollectionType)=>!c?.for_30mw)
               .map((c:CollectionType,i)=>{
                 return (
-                  <SettingCollPage key={i} c={c} i={i} />
+                  <SettingCollPage key={c.id} c={c} i={i} />
                 )
               })
             }

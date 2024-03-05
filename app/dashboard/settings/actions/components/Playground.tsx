@@ -22,6 +22,7 @@ import StringEmbedding from '../nodes/StringEmbedding';
 import Code from '../nodes/Code';
 import UpdateDoc from '../nodes/UpdateDoc';
 import ActionIcon from '../nodes/Icon';
+import Confirm from '../nodes/Confirm';
 
 
 
@@ -43,7 +44,8 @@ const nodeTypes = {
     embedding: StringEmbedding,
     code:Code,
     "update document":UpdateDoc,
-    "action icon":ActionIcon
+    "action icon":ActionIcon,
+    confirm:Confirm
 }
 
 

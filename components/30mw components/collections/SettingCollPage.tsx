@@ -232,6 +232,8 @@ const TableController = ({ collection, setCollection }: { collection: Collection
 						<div className="my-2 text-xl font-medium">
 							Table Rows 
 						</div>
+						{
+							collection?.tableRows?.length > 0 &&
 						<Reorder.Group  className="p-4 bg-slate-50 max-w-[900px] flex flex-col gap-2 rounded-xl border mt-2" values={collection?.tableRows} onReorder={(v) => setCollection({ ...collection, tableRows: v })}>
 						{
 							collection?.table &&
@@ -301,6 +303,7 @@ const TableController = ({ collection, setCollection }: { collection: Collection
 							})
 						}
 						</Reorder.Group>
+						}
 				</div>
 			}
 		</div>

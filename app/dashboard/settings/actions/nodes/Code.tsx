@@ -28,7 +28,7 @@ const Code = ({data,id}: Props) => {
 
  
   return (
-    <div className='w-[500px]'>
+    <div className='min-w-[600px]'>
      <Handle  type="source" style={{width: 10, height: 10 , borderRadius: 20 ,zIndex:100 }} position={Position.Left} />
       <Node
         header={
@@ -69,7 +69,9 @@ const Code = ({data,id}: Props) => {
               })
             }
         </div>
-        <Textarea   value={getValue(id,"code")} onChange={(e)=>{UpdateValue(id,"code",e.target.value)}} label="javascript code" className='nodrag dark font-mono text-sm' color='primary' >
+        <Textarea       classNames={{
+        input: "resize-y min-h-[40px]",
+      }}  value={getValue(id,"code")} onChange={(e)=>{UpdateValue(id,"code",e.target.value)}} label="javascript code" className='nodrag w-[600px] dark font-mono text-sm' color='primary' >
         </Textarea>
 
       </Node>

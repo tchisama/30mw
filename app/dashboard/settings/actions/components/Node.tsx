@@ -41,7 +41,7 @@ const Node = ({children,header}: Props) => {
       </CardHeader>
       {
         children &&
-      <CardBody className='flex flex-col min-w-[300px] gap-2'>
+      <CardBody className='flex flex-col w-fit min-w-[300px] gap-2'>
         {children}
       </CardBody>
       }
