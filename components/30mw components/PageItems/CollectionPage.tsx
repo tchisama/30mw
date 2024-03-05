@@ -136,7 +136,7 @@ const CollectionPage = ({readOnly}: Props) => {
 
 
 
-    <div className='py-4 grid grid-cols-4'>
+    <div className='py-4 grid grid-cols-3'>
       {
         actions.filter((a)=>{
           return a.type == "card"

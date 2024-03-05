@@ -1,3 +1,4 @@
+
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react'
 import { useCallback } from 'react';
@@ -18,16 +19,16 @@ const HtmlViewer = ({id}: Props) => {
   const { nodes , edges, action } = useAction()
   const [html,setHtml] = useState('')
   const fire = useRunAction()
-  useEffect(()=>{
-    const getHtml = ()=>{
-      try {
-        return fire({...action,nodes:JSON.stringify(nodes),edges:JSON.stringify(edges)} as any,"test",()=>{},"card")
-      }catch (error) {
-        return "<div class='text-red-500 p-2 bg-red-100 rounded-xl '>"+error+"</div>"
-      }
-    }
-    setHtml(getHtml())
-  },[nodes,edges,setHtml,action,fire])
+  // useEffect(()=>{
+  //   const getHtml = ()=>{
+  //     try {
+  //       return fire({...action,nodes:JSON.stringify(nodes),edges:JSON.stringify(edges)} as any,"test",()=>{},"card")
+  //     }catch (error) {
+  //       return "<div class='text-red-500 p-2 bg-red-100 rounded-xl '>"+error+"</div>"
+  //     }
+  //   }
+  //   setHtml(await getHtml())
+  // },[nodes,edges,setHtml,action,fire])
   return (
     name &&
     <>
@@ -41,7 +42,12 @@ const HtmlViewer = ({id}: Props) => {
           </>
         }
       >
-
+        <Button onClick={() => {
+          setHtml(()=>{
+            return fire({...action,nodes:JSON.stringify(nodes),edges:JSON.stringify(edges)} as any,"test",()=>{},"card")
+          }
+          )
+           }}><RefreshCw/></Button>
         <div  className='bg-slate-100 border p-4 min-w-[400px] rounded-xl '>
           <Card >
               <CardBody>

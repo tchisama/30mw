@@ -58,7 +58,7 @@ const fire = ( action:Action,doc:any,setDoc:any,type?:string)=>{
 
 
 
-  const FireNode = ({node,nodes,edges,doc ,setDoc ,action }:{node:Node , nodes:Node[] , edges:Edge[],doc:any,setDoc:Function ,action:Action}):any =>{
+  const FireNode =  ({node,nodes,edges,doc ,setDoc ,action }:{node:Node , nodes:Node[] , edges:Edge[],doc:any,setDoc:Function ,action:Action}):any =>{
     const data = {nodes,edges,doc,setDoc ,action}
     switch (node?.type) {
       case "start":
@@ -75,7 +75,7 @@ const fire = ( action:Action,doc:any,setDoc:any,type?:string)=>{
           : node.data["phone number"]
         }?text=${
           message ?
-          encodeURIComponent(FireNode({node:message as Node , ...data}))
+          encodeURIComponent( FireNode({node:message as Node , ...data}))
           : encodeURIComponent(node.data["message"])
         }`)
         FireNode({node:getNode(node,"next",nodes,edges) as Node , ...data})
@@ -93,7 +93,7 @@ const fire = ( action:Action,doc:any,setDoc:any,type?:string)=>{
       case "code":
 
 let code =`(()=>{
-${node.data?.sources?.map((source:{ id:string,name:string })=>`const ${source.name ?? "test"+Math.random()} = ${JSON.stringify(FireNode({node:getNode(node,source.id,nodes,edges) as Node , ...data}) ?? null)}`).join("; \n") ?? ""} ;
+${node.data?.sources?.map((source:{ id:string,name:string })=>`const ${source.name ?? "test"+Math.random()} = ${JSON.stringify( FireNode({node:getNode(node,source.id,nodes,edges) as Node , ...data}) ?? null)}`).join("; \n") ?? ""}
 return (${node.data.code})
 })()
 `
@@ -104,9 +104,9 @@ return (${node.data.code})
         console.log(code)
         return eval(code)
       case "update document":
-        const collValue = FireNode({node:getNode(node,"collection",nodes,edges) as Node , ...data}) ?? node.data["collection"]
-        const docIdValue = FireNode({node:getNode(node,"document id",nodes,edges) as Node , ...data}) ?? node.data["document id"]
-        const newDocValue= JSON.parse(FireNode({node:getNode(node,"new updated fields",nodes,edges) as Node , ...data}) ?? node.data["new updated fields"])
+        const collValue =  FireNode({node:getNode(node,"collection",nodes,edges) as Node , ...data}) ?? node.data["collection"]
+        const docIdValue =  FireNode({node:getNode(node,"document id",nodes,edges) as Node , ...data}) ?? node.data["document id"]
+        const newDocValue= JSON.parse( FireNode({node:getNode(node,"new updated fields",nodes,edges) as Node , ...data})  ?? node.data["new updated fields"])
         console.log(newDocValue)
         if(!collValue || !docIdValue || !newDocValue) return
         try {
