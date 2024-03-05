@@ -196,6 +196,13 @@ type ${collection.name[0].toUpperCase() + collection.name.slice(1)}Type = ${getT
 						</Tab>
 
 
+						<Tab key={"cards"} title="Cards">
+							<CardsController {...{ collection, setCollection }} />
+						</Tab>
+
+						<Tab key={"analytics"} title="Analytics">
+							{/* <AnalyticsController {...{ collection, setCollection }} /> */}
+						</Tab>
 
 					</Tabs>
 				</AccordionItem>
@@ -204,6 +211,16 @@ type ${collection.name[0].toUpperCase() + collection.name.slice(1)}Type = ${getT
 	);
 };
 
+
+
+
+const CardsController = ({ collection, setCollection }: { collection: CollectionType, setCollection: Function }) => {
+	return (
+		<div>
+			hello world
+		</div>
+	)
+}
 
 
 

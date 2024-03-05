@@ -55,7 +55,7 @@ const Page = (props: Props) => {
     })
   },[props.params.actionId,setAction])
 
-  const {nodes, edges , setNodes, setEdges, name, setName, icon, setIcon } = useAction()
+  const {nodes, edges , setNodes, setEdges, name, setName, icon, setIcon , type , setType } = useAction()
 
 
 
@@ -64,13 +64,15 @@ const Page = (props: Props) => {
     setEdges([])
     setName("")
     setIcon("")
+    setType("button")
 
     if(action == null) return
-    setNodes(JSON.parse(action.nodes as any) as Node[])
+    setNodes(JSON.parse(action.nodes as any) as Node[] )
     setEdges(JSON.parse(action.edges as any) as Edge[])
     setName(action.name)
     setIcon(action.icon)
-  }, [action,setNodes,setEdges , setName, setIcon])
+    setType(action.type)
+  }, [action,setNodes,setEdges , setName, setIcon, setType])
 
 
 
@@ -89,16 +91,43 @@ const Page = (props: Props) => {
             }  placeholder="Icon" className='w-[60px] text-center'  size='sm'></Input>
             <Input value={name} 
             onChange={(e)=>{setName(e.target.value)}}  placeholder="Action Name" className=' w-fit' size='sm'></Input>
+
+
+
+            <Select
+                size='sm'
+                label="type of the action" 
+                className="max-w-xs" 
+                disableSelectorIconRotation
+                selectedKeys={[type]}
+                onSelectionChange={(e)=>{
+                  setType((e as any).currentKey)
+                }}
+                selectorIcon={<ChevronsUpDown size={14} />}
+              >
+                {["button","value","select","card"].map((actionType) => (
+                  <SelectItem key={actionType} value={actionType} className='capitalize'>
+                    {actionType}
+                  </SelectItem>
+                ))}
+              </Select>
+
+
+
+
+
             <Button size='lg' variant='shadow' color='primary' className='w-fit ml-auto'
             onClick={()=>{
+              console.log(action)
               updateDoc(
                 doc(db,"actions",props.params.actionId),
                 {
                   ...action,
-                  name,
-                  icon,
-                  nodes: JSON.stringify(nodes),
-                  edges: JSON.stringify(edges)
+                  name: name ?? "",
+                  icon: icon ?? "",
+                  type: type ?? "button",
+                  nodes: JSON.stringify(nodes) ?? "[]",
+                  edges: JSON.stringify(edges) ?? "[]",
                 }
               )
             }}

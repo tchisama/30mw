@@ -1,6 +1,6 @@
 "use client"
 import { CollectionType, Field } from '@/types/collection';
-import { Button, Card, CardBody, CardHeader, Divider, Tooltip } from '@nextui-org/react';
+import { Button, ButtonGroup, Card, CardBody, CardHeader, Divider, Tooltip } from '@nextui-org/react';
 import React, { useEffect } from 'react'
 import ViewField from './ViewField';
 import Controllers from './Controllers';
@@ -49,17 +49,17 @@ function Doc({doc , readOnly , coll , actions}: Props) {
         </div>
         {
           actions &&
-          <div className='px-1 ml-auto flex flex-1 justify-end '>
+          <ButtonGroup className=' ml-auto flex rounded-xl w-fit justify-end '>
             {
               actions.map((act)=>{
                 return(
                   <Tooltip key={act.id} content={act.name}>
-                  <Button onClick={()=>fire(act,document,setDocument)} variant='light' key={act.id} className='capitalize text-xl' isIconOnly>{fire(act,document,setDocument,"icon") ??act.icon}</Button>
+                  <Button onClick={()=>fire(act,document,setDocument)} variant='bordered' key={act.id} className='capitalize text-xl' isIconOnly>{fire(act,document,setDocument,"icon") ??act.icon}</Button>
                   </Tooltip>
                 )
               })
             }
-          </div>
+          </ButtonGroup>
         }
           <Divider orientation='vertical' className='mr-2 ml-1' />
         {

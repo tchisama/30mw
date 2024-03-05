@@ -23,6 +23,7 @@ import Code from '../nodes/Code';
 import UpdateDoc from '../nodes/UpdateDoc';
 import ActionIcon from '../nodes/Icon';
 import Confirm from '../nodes/Confirm';
+import HtmlViewer from '../nodes/HtmlViewer';
 
 
 
@@ -45,7 +46,8 @@ const nodeTypes = {
     code:Code,
     "update document":UpdateDoc,
     "action icon":ActionIcon,
-    confirm:Confirm
+    // confirm:Confirm
+    "html viewer":HtmlViewer
 }
 
 
@@ -104,7 +106,7 @@ function isEqual(obj1:any, obj2:any) {
 
 
   const AddNode = (nodeType :string)=>{
-    const id =  nodeType ==  "start" ? "Node : start" : nodeType == "action icon" ?  "Node : icon" : "Node: "+ Math.random().toString()
+    const id =  nodeType ==  "start" ? "Node : start" : nodeType == "action icon" ?  "Node : icon" : nodeType == "html viewer" ? "Node : card" : "Node: "+ Math.random().toString()
     if(nodes.length === 0) return setNodes([
       {
         id,

@@ -80,7 +80,7 @@ function Field(props: Props) {
               labelPlacement="outside"
    
               onChange={(e)=>{UpdateValue(id,name,e.target.value)}}
-              className={cn("nodrag resize w-full ",disabled() ? "opacity-50" : "")}
+              className={cn("nodrag  resize w-full ",disabled() ? "opacity-50" : "")}
               size="sm"
               label={name}
               placeholder={`Enter ${name}`}

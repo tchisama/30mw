@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table"
 import { CollectionType } from '@/types/collection'
 import { getValueFromIndexes } from '@/lib/utils/index'
-import { Button, Card, Divider, Tooltip } from '@nextui-org/react'
+import { Button, ButtonGroup, Card, Divider, Tooltip } from '@nextui-org/react'
 import useCollections from '@/store/30mw/collections'
 import useRunAction from '@/lib/hooks/action'
 import { Action } from '@/store/30mw/actions'
@@ -71,17 +71,17 @@ const Row = ({doc,collection,actions}:{doc:any,collection:CollectionType,actions
           <TableCell className='flex justify-end '>
                    {
           actions &&
-          <div className=' ml-auto flex border rounded-xl bg-slate-50 w-fit justify-end '>
+          <ButtonGroup className=' ml-auto flex rounded-xl w-fit justify-end '>
             {
               actions.map((act)=>{
                 return(
                   <Tooltip key={act.id} content={act.name}>
-                  <Button onClick={()=>fire(act,document,setDocument)} variant='light' key={act.id} className='capitalize text-xl' isIconOnly>{fire(act,document,setDocument,"icon") ??act.icon}</Button>
+                  <Button onClick={()=>fire(act,document,setDocument)} variant='bordered' key={act.id} className='capitalize text-xl' isIconOnly>{fire(act,document,setDocument,"icon") ??act.icon}</Button>
                   </Tooltip>
                 )
               })
             }
-          </div>
+          </ButtonGroup>
         }
                   <Divider orientation='vertical' className='mr-2 ml-1 h-10' />
         {

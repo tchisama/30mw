@@ -11,6 +11,7 @@ export type Action = {
   icon: string
   nodes: Node[]
   edges: Edge[]
+  type: "button" | "value" | "select" | "card"
   id: string
   description: string
   collection: string
@@ -30,7 +31,8 @@ type RFState = {
   setName: (name: string) => void
   icon: string
   setIcon: (icon: string) => void
-
+  type : "button" | "value" | "select" | "card",
+  setType: (type: "button" | "value" | "select" |  "card") => void
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -45,6 +47,8 @@ const useAction = create<RFState>((set) => ({
   setName: (name: string) => set({ name }),
   icon: '',
   setIcon: (icon: string) => set({ icon }),
+  type : "button",
+  setType: (type: "button" | "value" | "select" |  "card") => set({ type }),
 }));
 
 export default useAction;

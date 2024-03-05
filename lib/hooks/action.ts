@@ -30,9 +30,16 @@ const fire = ( action:Action,doc:any,setDoc:any,type?:string)=>{
       return _nodes.find((e) => e.id == "Node : icon");
     }
 
+    const getCard = () => {
+      return _nodes.find((e) => e.id == "Node : card");
+    }
+
     if(type=="icon") {
       console.log(getIcon())
       return FireNode({node:getIcon() as Node,nodes:_nodes,edges:_edges,doc,setDoc,action})
+    }
+    if(type=="card"){
+      return FireNode({node:getCard() as Node,nodes:_nodes,edges:_edges,doc,setDoc,action})
     }
     FireNode({node:getStart() as Node,nodes:_nodes,edges:_edges,doc,setDoc,action})
 }
@@ -55,12 +62,10 @@ const fire = ( action:Action,doc:any,setDoc:any,type?:string)=>{
     const data = {nodes,edges,doc,setDoc ,action}
     switch (node?.type) {
       case "start":
-          FireNode({
+          return FireNode({
             node:getNode(node,"start",nodes,edges) as Node,
             ...data
           })
-          break;
-
       case "whatsapp":
         const phone = getNode(node,"phone number",nodes,edges)
         const message = getNode(node,"message",nodes,edges)
@@ -88,7 +93,7 @@ const fire = ( action:Action,doc:any,setDoc:any,type?:string)=>{
       case "code":
 
 let code =`(()=>{
-${node.data?.sources?.map((source:{ id:string,name:string })=>`const ${source.name} = ${JSON.stringify(FireNode({node:getNode(node,source.id,nodes,edges) as Node , ...data}))}`).join("; \n")} ;
+${node.data?.sources?.map((source:{ id:string,name:string })=>`const ${source.name ?? "test"+Math.random()} = ${JSON.stringify(FireNode({node:getNode(node,source.id,nodes,edges) as Node , ...data}) ?? null)}`).join("; \n") ?? ""} ;
 return (${node.data.code})
 })()
 `
@@ -131,7 +136,8 @@ return (${node.data.code})
       case "confirm":
         // const confirmed = FireNode({node:getNode(node,"true",nodes,edges) as Node , ...data}) 
         // const canceled = FireNode({node:getNode(node,"true",nodes,edges) as Node , ...data}) 
-        
+      case "html viewer":
+        return FireNode({node:getNode(node,"html",nodes,edges) as Node , ...data}) ?? node.data["html"]
       default:
         return null
   }

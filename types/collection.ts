@@ -12,6 +12,12 @@ export type CollectionType = {
   for_30mw?: boolean
   motherCollection?: string
   addAsField?: string
+  cards?:{
+    title : string
+    icon : string
+    subtitle : string
+    value : string
+  }
   defaultView: "table" | "grid" | "analytics"
   table : boolean
 } & (

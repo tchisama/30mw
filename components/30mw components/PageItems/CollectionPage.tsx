@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useMemo } from 'react'
 import Doc from '../DocComponents/Doc'
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, Input, useDisclosure, Skeleton, Card, Divider, Accordion, AccordionItem} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, Input, useDisclosure, Skeleton, Card, Divider, Accordion, AccordionItem, CardBody} from "@nextui-org/react";
 import { BarChart, BarChartBig, Divide, Filter, LayoutGrid, List, Plus, Search, Trash } from 'lucide-react';
 import { CollectionType } from '@/types/collection';
 import { addDoc, collection, getDocs, onSnapshot, orderBy, query, where } from 'firebase/firestore';
@@ -16,6 +16,7 @@ import Bar from './Chart';
 import { Action } from '@/store/30mw/actions';
 import CollTable from './CollTable';
 import { Timestamp } from 'firebase/firestore/lite';
+import useRunAction from '@/lib/hooks/action';
 
 type Props = {
   readOnly : boolean
@@ -59,7 +60,7 @@ const CollectionPage = ({readOnly}: Props) => {
     })
     setLoading(false)
   },[selectedCollection])
-
+  const fire = useRunAction()
   return (
     selectedCollection && !loading &&
     <div className='flex-1'>
@@ -132,6 +133,23 @@ const CollectionPage = ({readOnly}: Props) => {
       </NavbarContent>
     </Navbar>
     <div className='flex flex-col gap-4 mt-6'>
+
+
+
+    <div className='py-4 grid grid-cols-4'>
+      {
+        actions.filter((a)=>{
+          return a.type == "card"
+        }).map((a)=>{
+          return <Card key={a.id}>
+            <CardBody>
+              <div dangerouslySetInnerHTML={{__html: fire(a,"test",()=>{},"card")}}></div>
+            </CardBody>
+          </Card>
+        })
+      }
+    </div>
+
 
 
     <Accordion   defaultExpandedKeys={["1","2"]} selectionMode='multiple'>
@@ -217,7 +235,7 @@ const CollectionPage = ({readOnly}: Props) => {
 
 {
     view == "table" &&
-    <CollTable {...{collection:selectedCollection,docs:docs.filter(doc=>JSON.stringify(doc).includes(search)),actions}} />
+    <CollTable {...{collection:selectedCollection,docs:docs.filter(doc=>JSON.stringify(doc).includes(search)),actions:actions.filter(a=>a.type !== "card")}} />
 }
 
 
