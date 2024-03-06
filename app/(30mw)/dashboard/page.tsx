@@ -53,7 +53,14 @@ function page({}: Props) {
 }
 
 const ActionsCard = ()=>{
-  const {collections} = useCollections()
+	const [actions, setActions] = React.useState<any>([])
+	useEffect(()=>{
+		getDocs(
+			query(collection(db,"actions"))
+		).then((snap)=>{
+			setActions(snap.docs.map((doc)=>doc.data()))
+		})
+	},[])
   return (
           <Link  className=" " href="/dashboard/settings/actions">
 						<Card className="w-full h-full">
@@ -67,7 +74,7 @@ const ActionsCard = ()=>{
 								<div className="flex gap-4 items-center">
 
 									<div className="flex gap-2 flex-col">
-										<p className="">{collections.length} deleted items</p>
+										<p className="">{actions.length} Actions </p>
 									</div>
 								</div>
 							</CardBody>
@@ -123,7 +130,7 @@ const DashboardCard = ()=>{
 
 									<div className="flex gap-2 ">
 										<Image src={configBrand?.logo ??""} className="bg-slate-50 w-[50px] h-[50px] border" alt="logo" width={50} height={50}/>
-										<p className="">manage {configBrand?.brandName} brand , and more </p>
+										<p className="flex-1">manage {configBrand?.brandName} brand , and more </p>
 									</div>
 								</div>
 							</CardBody>
