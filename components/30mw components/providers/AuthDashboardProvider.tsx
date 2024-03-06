@@ -2,7 +2,7 @@
 import { db } from '@/firebase'
 import { Rule, useAdminStore } from '@/store/30mw/admin'
 import { Spinner } from '@nextui-org/react'
-import { collection, getDocs, onSnapshot } from 'firebase/firestore'
+import { Timestamp, addDoc, collection, doc, getDoc, getDocs, onSnapshot } from 'firebase/firestore'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
@@ -16,7 +16,7 @@ const AuthDashboardProvider = ({children}: Props) => {
   const router = useRouter()
 
   useEffect(() => {
-     onSnapshot(collection(db,"_30mw_admins_rules"), (snapshot) => {
+  onSnapshot(collection(db,"_30mw_admins_rules"), (snapshot) => {
       if(snapshot.docs.length > 0){
         setRules(snapshot.docs.map((doc) => {
           return {...doc.data(), id: doc.id }
@@ -28,6 +28,15 @@ const AuthDashboardProvider = ({children}: Props) => {
     }) 
   },[setRules])
 
+  const [firstLoad, setFirstLoad] = React.useState(true)
+  useEffect(() => {
+       
+  },[])
+
+
+
+
+
   useEffect(() => {
 
     (async () => {
@@ -38,7 +47,10 @@ const AuthDashboardProvider = ({children}: Props) => {
 
     const getAdminFromLocalStorage = localStorage.getItem("_30mw_admin")
     if(getAdminFromLocalStorage){
-      setAdmin(JSON.parse(getAdminFromLocalStorage))
+      getDoc(doc(db,"_30mw_admins",JSON.parse(getAdminFromLocalStorage).id)).then((doc)=>{ 
+        if(!doc.exists()) return router.push("/dashboard/login")
+        setAdmin({... doc.data(), id: doc.id} as Rule)
+      })
       const ruleId = JSON.parse(getAdminFromLocalStorage).rule
       if(!ruleId) return
       if(!rules) return

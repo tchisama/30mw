@@ -4,7 +4,7 @@ import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Butt
 import { and, collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '@/firebase';
 import {motion} from "framer-motion"
-import FolderComp, { FileType } from '@/app/dashboard/settings/filesystem/[folderId]/components/FolderComp';
+import FolderComp, { FileType } from '@/app/(30mw)/dashboard/settings/filesystem/[folderId]/components/FolderComp';
 import { ArrowLeft } from 'lucide-react';
 type Props = {
   model: {

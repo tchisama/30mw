@@ -64,16 +64,16 @@ function UploadImage({children,returnImage,className,folder,defaultFolder=true}:
     const name = ""+ Date.now() as string
     const storageRef = ref(storage, `${folder}/${name}`);
     uploadBytes(storageRef, e.target.files[0] as File).then((snapshot) => {
-      returnImage(`https://firebasestorage.googleapis.com/v0/b/mw-typescript.appspot.com/o/${folder}%2F${name}?alt=media&token=d849d7ec-d80e-4297-8a2e-85f5d26f4c31`)
+      returnImage(`https://firebasestorage.googleapis.com/v0/b/${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/o/${folder}%2F${name}?alt=media&token=d849d7ec-d80e-4297-8a2e-85f5d26f4c31`)
       setLoading(false)
       addDoc(collection(db, "_30mw_filesystem"), {
         _30mw_deleted: false,
         _30mw_createdAt: Timestamp.now(),
         _30mw_updatedAt: Timestamp.now(),
-        motherFolder:!defaultFolder ? folder : folderId as string,
+        motherFolder:(!defaultFolder ? folder : folderId as string)??"home",
         name: name,
         type: "file",
-        url: `https://firebasestorage.googleapis.com/v0/b/mw-typescript.appspot.com/o/${folder}%2F${name}?alt=media&token=d849d7ec-d80e-4297-8a2e-85f5d26f4c31`
+        url: `https://firebasestorage.googleapis.com/v0/b/${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/o/${folder}%2F${name}?alt=media&token=d849d7ec-d80e-4297-8a2e-85f5d26f4c31`
       })
     })
   }

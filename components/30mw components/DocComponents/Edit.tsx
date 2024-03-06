@@ -24,7 +24,7 @@ function EditModal({document,setDocument,collection:_collection,model:{isOpen, o
   const updateDocument = () => {
     if(newDocument==document) return
 
-
+    if(!admin || !newDocument) return
     addDoc(collection(db,"_30mw_notifications"),{
       collection : _collection.collection,
       document : newDocument.id,
@@ -37,14 +37,13 @@ function EditModal({document,setDocument,collection:_collection,model:{isOpen, o
       maker:{
         fullName:admin?.fullName,
         id:admin?.id,
-        photo: admin?.photo
+        photo: admin?.photo ?? ""
       },
       data:{
         document,
         newDocument
       }
     })
-
 
 
     updateDoc(doc(db,_collection.collection,newDocument.id),{

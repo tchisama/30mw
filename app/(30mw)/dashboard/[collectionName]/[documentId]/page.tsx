@@ -38,6 +38,10 @@ function Page({ }: Props) {
   useEffect(() => {
     if (!selectedRule) return
     const access = () => {
+      if (selectedRule.name === "developer") {
+        setReadOnly(true)
+        return true
+      }
       if (selectedRule['access to all ']) {
         setReadOnly(!selectedRule["read all only"])
         if (!selectedRule["but collections"]) {
@@ -99,7 +103,7 @@ function Page({ }: Props) {
 
                           {
                             selectedCollection && document &&
-                            selectedCollection.structure.map((field: Field, index) => {
+                            selectedCollection?.structure?.map((field: Field, index) => {
                               return (
                                 <ViewField key={field.name} field={field} index={[field.name]} document={document} setDocument={setDocument} />
                               );
@@ -174,7 +178,7 @@ const TabDocs = ({collection:_collection, forDocument}:{collection:CollectionTyp
           {
             docs && docs.length > 0 &&
             docs.map((doc,i)=>{
-              return <Doc key={i} doc={doc} coll={_collection} readOnly={false} />
+              return <Doc actions={[]} key={i} doc={doc} coll={_collection} readOnly={false} />
             })
           }
         </div>

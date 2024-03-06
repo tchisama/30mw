@@ -122,8 +122,8 @@ const DashboardCard = ()=>{
 								<div className="flex gap-4 items-center">
 
 									<div className="flex gap-2 ">
-										<Image src={configBrand.logo} alt="logo" width={50} height={50}/>
-										<p className="">manage {configBrand.brandName} brand , and more </p>
+										<Image src={configBrand?.logo ??""} className="bg-slate-50 w-[50px] h-[50px] border" alt="logo" width={50} height={50}/>
+										<p className="">manage {configBrand?.brandName} brand , and more </p>
 									</div>
 								</div>
 							</CardBody>

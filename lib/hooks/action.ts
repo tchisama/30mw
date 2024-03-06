@@ -102,7 +102,12 @@ return (${node.data.code})
         //   code = code.replace(`{{${sources.name}}}`,JSON.stringify(FireNode({node:getSourceNode as Node , ...data})) )
         // })
         console.log(code)
-        return eval(code)
+         try {
+          
+          return eval(code)
+         } catch (error) {
+          return error
+         }
       case "update document":
         const collValue =  FireNode({node:getNode(node,"collection",nodes,edges) as Node , ...data}) ?? node.data["collection"]
         const docIdValue =  FireNode({node:getNode(node,"document id",nodes,edges) as Node , ...data}) ?? node.data["document id"]

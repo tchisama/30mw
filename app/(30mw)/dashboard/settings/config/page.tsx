@@ -45,7 +45,6 @@ const BrandCard = ()=>{
     })
   },[])
   return(
-      configBrand &&
             <Card className="max-w-[500px] ">
               <CardHeader>
                 <h1 className="text-2xl">🎨 Brand</h1>
@@ -73,15 +72,15 @@ const BrandCard = ()=>{
                           document.getElementById(id)?.click()
                         }
                       } className='w-[100px] h-[100px] border rounded-xl bg-slate-100'>
-                      <Image className='w-full h-full object-contain' width={100} height={100} alt="logo" src={configBrand.logo} ></Image>
+                      <Image className='w-full h-full object-contain' width={100} height={100} alt="logo" src={configBrand?.logo} ></Image>
                       </button>
                       )
                     }
                   }
 
                 </UploadImage>
-                <Input value={configBrand.brandName} onChange={(e)=>setConfigBrand({...configBrand,brandName:e.target.value})} labelPlacement="outside" placeholder='ex. 30MW' label="Brand Name" />
-                <Input value={configBrand.sologoName} onChange={(e)=>setConfigBrand({...configBrand,sologoName:e.target.value})} labelPlacement="outside" placeholder='ex. 30 minutes website' label="sologo Name" />
+                <Input value={configBrand?.brandName} onChange={(e)=>setConfigBrand({...configBrand,brandName:e.target.value})} labelPlacement="outside" placeholder='ex. 30MW' label="Brand Name" />
+                <Input value={configBrand?.sologoName} onChange={(e)=>setConfigBrand({...configBrand,sologoName:e.target.value})} labelPlacement="outside" placeholder='ex. 30 minutes website' label="sologo Name" />
               </CardBody>
             </Card>
   )

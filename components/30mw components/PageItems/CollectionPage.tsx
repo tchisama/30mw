@@ -136,14 +136,14 @@ const CollectionPage = ({readOnly}: Props) => {
 
 
 
-    <div className='py-4 grid grid-cols-3'>
+    <div className='py-4 grid gap-4 grid-cols-3'>
       {
         actions.filter((a)=>{
           return a.type == "card"
         }).map((a)=>{
           return <Card key={a.id}>
             <CardBody>
-              <div dangerouslySetInnerHTML={{__html: fire(a,"test",()=>{},"card")}}></div>
+              <div dangerouslySetInnerHTML={{__html: fire(a,docs,()=>{},"card")}}></div>
             </CardBody>
           </Card>
         })

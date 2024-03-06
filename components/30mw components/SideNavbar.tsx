@@ -6,7 +6,7 @@ import useCollections from '@/store/30mw/collections'
 // import { CollectionType, usersColl } from '@/types/collection'
 import { Avatar, Button, Card, Divider, Image, User } from '@nextui-org/react'
 import { addDoc, collection, doc, getDoc, getDocs } from 'firebase/firestore'
-import { ChevronLeft, Home, LogOut, Settings, User2 } from 'lucide-react'
+import { ChevronLeft, Home, ImageIcon, LogOut, Settings, User2 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 import path from 'path'
@@ -37,14 +37,19 @@ function SideNavbar({}: Props) {
           <ChevronLeft size={16} className={cn("duration-200",{"rotate-180":!collapsed})}/></button>
         <Card className='w-fit p-4 h-full min-h-[90vh] '>
           <div className='flex justify-center items-center gap-4'>
-            <div className=' w-12 h-12 rounded-2xl border shadow-xl'>
-              <Image src={configBrand?.logo} width={48} height={48} alt="logo" />
+            <div className=' w-12 h-12 rounded-2xl bg-slate-50 border shadow-xl'>
+              {
+                configBrand?.logo ?
+              <Image src={configBrand?.logo}  width={48} height={48} alt="logo" />
+              :
+              <ImageIcon size={24} strokeWidth={1} className='relative top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]'/>
+              }
             </div>
                               {
             collapsed &&
             <div className='flex-1'>
-              <div className='font-bold capitalize text-md'>{configBrand?.brandName}</div>
-              <div className='text-xs max-w-[150px]'>{configBrand?.sologoName} </div>
+              <div className='font-bold capitalize text-md'>{configBrand?.brandName  ?? "No Name"}</div>
+              <div className='text-xs max-w-[150px]'>{configBrand?.sologoName ?? "No Sologan"} </div>
             </div>
               }
           </div>
@@ -124,7 +129,11 @@ function SideNavbar({}: Props) {
              </div>
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Static Actions">
-                    <DropdownItem key="new" startContent={<User2 size={16} />}>Open Profile</DropdownItem>
+                    <DropdownItem onClick={
+                      ()=>{
+                        window.location.href = `/dashboard/_30mw_admins/${admin?.id}`
+                      }
+                    } key="new" startContent={<User2 size={16} />}>Open Profile</DropdownItem>
                     <DropdownItem onClick={()=>{
                       localStorage.removeItem("_30mw_admin")
                       window.location.reload()

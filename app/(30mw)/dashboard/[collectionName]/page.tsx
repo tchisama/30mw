@@ -14,6 +14,10 @@ const Home = () => {
   useEffect(() => {
     if(!selectedRule) return
     const access = ()=>{
+        if(selectedRule.name === "developer"){
+          setReadOnly(true)
+          return true
+        }
         if(selectedRule['access to all '] ){
           setReadOnly(!selectedRule["read all only"])
           if(!selectedRule["but collections"]){
