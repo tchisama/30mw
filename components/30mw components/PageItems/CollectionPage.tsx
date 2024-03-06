@@ -135,25 +135,21 @@ const CollectionPage = ({readOnly}: Props) => {
     <div className='flex flex-col gap-4 mt-6'>
 
 
-      {
-        actions.filter((a)=>{
-          return a.type == "card"
-        }).length > 0 &&
-    <div className='py-2 gap-4 grid grid-cols-3'>
+
+    <div className='py-4 grid grid-cols-3'>
       {
         actions.filter((a)=>{
           return a.type == "card"
         }).map((a)=>{
           return <Card key={a.id}>
             <CardBody>
-              <div dangerouslySetInnerHTML={{__html: fire(a,docs,()=>{},"card")}}></div>
+              <div dangerouslySetInnerHTML={{__html: fire(a,"test",()=>{},"card")}}></div>
             </CardBody>
           </Card>
         })
       }
     </div>
 
-      }
 
 
     <Accordion   defaultExpandedKeys={["1","2"]} selectionMode='multiple'>
