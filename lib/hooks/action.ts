@@ -1,7 +1,7 @@
 import { Action } from '@/store/30mw/actions'
 import { getDoc, getDocs, increment, updateDoc ,collection } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Edge, Node } from 'reactflow'
 import {doc as docFirebase} from "firebase/firestore"
 import { db } from '@/firebase'
@@ -10,17 +10,14 @@ import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter} from
 type Props = {}
 
 function useRunAction() {
-  const router = useRouter()
  
   // const [nodes,setNodes] = React.useState<Node[]>([])
   // const [edges,setEdges] = React.useState<Edge[]>([])
-
 
 const fire = ( action:Action,doc:any,setDoc:any,type?:string)=>{
 
     const _nodes = JSON.parse(action.nodes as any) as Node[]
     const _edges = JSON.parse(action.edges as any) as Edge[]
-
 
 
     const getStart = () => {
@@ -102,7 +99,17 @@ return (${node.data.code})
         //   code = code.replace(`{{${sources.name}}}`,JSON.stringify(FireNode({node:getSourceNode as Node , ...data})) )
         // })
         console.log(code)
-        return eval(code)
+        try {
+          
+          return eval(code)
+        } catch (error) {
+          return console.log(error)
+          
+        }
+
+
+
+
       case "update document":
         const collValue =  FireNode({node:getNode(node,"collection",nodes,edges) as Node , ...data}) ?? node.data["collection"]
         const docIdValue =  FireNode({node:getNode(node,"document id",nodes,edges) as Node , ...data}) ?? node.data["document id"]

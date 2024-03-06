@@ -8,7 +8,10 @@ import useAction, { Action } from '@/store/30mw/actions';
 import Field from '../components/Field';
 import { RefreshCw } from 'lucide-react';
 import useRunAction from '@/lib/hooks/action';
- 
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/firebase';
+import useCollections from '@/store/30mw/collections';
+
 type Props = {
   id:string
 }
@@ -18,17 +21,34 @@ const HtmlViewer = ({id}: Props) => {
   const {name , icon} = useAction()
   const { nodes , edges, action } = useAction()
   const [html,setHtml] = useState('')
+  const {collections} = useCollections()
+  const [docs,setDocs] = useState([])
+  const [counter,setCounter] = useState(0)
+  useEffect(()=>{
+    console.log(action)
+    if(!action?.collection) return
+    if(!collections.find((c)=>c.id==action.collection)) return
+    getDocs(
+      query(
+        collection(db,collections.find((c)=>c.id==action.collection)?.collection??""),
+        where("_30mw_deleted", "==", false),
+      )
+    ).then((snap)=>{
+      setDocs(snap.docs.map((doc)=>({...doc.data(), id: doc.id} as any))  as any )
+    })
+  },[action,collections])
   const fire = useRunAction()
-  // useEffect(()=>{
-  //   const getHtml = ()=>{
-  //     try {
-  //       return fire({...action,nodes:JSON.stringify(nodes),edges:JSON.stringify(edges)} as any,"test",()=>{},"card")
-  //     }catch (error) {
-  //       return "<div class='text-red-500 p-2 bg-red-100 rounded-xl '>"+error+"</div>"
-  //     }
-  //   }
-  //   setHtml(await getHtml())
-  // },[nodes,edges,setHtml,action,fire])
+  useEffect(()=>{
+    const getHtml = ()=>{
+      try {
+        return fire({...action,nodes:JSON.stringify(nodes),edges:JSON.stringify(edges)} as any,docs,()=>{},"card")
+      }catch (error) {
+        return "<div class='text-red-500 p-2 bg-red-100 rounded-xl '>"+error+"</div>"
+      }
+    }
+      setCounter(p=>p+1)
+    setHtml( getHtml())
+  },[])
   return (
     name &&
     <>
@@ -42,13 +62,18 @@ const HtmlViewer = ({id}: Props) => {
           </>
         }
       >
-        <Button onClick={() => {
+        {/* {counter} */}
+        <Button isIconOnly size='sm' color="primary" onClick={() => {
           setHtml(()=>{
-            return fire({...action,nodes:JSON.stringify(nodes),edges:JSON.stringify(edges)} as any,"test",()=>{},"card")
-          }
+            try {
+              return fire({...action,nodes:JSON.stringify(nodes),edges:JSON.stringify(edges)} as any,docs,()=>{},"card")
+            }catch (error) {
+              return "<div class='text-red-500 p-2 bg-red-100 rounded-xl '>"+error+"</div>"
+            }
+          } 
           )
-           }}><RefreshCw/></Button>
-        <div  className='bg-slate-100 border p-4 min-w-[400px] rounded-xl '>
+           }}><RefreshCw size={15}/></Button>
+        <div  className='bg-slate-100 border p-4 min-w-[500px] rounded-xl '>
           <Card >
               <CardBody>
                 <div dangerouslySetInnerHTML={{ __html: html }}></div>

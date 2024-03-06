@@ -13,6 +13,7 @@ import path from 'path'
 import React, { useEffect } from 'react'
 import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@nextui-org/react";
 import { Reorder } from 'framer-motion'
+import { useRouter } from 'next/router'
 type Props = {}
 
 function SideNavbar({}: Props) {
@@ -124,7 +125,9 @@ function SideNavbar({}: Props) {
              </div>
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Static Actions">
-                    <DropdownItem key="new" startContent={<User2 size={16} />}>Open Profile</DropdownItem>
+                    <DropdownItem key="new" onClick={()=>{
+                      window.location.href = "/dashboard/_30mw_admins/"+ admin?.id
+                    }} startContent={<User2 size={16} />}>Open Profile</DropdownItem>
                     <DropdownItem onClick={()=>{
                       localStorage.removeItem("_30mw_admin")
                       window.location.reload()
