@@ -73,6 +73,9 @@ function SideNavbar({}: Props) {
                   collections
                   .filter(c=>!c?.motherCollection && !c?.for_30mw)
                   .filter(c=>{
+                    if(selectedRule['name']=== "developer"){
+                      return true
+                    }
                     if(selectedRule['access to all '] ){
                       if(!selectedRule["but collections"]){
                         return true

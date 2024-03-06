@@ -22,8 +22,8 @@ function DashboardProvider({children}: Props) {
           setCollections(snapshot.docs.map((doc) => {
               return {...doc.data(), id: doc.id , structure: JSON.parse(doc.data().structure)} as CollectionType
           }))  
+      console.log(snapshot.docs)
       })
-
     }catch (e){
       console.log(e)
     }

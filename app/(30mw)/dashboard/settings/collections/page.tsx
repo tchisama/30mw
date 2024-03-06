@@ -1,6 +1,7 @@
 "use client"
 import SideNavbar from '@/components/30mw components/SideNavbar'
 import AddCollection from '@/components/30mw components/collections/AddCollection'
+import CollectionLibrary from '@/components/30mw components/collections/CollectionLibrary'
 import  SettingCollPage  from '@/components/30mw components/collections/RowRender'
 import DashboardProvider from '@/components/30mw components/providers/DashboardProvider'
 import { db } from '@/firebase'
@@ -50,7 +51,10 @@ function Page({}: Props) {
               <h1 className="text-5xl font-bold capitalize">🗃️ collections</h1>
               <h1 className="text-xl">Manager</h1>
             </div>
-            <AddCollection />
+            <div className='flex gap-2'>
+              <CollectionLibrary />
+              <AddCollection />
+            </div>
           </div>
           <div className="grid grid-cols-1 mt-4 gap-3  ">
             {
