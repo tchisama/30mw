@@ -4,8 +4,9 @@ import Text from '@/components/30mw components/language/Text'
 import DashboardProvider from '@/components/30mw components/providers/DashboardProvider'
 import { cn } from '@/lib/utils'
 import useLanguages from '@/store/30mw/languages'
-import { Button, Card, CardBody, CardHeader, Chip, Input, Switch } from '@nextui-org/react'
-import { Badge, Edit, Edit2, Languages, Lock, MoonIcon, SunIcon, X } from 'lucide-react'
+import { Button, Card, CardBody, CardHeader, Chip, Input, Select, SelectItem, Switch } from '@nextui-org/react'
+import { Selection } from '@tiptap/pm/state'
+import { Badge, Check, Edit, Edit2, Languages, Lock, MoonIcon, SunIcon, X } from 'lucide-react'
 import React, { useState } from 'react'
 
 type Props = {}
@@ -15,6 +16,17 @@ function Page({ }: Props) {
 
   const [editMode, setEditMode] = useState(false)
   const {languages} = useLanguages()
+  const languagesLabels = [
+    "English",
+    "French",
+    "Arabic",
+    "Portuguese",
+    "Spanish",
+    "German",
+    "Japanese",
+    "Chinese",
+    "Russian"
+  ]
   return (
     <DashboardProvider>
       <div className="flex gap-8">
@@ -34,11 +46,14 @@ function Page({ }: Props) {
                 <p className='max-w-[300px] text-xs text-gray-500'>by set the edit mode on , you can return to your website and edit your website content in real time</p>
               </CardHeader>
                 <CardBody>
+                
                 <Switch
                   isSelected={editMode}
                   onValueChange={setEditMode}
                   size="lg"
                   color="primary"
+                  
+                  className='shadow-xl w-[60px] rounded-full border-2 border-primary-200'
                   thumbIcon={({ isSelected, className }) =>
                     isSelected ? (
                       <Edit2 size={16} className={className} />
@@ -59,15 +74,44 @@ function Page({ }: Props) {
                   <h1 className='text-2xl font-medium flex gap-3 items-center'><Languages size={24} /> Languages</h1>
                   <p className='max-w-[500px] text-xs text-gray-500'>you can add languages to your website here , you need to have at least one language content already added</p>
                 </CardHeader>
-              <CardBody className=''>
-                <div>
+              <CardBody className=' flex flex-col gap-2'>
+                      <Select
+                        label="Choose default Language"
+                        placeholder="Select default language"
+                        className=""
+                        size='sm'
+                      >
+                        {languagesLabels.map((lang) => (
+                          <SelectItem key={lang} value={lang}>
+                            {lang}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                <div className="flex gap-2">
 
-                </div>
-                  <div className='p-3 bg-slate-50 border w-full rounded-xl h-full gap-2 flex'>
+                  {/* <div className='p-3 bg-slate-50 border w-full rounded-xl h-full gap-2 flex'>
                     {
                       ["English", "French", "Arabic"].map((_, i) => <div color='secondary' className='bg-white border p-2 items-center flex gap-2 rounded-xl ' key={i} >{_} <Button className='w-6 h-6 p-0' size='sm' isIconOnly ><X size={14}/></Button></div>)
                     }
-                  </div>
+                  </div> */}
+
+                      <Select
+                        label="Choose Languages"
+                        placeholder="Select a language"
+                        selectionMode="multiple"
+                        className=""
+                        size='sm'
+                      >
+                        {languagesLabels.map((lang) => (
+                          <SelectItem key={lang} value={lang}>
+                            {lang}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                      <Button size="lg" color="primary" startContent={<Check size={26}/>}>
+                        Apply
+                      </Button>
+                </div>
               </CardBody>
             </Card>
           </div>
