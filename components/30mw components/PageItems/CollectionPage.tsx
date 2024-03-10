@@ -52,11 +52,15 @@ const CollectionPage = ({readOnly}: Props) => {
     setDocs([])
     setLoading(true)
     if(!selectedCollection.collection) return
-    const q = query(collection(db,selectedCollection.collection),where('_30mw_deleted', '==', false));
+    const q = query(collection(db,selectedCollection.collection));
     onSnapshot(q, (snapshot) => {
       setDocs([...snapshot.docs.map((doc) => {
-        return {...doc.data(), id: doc.id} as any
-      })].sort((a,b)=>((b._30mw_createdAt as Timestamp ).toDate() as any) - ((a._30mw_createdAt as Timestamp).toDate() as any)))
+        return {...doc.data(), id: doc.id, 
+          // _30mw_createdAt:Timestamp
+        } as any
+      })]
+      .sort((a,b)=>((b._30mw_createdAt as Timestamp )?.toDate() as any) - ((a._30mw_createdAt as Timestamp)?.toDate() as any))
+      )
     })
     setLoading(false)
   },[selectedCollection])

@@ -24,7 +24,7 @@ function AddCollection({}: Props) {
 
   return (
     <>
-      <Button onPress={onOpen} variant='shadow' color="primary"><Plus size={16}/>new</Button>
+      <Button size="lg" onPress={onOpen} variant='shadow' color="primary"><Plus size={16}/>new</Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (

@@ -172,8 +172,8 @@ function EditDailog({
 										className=""
 									>
 										{collections.map((field) => (
-											<SelectItem key={field.name} value={field.name}>
-												{field.name}
+											<SelectItem key={field.collection} value={field.collection}>
+												{field.collection}
 											</SelectItem>
 										))}
 									</Select>
@@ -185,7 +185,7 @@ function EditDailog({
 										label="Select key"
 										className=""
 									>
-										{collections.find(c=>c.name == ((refCollection as any).currentKey??(value as any)?.reference?.collection) )?.structure.filter(r=>!["array","reference","object","select"].includes(r.name)).map((field) => (
+										{collections.find(c=>c.collection == ((refCollection as any).currentKey??(value as any)?.reference?.collection) )?.structure.filter(r=>!["array","reference","object","select"].includes(r.name)).map((field) => (
 											<SelectItem  key={field.name} value={field.name}>
 												{field.name}
 											</SelectItem>
@@ -194,7 +194,7 @@ function EditDailog({
 									}
 								</div>}
 
-
+c
 
 								{type.has("boolean") && (
 									<div className="flex gap-2 ">

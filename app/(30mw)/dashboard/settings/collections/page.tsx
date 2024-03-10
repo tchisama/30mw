@@ -10,13 +10,13 @@ import useCollections from '@/store/30mw/collections'
 import { CollectionType } from '@/types/collection'
 import { Button } from '@nextui-org/react'
 import { addDoc, collection } from 'firebase/firestore'
-import { Plus } from 'lucide-react'
+import { Plus, Stars } from 'lucide-react'
 import React, { useEffect } from 'react'
 
 type Props = {}
 
 function Page({}: Props) {
-  const { collections , selectedCollection } = useCollections()
+  const { collections , selectedCollection,setCollections } = useCollections()
 
 
   const { selectedRule} = useAdminStore()
@@ -33,7 +33,18 @@ function Page({}: Props) {
     setHaveAccess(access())
   },[ selectedRule, selectedCollection])
 
+  const generate = ()=>{
+    const jsonValue = prompt("json collections array")
+    const value = JSON.parse(jsonValue ?? "[]") as CollectionType[]
+    
+    value.map((c:CollectionType)=>{
+      addDoc(collection(db,"collections"),{
+        ...c,
+        structure:JSON.stringify(c.structure)
+      })
+    })
 
+  }
 
 
   return (
@@ -52,7 +63,10 @@ function Page({}: Props) {
               <h1 className="text-xl">Manager</h1>
             </div>
             <div className='flex gap-2'>
-              <CollectionLibrary />
+              <Button size='lg' onClick={
+                generate
+              } color="primary" variant="shadow" isIconOnly><Stars size="18"/></Button>
+              {/* <CollectionLibrary /> */}
               <AddCollection />
             </div>
           </div>
@@ -82,5 +96,17 @@ function Page({}: Props) {
     </DashboardProvider>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default Page
