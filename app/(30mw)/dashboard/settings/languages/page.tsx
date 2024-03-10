@@ -4,7 +4,7 @@ import Text from '@/components/30mw components/language/Text'
 import DashboardProvider from '@/components/30mw components/providers/DashboardProvider'
 import { cn } from '@/lib/utils'
 import { Button, Card, CardBody, CardHeader, Input, Switch } from '@nextui-org/react'
-import { Edit, Edit2, Lock, MoonIcon, SunIcon } from 'lucide-react'
+import { Edit, Edit2, Languages, Lock, MoonIcon, SunIcon } from 'lucide-react'
 import React, { useState } from 'react'
 
 type Props = {}
@@ -12,15 +12,7 @@ type Props = {}
 function Page({ }: Props) {
 
 
-
-    const [content, setContent] = useState('Type here to edit');
-
-  const handleContentChange = (event:any) => {
-    setContent(event.target.value);
-  };
-
   const [editMode, setEditMode] = useState(false)
-
 
   return (
     <DashboardProvider>
@@ -33,12 +25,12 @@ function Page({ }: Props) {
             </div>
 
           </div>
-          <div>
+          <div className='flex gap-4  my-8'>
             <div className='w-fit' onClick={() => setEditMode(!editMode)}>
-            <Card className={cn(' cursor-pointer hover:bg-slate-50 mt-8 duration-300 w-fit min-w-[500px] border-2 border-primary/0 ', editMode ? 'border-primary' : '')}>
+            <Card className={cn(' cursor-pointer   duration-300 w-fit min-w-[300px] border-2 border-primary/0 ', editMode ? 'border-primary-300 bg-primary-50' : '')}>
               <CardHeader className='flex flex-col gap-2 items-start'>
-                <h1 className='text-3xl font-medium'>Edit Mode</h1>
-                <p className='max-w-[500px] text-sm text-gray-500'>by set the edit mode on , you can return to your website and edit your website content in real time</p>
+                <h1 className='text-2xl font-medium'>Edit Mode</h1>
+                <p className='max-w-[300px] text-xs text-gray-500'>by set the edit mode on , you can return to your website and edit your website content in real time</p>
               </CardHeader>
                 <CardBody>
                 <Switch
@@ -54,23 +46,36 @@ function Page({ }: Props) {
                     )
                   }
                 >
-                  Edit Mode {editMode ? 'On' : 'Off'}
+                  <div className='text-sm'>
+                    {/* Edit Mode {editMode ? 'On' : 'Off'} */}
+                  </div>
                 </Switch>
                 </CardBody>
             </Card>
             </div>
+            <Card className='flex-1'>
+                <CardHeader className='flex flex-col gap-2 items-start'>
+                  <h1 className='text-2xl font-medium flex gap-3 items-center'><Languages size={24} /> Languages</h1>
+                  <p className='max-w-[300px] text-xs text-gray-500'>by set the edit mode on , you can return to your website and edit your website content in real time</p>
+                </CardHeader>
+              <CardBody className=''>
+
+              </CardBody>
+            </Card>
           </div>
 
+
+<div>
+      {
+        
+      }
+</div>
+
+
+
           <Button onClick={() => setEditMode(!editMode)}>
-            <Text id="en" language="English"/>
+            <Text id="click me" language="English"/>
           </Button>
-            <Text id="en" language="English"/>
-
-
-            <Text id="en" language="English">
-              {value=> <Input label={value} placeholder={value}></Input>}
-            </Text>
-
 
         </div>
       </div>

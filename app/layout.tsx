@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NextuiProvider from "@/components/30mw components/providers/nextuiProvider";
+import LanguageProvider from "@/components/30mw components/providers/LanguageProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className + "  "}>
-        <NextuiProvider>
-          <div className="border rounded-xl m-1 bg-red-100">{test}</div>
-          {children}
-        </NextuiProvider>
+        <LanguageProvider>
+          <NextuiProvider>
+            <div className="border rounded-xl m-1 bg-red-100">{test}</div>
+            {children}
+          </NextuiProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
