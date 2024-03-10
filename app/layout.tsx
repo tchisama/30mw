@@ -12,14 +12,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  test
 }: Readonly<{
   children: React.ReactNode;
+  test:React.ReactNode
 }>) {
   return (
     <html lang="en">
       <body className={inter.className + "  "}>
         <NextuiProvider>
-        {children}
+          <div className="border rounded-xl m-1 bg-red-100">{test}</div>
+          {children}
         </NextuiProvider>
       </body>
     </html>

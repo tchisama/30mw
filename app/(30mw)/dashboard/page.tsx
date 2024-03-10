@@ -36,7 +36,7 @@ function page({}: Props) {
 				<div className="min-h-[110vh] pt-8 flex-1 p-4">
 					<h1 className="text-5xl my-2 font-bold">🚀 Dashboard</h1>
 					<h1 className="text-3xl"> welcome tchisama 👋</h1>
-					<div className="mt-12 grid grid-cols-4 ml-auto gap-4">
+					<div className="mt-12 grid xl:grid-cols-4 grid-cols-3 ml-auto gap-4">
 
 						<FileCard />
 						<NotificationsCard />
@@ -45,6 +45,7 @@ function page({}: Props) {
 						<UsersCard />
 						<TrashCard />
 						<ActionsCard />
+						<LangCard />
 					</div>
 				</div>
 			</div>
@@ -84,6 +85,32 @@ const ActionsCard = ()=>{
 }
 
 
+
+
+
+
+const LangCard = ()=>{
+  return (
+          <Link  className=" " href="/dashboard/settings/languages">
+						<Card className="w-full h-full">
+							<CardHeader className="flex gap-3">
+								<div className="flex justify-between w-full">
+									<p className="text-2xl">🌐 Language</p>
+								</div>
+							</CardHeader>
+							<Divider />
+							<CardBody className="flex gap-2 ">
+								<div className="flex gap-4 items-center">
+
+									<div className="flex gap-2 flex-col">
+										<p className="text-sm">manage languages and translations for your website content</p>
+									</div>
+								</div>
+							</CardBody>
+						</Card>
+					</Link>
+  )
+}
 
 
 const TrashCard = ()=>{
@@ -241,7 +268,7 @@ const NotificationsCard = ()=>{
 			})
 		},[setNotifications,admin])
   return (
-          <Link  className=" row-span-2 " href="/dashboard/settings/notifications">
+          <Link  className=" xl:row-span-2 " href="/dashboard/settings/notifications">
 						<Card className="w-full h-full ">
 							<CardHeader className="flex gap-3">
 								<div className="flex justify-between w-full">

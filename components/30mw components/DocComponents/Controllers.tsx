@@ -1,11 +1,12 @@
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, cn, useDisclosure} from "@nextui-org/react";
-import { Copy, Edit, Menu, MoreHorizontal, Trash } from "lucide-react";
+import { ArrowUpRight, Copy, Edit, Menu, MoreHorizontal, Trash } from "lucide-react";
 import React from 'react'
 import EditModal from "./Edit";
 import { CollectionType } from "@/types/collection";
 import { Timestamp, addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useAdminStore } from "@/store/30mw/admin";
+import { useRouter } from "next/navigation";
 
 type Props = {
   document: any,
@@ -21,7 +22,7 @@ function Controllers({
   const iconClasses = "text-xl w-5 h-5 mr-2 text-default-500 pointer-events-none flex-shrink-0";
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const {admin} = useAdminStore()
-
+  const router = useRouter()
   const deleteDocument = () => {
     if(!_document) return
 
@@ -72,8 +73,17 @@ function Controllers({
       </DropdownTrigger>
       <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
         <DropdownItem
+          key="Open"
+          // showDivider
+          onClick={()=>{router.push(`/dashboard/${_collection.collection}/${_document.id}`)}}
+          description="open file in full screen"
+          startContent={<ArrowUpRight className={iconClasses} />}
+        >
+          Open 
+        </DropdownItem>
+        <DropdownItem
           key="edit"
-          showDivider
+          // showDivider
           onClick={onOpen}
           description="Allows you to edit the file"
           startContent={<Edit className={iconClasses} />}

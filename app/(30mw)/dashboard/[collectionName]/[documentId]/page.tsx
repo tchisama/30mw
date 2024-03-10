@@ -129,7 +129,7 @@ function Page({ }: Props) {
                   collections.filter(c=>c?.addAsField == selectedCollection.name).map((collection)=>{
                     return (
                     <Tab key={collection.name} title={collection.name} className='px-6'>
-                      <TabDocs key={collection.name} collection={collection} forDocument={params.documentId as string} />
+                      <TabDocs readOnly={readOnly} key={collection.name} collection={collection} forDocument={params.documentId as string} />
                     </Tab>
 
                     )
@@ -152,7 +152,7 @@ function Page({ }: Props) {
 
 
 
-const TabDocs = ({collection:_collection, forDocument}:{collection:CollectionType, forDocument:string})=>{
+const TabDocs = ({collection:_collection, forDocument , readOnly}:{collection:CollectionType, forDocument:string, readOnly:boolean})=>{
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [docs, setDocs] = React.useState<any[]>([]);
   useEffect(()=>{
@@ -178,7 +178,7 @@ const TabDocs = ({collection:_collection, forDocument}:{collection:CollectionTyp
           {
             docs && docs.length > 0 &&
             docs.map((doc,i)=>{
-              return <Doc actions={[]} key={i} doc={doc} coll={_collection} readOnly={false} />
+              return <Doc  actions={[]} key={i} doc={doc} coll={_collection} readOnly={readOnly} />
             })
           }
         </div>
