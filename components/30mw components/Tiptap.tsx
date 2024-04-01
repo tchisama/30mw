@@ -4,12 +4,21 @@ import StarterKit from '@tiptap/starter-kit'
 import { Toggle } from '../ui/toggle'
 import { Bold, Heading1, Heading2, Heading3, Italic, Pilcrow, Strikethrough } from 'lucide-react'
 import Heading from '@tiptap/extension-heading'
+
+
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from '../ui/button'
+
+
+
+
+
+
 
 type Props = {
   value:string,

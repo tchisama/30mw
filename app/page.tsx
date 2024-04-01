@@ -16,13 +16,14 @@ import { Card } from "@nextui-org/react";
 
 // 😎 copy and paste type to your code
 const Home = ({test}:{test:any}) => {
-
 	return (
     <div className="">
 			hello from the home page
     </div>
 	);
 };
+
+
 
 
 
